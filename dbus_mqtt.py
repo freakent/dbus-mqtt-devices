@@ -3,13 +3,13 @@
 import sys, os
 import json
 import logging
-from itertools import groupby, count, zip_longest, zip
+from itertools import groupby, count, zip_longest
 from argparse import ArgumentParser
 sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'ext', 'velib_python'))
 
 from dbus.mainloop.glib import DBusGMainLoop
 import dbus
-import gobject
+from gi.repository import GObject as gobject
 from vedbus import VeDbusService
 from settingsdevice import SettingsDevice
 
