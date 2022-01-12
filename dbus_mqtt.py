@@ -9,7 +9,7 @@ sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'ext', 'velib_python'
 
 from dbus.mainloop.glib import DBusGMainLoop
 import dbus
-from gi.repository import GObject as gobject
+from gi.repository import GLib
 from vedbus import VeDbusService
 from settingsdevice import SettingsDevice
 
@@ -118,7 +118,7 @@ def main():
     # MQTT connection
     bridge = Bridge(args.servicebase, args.host)
 
-    mainloop = gobject.MainLoop()
+    mainloop = GLib.MainLoop()
     mainloop.run()
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import errno
-from gi.repository import GObject as gobject
+from gi.repository import GLib
 import logging
 import os
 import paho.mqtt.client
@@ -25,7 +25,7 @@ class MqttGObjectBridge(object):
 		self._socket_watch = None
 		self._socket_timer = None
 		if self._init_mqtt():
-			gobject.timeout_add_seconds(5, exit_on_error, self._init_mqtt)
+			Glib.timeout_add_seconds(5, exit_on_error, self._init_mqtt)
 
 	def _init_mqtt(self):
 		try:
@@ -46,7 +46,7 @@ class MqttGObjectBridge(object):
 
 	def _init_socket_handlers(self):
 		if self._socket_watch is not None:
-			gobject.source_remove(self._socket_watch)
+			Glib.source_remove(self._socket_watch)
 		self._socket_watch = gobject.io_add_watch(self._client.socket().fileno(), gobject.IO_IN,
 			self._on_socket_in)
 		if self._socket_timer is None:
@@ -71,10 +71,10 @@ class MqttGObjectBridge(object):
 	def _on_disconnect(self, client, userdata, rc):
 		logging.error('[Disconnected] Lost connection to broker')
 		if self._socket_watch is not None:
-			gobject.source_remove(self._socket_watch)
+			Glib.source_remove(self._socket_watch)
 			self._socket_watch = None
 		logging.info('[Disconnected] Set timer')
-		gobject.timeout_add(5000, exit_on_error, self._reconnect)
+		Glib.timeout_add(5000, exit_on_error, self._reconnect)
 
 	def _reconnect(self):
 		try:
