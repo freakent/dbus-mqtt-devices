@@ -3,7 +3,7 @@
 import sys, os
 import json
 import logging
-from itertools import groupby, count, izip_longest, izip
+from itertools import groupby, count, zip_longest, zip
 from argparse import ArgumentParser
 sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'ext', 'velib_python'))
 
