@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "dbus",
+        "ECONNREFUSED",
         "gobject",
         "MQTT",
         "paho",
