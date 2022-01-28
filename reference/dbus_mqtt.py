@@ -13,8 +13,8 @@ from gi.repository import GLib
 from vedbus import VeDbusService
 from settingsdevice import SettingsDevice
 
-from bridge import MqttGObjectBridge
-from sensor import Sensor
+from reference.bridge import MqttGObjectBridge
+from reference.sensor import Sensor
 
 VERSION = '0.1'
 

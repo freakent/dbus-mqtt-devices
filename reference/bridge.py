@@ -47,10 +47,10 @@ class MqttGObjectBridge(object):
 	def _init_socket_handlers(self):
 		if self._socket_watch is not None:
 			Glib.source_remove(self._socket_watch)
-		self._socket_watch = gobject.io_add_watch(self._client.socket().fileno(), gobject.IO_IN,
+		self._socket_watch = Glib.io_add_watch(self._client.socket().fileno(), Glib.IO_IN,
 			self._on_socket_in)
 		if self._socket_timer is None:
-			self._socket_timer = gobject.timeout_add_seconds(1, exit_on_error, self._on_socket_timer)
+			self._socket_timer = Glib.timeout_add_seconds(1, exit_on_error, self._on_socket_timer)
 
 	def _on_socket_in(self, src, condition):
 		exit_on_error(self._client.loop_read)
