@@ -28,9 +28,10 @@ class MQTTDeviceManager(MqttGObjectBridge):
             self._subscribe_to_device_topic()
     
     def _on_message(self, client, userdata, msg):
+        mqtt = self._client
         MqttGObjectBridge._on_message(self, client, userdata, msg)
         print(msg.topic+" "+str(msg.payload))
-        if self._mqtt.topic_matches_sub(msg.top, "device/+/Status"):
+        if mqtt.topic_matches_sub(msg.top, "device/+/Status"):
             logging.info("Received device status message")
             self._process_device(json.loads(msg.payload))
 
