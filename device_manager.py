@@ -4,6 +4,8 @@ import json
 import os
 import sys
 
+from device import MQTTDevice
+
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
 from mqtt_gobject_bridge import MqttGObjectBridge
@@ -14,6 +16,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
 
     def __init__(self, mqtt_server=None, ca_cert=None, user=None, passwd=None, dbus_address=None, init_broker=False, debug=False):
         self._dbus_address = dbus_address
+        self._debug = debug
         self._devices = {}
         MqttGObjectBridge.__init__(self, mqtt_server, clientId, ca_cert, user, passwd, debug)
 
@@ -46,7 +49,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         device = self._devices.get(clientId)
         if device is None:
             # create a new device
-            self._devices[clientId] = {}
+            self._devices[clientId] = device = MQQTDevice(device_status=status, dbus_address=self._dbus_address, debug=self._debug)
         topic = "device/" + clientId + "/DeviceInstance"
-        res = mqtt.publish(topic, '{"Temperature": 319}')
-        logging.info('publish to %s, status is %s', topic, res.rc)
+        res = mqtt.publish(topic, device.device_instance())
+        logging.info('publish %s to %s, status is %s', device.device_instance(), topic, res.rc)
