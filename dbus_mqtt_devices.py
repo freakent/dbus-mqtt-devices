@@ -43,10 +43,9 @@ def main():
 	mainloop = GLib.MainLoop()
 	# Have a mainloop, so we can send/receive asynchronous calls to and from dbus
 	DBusGMainLoop(set_as_default=True)
-	keep_alive_interval = args.keep_alive if args.keep_alive > 0 else None
 	handler = MQTTDeviceManager(
 		mqtt_server=args.mqtt_server, ca_cert=args.mqtt_certificate, user=args.mqtt_user,
-		passwd=args.mqtt_password, dbus_address=args.dbus, keep_alive_interval=keep_alive_interval,
+		passwd=args.mqtt_password, dbus_address=args.dbus,
 		init_broker=args.init_broker, debug=args.debug)
 
 	# Quit the mainloop on ctrl+C

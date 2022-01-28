@@ -10,10 +10,9 @@ from mqtt_gobject_bridge import MqttGObjectBridge
 
 clientId = "dbus_mqtt_device_manager"
 
-class MQTTDeviceManager(MqttObjectBridge):
+class MQTTDeviceManager(MqttGObjectBridge):
 
-    def __init__(self, mqtt_server=None, ca_cert=None, user=None, passwd=None, dbus_address=None,
-				keep_alive_interval=None, init_broker=False, debug=False):
+    def __init__(self, mqtt_server=None, ca_cert=None, user=None, passwd=None, dbus_address=None, init_broker=False, debug=False):
         self._dbus_address = dbus_address
         self._devices = {}
         MqttGObjectBridge.__init__(self, mqtt_server, clientId, ca_cert, user, passwd, debug)
