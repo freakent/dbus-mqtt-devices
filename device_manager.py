@@ -49,7 +49,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         device = self._devices.get(clientId)
         if device is None:
             # create a new device
-            self._devices[clientId] = device = MQQTDevice(device_status=status, dbus_address=self._dbus_address, debug=self._debug)
+            self._devices[clientId] = device = MQTTDevice(device_status=status, dbus_address=self._dbus_address, debug=self._debug)
         topic = "device/" + clientId + "/DeviceInstance"
-        res = mqtt.publish(topic, device.device_instance())
+        res = mqtt.publish(topic, json.dumps(device.device_instance()))
         logging.info('publish %s to %s, status is %s', device.device_instance(), topic, res.rc)
