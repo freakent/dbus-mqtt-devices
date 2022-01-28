@@ -19,7 +19,7 @@ class MQTTDevice(object):
 			else dbus.bus.BusConnection(dbus_address)
         self._status = device_status
         self._clientId = device_status["clientId"]
-        self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings={}, eventCallback=_handle_changed_settings)
+        self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings={}, eventCallback=self._handle_changed_setting)
         self._services = {}
         self._register_device_services()
 
@@ -32,7 +32,7 @@ class MQTTDevice(object):
 
     def _register_device_services(self):
         for service in self._status["services"]:
-            res = self._settings.addSetting("Settings/Devices/{}".format(self._serviceId(service)), "{}:1".format(service), None, None)
+            res = self._settings.addSetting("/Settings/Devices/{}".format(self._serviceId(service)), "{}:1".format(service), None, None)
             print(res)
             self._services[service] = 101 #this will be populated from dbus
 
