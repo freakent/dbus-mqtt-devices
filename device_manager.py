@@ -21,7 +21,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
     # 2: Connection refused - invalid client identifier 3: Connection refused - server unavailable 
     # 4: Connection refused - bad username or password 5: Connection refused - not authorised 
     # 6-255: Currently unused.
-    def _on_connect(self, client, usedata, flags, rc): 
+    def _on_connect(self, client, userdata, flags, rc): 
         MqttGObjectBridge._on_connect(self, client, userdata, dict, rc)
         logging.info('[Connected] Result code {}'.format(rc))
         if rc == 0:
@@ -35,7 +35,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
             self._process_device(json.loads(msg.payload))
 
     def _subscribe_to_device_topic(self):
-        mqtt = self._mqtt
+        mqtt = self._client
         mqtt.subscribe("device/+/Status")
 
     def _process_device(self, status):
@@ -44,4 +44,5 @@ class MQTTDeviceManager(MqttGObjectBridge):
             # create a new device
             self._devices[status.deviceId] = {}
         topic = "device/" + status.deviceId + "/DeviceInstance"
-        self._mqtt.publish(topic, '{"Temperature": 399}')
+        mqtt = self._client
+        mqtt.publish(topic, '{"Temperature": 399}')
