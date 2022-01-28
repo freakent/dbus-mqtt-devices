@@ -20,8 +20,8 @@ class MQTTDevice(object):
     
 
     def _register_device_services(self):
-        for service in device_status["services"]:
-            self._services[service] = 101 #this will be poulated from dbus
+        for service in self._status["services"]:
+            self._services[service] = 101 #this will be populated from dbus
 
     def device_instance(self):
         return {"temperature": 333} # self._services
