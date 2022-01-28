@@ -28,12 +28,13 @@ class MQTTDeviceManager(MqttGObjectBridge):
             self._subscribe_to_device_topic()
     
     def _on_message(self, client, userdata, msg):
-        mqtt = self._client
         MqttGObjectBridge._on_message(self, client, userdata, msg)
-        print(msg.topic+" "+str(msg.payload))
+
         if MQTT.topic_matches_sub("device/+/Status", msg.topic):
             logging.info("Received device status message")
             self._process_device(json.loads(msg.payload))
+        else:
+            logging.info('Received message on topic %s, but no action ifs defined', msg.topic)
 
     def _subscribe_to_device_topic(self):
         mqtt = self._client
@@ -47,5 +48,5 @@ class MQTTDeviceManager(MqttGObjectBridge):
             # create a new device
             self._devices[clientId] = {}
         topic = "device/" + clientId + "/DeviceInstance"
-        res = mqtt.publish(topic, '{"Temperature": 399}')
+        res = mqtt.publish(topic, '{"Temperature": 319}')
         logging.info('publish to %s, status is %s', topic, res.rc)
