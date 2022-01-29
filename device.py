@@ -32,8 +32,10 @@ class MQTTDevice(object):
 
     def _register_device_services(self):
         for service in self._status["services"]:
-            path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self._serviceId(service)), "{}:1".format(service)
-            res = self._settings.addSetting(path, None, None)
+            logging.info("Registering service {} for client {}", service, self._clientId)
+            path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self._serviceId(service))
+            requested_id = "{}:1".format(service)
+            res = self._settings.addSetting(path, requested_id, "", "")
             s, device_instance = res.get_value().split(':')
             logging.info("Registered Service under %s (%s)", res.get_value(), device_instance)
             self._services[service] = device_instance
