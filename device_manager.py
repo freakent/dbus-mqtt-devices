@@ -51,5 +51,5 @@ class MQTTDeviceManager(MqttGObjectBridge):
             # create a new device
             self._devices[clientId] = device = MQTTDevice(device_status=status, dbus_address=self._dbus_address, debug=self._debug)
         topic = "device/" + clientId + "/DeviceInstance"
-        res = mqtt.publish(topic, json.dumps(device.device_instance()))
+        res = mqtt.publish(topic, json.dumps(device.device_instances()))
         logging.info('publish %s to %s, status is %s', device.device_instance(), topic, res.rc)

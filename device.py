@@ -4,6 +4,8 @@ import sys
 import json
 import dbus
 
+VERSION=0.1
+
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib-python'))
 
@@ -34,7 +36,7 @@ class MQTTDevice(object):
 
     def _register_device_services(self):
         for service in self._status["services"]:
-            logging.info("Registering service {} for client {}", service, self._clientId)
+            logging.info("Registering service %s for client %s", service, self._clientId)
 
             path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self._serviceId(service))
             requested_id = "{}:1".format(service)
@@ -61,5 +63,6 @@ class MQTTDevice(object):
             logging.info("Registered Service under %s (%s)", res.get_value(), device_instance)
             self._services[service] = {"deviceInstance": device_instance, "dbusService": dbus_service}
 
-    def device_instance(self):
-        return self._services
+    def device_instances(self):
+        return dict(map(lambda s : (s[0], s[1]['deviceInstance']), self._services()))
+        
