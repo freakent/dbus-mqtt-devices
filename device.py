@@ -26,10 +26,13 @@ class MQTTDevice(object):
         self._register_device_services()
 
     def _handle_changed_setting(self, setting, oldvalue, newvalue):
-        print("setting changed, setting: {}, old: {}, new: {}".format(setting, oldvalue, newvalue))
+        logging.info("setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
 
     def _handle_changed_value(self, path, value):
-        print("value changed, path: {}, value: {}".format(path, value))
+        logging.info("value changed, path: %s, value: %s", path, value)
+        settings_path = "/Settings/Devices/{}".format(self._serviceId(service))
+        self._settings[settings_path+"/CustomName"] = value
+        return value
 
     def _serviceId(self, service):
         return 'mqtt_{}_{}'.format(self._clientId, service)
@@ -53,7 +56,7 @@ class MQTTDevice(object):
             # Add objects required by ve-api
             dbus_service.add_path('/Management/ProcessName', 'dbus-mqtt-devices')
             dbus_service.add_path('/Management/ProcessVersion', VERSION)
-            dbus_service.add_path('/Management/Connection', 'MQTT {}'.format(self._clientId))
+            dbus_service.add_path('/Management/Connection', 'MQTT') # 'MQTT {}'.format(self._clientId))
             dbus_service.add_path('/DeviceInstance', device_instance)
             dbus_service.add_path('/ProductId', 0xFFFF) # ???
             dbus_service.add_path('/ProductName', "{} Sensor via MQTT".format(service).capitalize())
