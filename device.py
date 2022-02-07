@@ -27,12 +27,13 @@ class MQTTDevice(object):
 
     def _handle_changed_setting(self, setting, oldvalue, newvalue):
         logging.info("setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
+        return True
 
     def _handle_changed_value(self, path, value):
         logging.info("value changed, path: %s, value: %s", path, value)
-        settings_path = "/Settings/Devices/{}".format(self._serviceId(service))
+        settings_path = "/Settings/Devices/{}".format(self._serviceId('temperature'))
         self._settings[settings_path+"/CustomName"] = value
-        return value
+        return True
 
     def _serviceId(self, service):
         return 'mqtt_{}_{}'.format(self._clientId, service)
