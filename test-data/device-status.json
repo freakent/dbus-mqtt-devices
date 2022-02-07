@@ -1,0 +1,8 @@
+// device/arduino_freakent1/Status
+{
+    "clientId": "arduino_freakent1",
+    "connected": 1,
+    "services": [
+      "temperature"
+    ]
+  }

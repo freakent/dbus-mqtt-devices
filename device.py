@@ -25,8 +25,11 @@ class MQTTDevice(object):
         self._services = {}
         self._register_device_services()
 
-    def _handle_changed_setting(setting, oldvalue, newvalue):
+    def _handle_changed_setting(self, setting, oldvalue, newvalue):
         print("setting changed, setting: {}, old: {}, new: {}".format(setting, oldvalue, newvalue))
+
+    def _handle_changed_value(self, path, value):
+        print("value changed, path: {}, value: {}".format(path, value))
 
     def _serviceId(self, service):
         return 'mqtt_{}_{}'.format(self._clientId, service)
@@ -38,23 +41,26 @@ class MQTTDevice(object):
         for service in self._status["services"]:
             logging.info("Registering service %s for client %s", service, self._clientId)
 
-            path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self._serviceId(service))
-            requested_id = "{}:1".format(service)
-            res = self._settings.addSetting(path, requested_id, "", "")
+            default_custom_name = 'My Temp Sensor'
+
+            settings_path = "/Settings/Devices/{}".format(self._serviceId(service))
+            requested_device_instance = "{}:1".format(service) # extract the ID requested by the MQTT client
+            res = self._settings.addSetting(settings_path+"/ClassAndVrmInstance", requested_device_instance, "", "")
             s, device_instance = res.get_value().split(':')
+            res = self._settings.addSetting(settings_path+"/CustomName", default_custom_name, "", "")
 
             dbus_service = VeDbusService(self._servicePath(service), bus=self._dbus_conn)
             # Add objects required by ve-api
             dbus_service.add_path('/Management/ProcessName', 'dbus-mqtt-devices')
             dbus_service.add_path('/Management/ProcessVersion', VERSION)
-            dbus_service.add_path('/Management/Connection', 'mqtt{}'.format(self._clientId))
+            dbus_service.add_path('/Management/Connection', 'MQTT {}'.format(self._clientId))
             dbus_service.add_path('/DeviceInstance', device_instance)
             dbus_service.add_path('/ProductId', 0xFFFF) # ???
-            dbus_service.add_path('/ProductName', "{} Sensor via MQTT".format(service))
-            dbus_service.add_path('/FirmwareVersion', None)
+            dbus_service.add_path('/ProductName', "{} Sensor via MQTT".format(service).capitalize())
+            dbus_service.add_path('/FirmwareVersion', VERSION)
             dbus_service.add_path('/Connected', 1)
 
-            dbus_service.add_path('/CustomName', value='FreakEnt Temp Sensor', writeable=True)
+            dbus_service.add_path('/CustomName', value=default_custom_name, writeable=True, onchangecallback=self._handle_changed_value)
             dbus_service.add_path('/TemperatureType', value=2, writeable=True)
             dbus_service.add_path('/Temperature', value=5, description="Cabin temperature", writeable=True)
             dbus_service.add_path('/Humidity', value=59.56, description="Cabin humidity", writeable=True)
@@ -64,5 +70,5 @@ class MQTTDevice(object):
             self._services[service] = {"deviceInstance": device_instance, "dbusService": dbus_service}
 
     def device_instances(self):
-        return dict(map(lambda s : (s[0], s[1]['deviceInstance']), self._services()))
+        return dict( map( lambda s : (s[0], s[1]['deviceInstance']), self._services() ))
         
