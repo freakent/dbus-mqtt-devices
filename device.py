@@ -70,5 +70,5 @@ class MQTTDevice(object):
             self._services[service] = {"deviceInstance": device_instance, "dbusService": dbus_service}
 
     def device_instances(self):
-        return dict( map( lambda s : (s[0], s[1]['deviceInstance']), self._services() ))
+        return dict( map( lambda s : (s[0], s[1]['deviceInstance']), self._services.items() ))
         
