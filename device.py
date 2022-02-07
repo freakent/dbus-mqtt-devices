@@ -41,7 +41,7 @@ class MQTTDevice(object):
         return 'mqtt_{}_{}'.format(self._clientId, service)
     
     def _servicePath(self, service):
-        return 'com.victronenergy.{}.mqtt{}'.format(service, self._clientId)
+        return 'com.victronenergy.{}.mqtt_{}'.format(service, self._clientId)
 
     def _register_device_services(self):
         for service in self._status["services"]:
