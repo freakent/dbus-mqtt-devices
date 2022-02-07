@@ -32,7 +32,9 @@ class MQTTDevice(object):
     def _handle_changed_value(self, path, value):
         logging.info("value changed, path: %s, value: %s", path, value)
         settings_path = "/Settings/Devices/{}".format(self._serviceId('temperature'))
+        logging.info("Setting before, /CustomName: %s", self._settings[settings_path+"/CustomName"])
         self._settings[settings_path+"/CustomName"] = value
+        logging.info("Setting after, /CustomName: %s", self._settings[settings_path+"/CustomName"])
         return True
 
     def _serviceId(self, service):
