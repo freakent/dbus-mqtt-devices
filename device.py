@@ -16,7 +16,7 @@ class MQTTDevice(object):
 
     def __init__(self, device_status=None, dbus_address=None, debug=False):
         self._dbus_address = dbus_address
-        self._dbus_conn = (dbus.SessionBus() if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus()) \
+        self._dbus_conn = (dbus.SessionBus(private=True) if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus(private=True)) \
 			if dbus_address is None \
 			else dbus.bus.BusConnection(dbus_address)
         self._status = device_status
