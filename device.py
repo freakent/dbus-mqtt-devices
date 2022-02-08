@@ -21,6 +21,7 @@ class MQTTDevice(object):
 			else dbus.bus.BusConnection(dbus_address)
         self._status = device_status
         self._clientId = device_status["clientId"]
+        logging.info("*** New device: %s, services: %s", self._clientId, self._status['services'])
         self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings={}, eventCallback=self._handle_changed_setting)
         self._services = {}
         self._register_device_services()
@@ -49,21 +50,23 @@ class MQTTDevice(object):
 
     def _register_device_services(self):
         for service in self._status["services"]:
-            logging.info("Registering service %s for client %s", service, self._clientId)
+            logging.info("Registering service %s for client %s at path %s", service, self._clientId, self._servicePath(service))
 
             default_custom_name = 'My Temp Sensor'
 
-            settings_path = "/Settings/Devices/{}".format(self._serviceId(service))
-            requested_device_instance = "{}:1".format(service) # extract the ID requested by the MQTT client
-            res = self._settings.addSetting(settings_path+"/ClassAndVrmInstance", requested_device_instance, "", "")
-            s, device_instance = res.get_value().split(':')
+            settings_device_path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self._serviceId(service))
+            requested_device_instance = "{}:1".format(service) # Append the ID requested by the MQTT client
+            res = self._settings.addSetting(settings_device_path, requested_device_instance, "", "")
+            s, device_instance = res.get_value().split(':') # Return the allocated ID provided from dbus SettingDevices
+
+            settings_path = "/Settings/{}".format(self._serviceId(service))
             res = self._settings.addSetting(settings_path+"/CustomName", default_custom_name, "", "")
 
             dbus_service = VeDbusService(self._servicePath(service), bus=self._dbus_conn)
             # Add objects required by ve-api
             dbus_service.add_path('/Management/ProcessName', 'dbus-mqtt-devices')
             dbus_service.add_path('/Management/ProcessVersion', VERSION)
-            dbus_service.add_path('/Management/Connection', 'MQTT', gettextcallback=get_text_for_connection) # 'MQTT {}'.format(self._clientId))
+            dbus_service.add_path('/Management/Connection', 'MQTT', gettextcallback=self._get_text_for_connection) # 'MQTT {}'.format(self._clientId))
             dbus_service.add_path('/DeviceInstance', device_instance)
             dbus_service.add_path('/ProductId', 0xFFFF) # ???
             dbus_service.add_path('/ProductName', "{} Sensor via MQTT".format(service).capitalize())
@@ -72,8 +75,8 @@ class MQTTDevice(object):
 
             dbus_service.add_path('/CustomName', value=default_custom_name, writeable=True, onchangecallback=self._handle_changed_value)
             dbus_service.add_path('/TemperatureType', value=2, writeable=True)
-            dbus_service.add_path('/Temperature', value=5, description="Cabin temperature", writeable=True)
-            dbus_service.add_path('/Humidity', value=59.56, description="Cabin humidity", writeable=True)
+            #dbus_service.add_path('/Temperature', value=5, description="Cabin temperature", writeable=True)
+            #dbus_service.add_path('/Humidity', value=59.56, description="Cabin humidity", writeable=True)
             #dbus_service.add_path('/Pressure', value=None, description="Cabin pressure", writeable=True)
             
             logging.info("Registered Service under %s (%s)", res.get_value(), device_instance)
