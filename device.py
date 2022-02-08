@@ -31,11 +31,15 @@ class MQTTDevice(object):
 
     def _handle_changed_value(self, path, value):
         logging.info("value changed, path: %s, value: %s", path, value)
-        settings_path = "/Settings/Devices/{}".format(self._serviceId('temperature'))
-        logging.info("Setting before, /CustomName: %s", self._settings[settings_path+"/CustomName"])
-        self._settings[settings_path+"/CustomName"] = value
-        logging.info("Setting after, /CustomName: %s", self._settings[settings_path+"/CustomName"])
+        #settings_path = "/Settings/Devices/{}".format(self._serviceId('temperature'))
+        #logging.info("Setting before, /CustomName: %s", self._settings[settings_path+"/CustomName"])
+        #self._settings[settings_path+"/CustomName"] = value
+        #logging.info("Setting after, /CustomName: %s", self._settings[settings_path+"/CustomName"])
         return True
+
+    def _get_text_for_connection(path, value):
+        logging.info("Getting Text for path %s and value %s", path, value)
+        return('%d rotations per minute' % value)
 
     def _serviceId(self, service):
         return 'mqtt_{}_{}'.format(self._clientId, service)
@@ -59,7 +63,7 @@ class MQTTDevice(object):
             # Add objects required by ve-api
             dbus_service.add_path('/Management/ProcessName', 'dbus-mqtt-devices')
             dbus_service.add_path('/Management/ProcessVersion', VERSION)
-            dbus_service.add_path('/Management/Connection', 'MQTT') # 'MQTT {}'.format(self._clientId))
+            dbus_service.add_path('/Management/Connection', 'MQTT', gettextcallback=get_text_for_connection) # 'MQTT {}'.format(self._clientId))
             dbus_service.add_path('/DeviceInstance', device_instance)
             dbus_service.add_path('/ProductId', 0xFFFF) # ???
             dbus_service.add_path('/ProductName', "{} Sensor via MQTT".format(service).capitalize())
