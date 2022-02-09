@@ -39,7 +39,7 @@ class MQTTDeviceService(object):
         self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
 
     def _set_up_device_instance(self):
-        settings_device_path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self._serviceId(self.service))
+        settings_device_path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self.serviceId(self.service))
         requested_device_instance = "{}:1".format(self.service) # Append the ID requested by the MQTT client
         r = self._settings.addSetting(settings_device_path, requested_device_instance, "", "")
         s, self.device_instance = r.get_value().split(':') # Return the allocated ID provided from dbus SettingDevices
