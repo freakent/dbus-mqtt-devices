@@ -43,6 +43,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         mqtt = self._client
         mqtt.subscribe("device/+/Status")
 
+    #ToDo : Check connected status and register connected devices and delete disconnected devices
     def _process_device(self, status):
         mqtt = self._client
         clientId = status["clientId"] # the device's client id

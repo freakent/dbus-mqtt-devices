@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-import json
 import dbus
 
 #from dbus_mqtt_devices import VERSION
@@ -74,15 +73,7 @@ class MQTTDeviceService(object):
         setting = path.replace('/', '')
         if self._settings[setting]:
             self._settings[setting] = value
-        #settings_path = "/Settings/Devices/{}".format(self._serviceId('temperature'))
-        #logging.info("Setting before, /CustomName: %s", self._settings[settings_path+"/CustomName"])
-        #self._settings[settings_path+"/CustomName"] = value
-        #logging.info("Setting after, /CustomName: %s", self._settings[settings_path+"/CustomName"])
         return True
-
-    def _get_text_for_connection(path, value):
-        logging.info("Getting Text for path %s and value %s", path, value)
-        return('MQTT')
 
     def serviceId(self, service):
         return 'mqtt_{}_{}'.format(self.device.clientId, service)
