@@ -4,6 +4,7 @@
         "ECONNREFUSED",
         "gobject",
         "MQTT",
+        "onchangecallback",
         "paho",
         "SIGUSR",
         "velib"

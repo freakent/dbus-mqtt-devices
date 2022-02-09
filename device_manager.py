@@ -10,15 +10,15 @@ AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
 from mqtt_gobject_bridge import MqttGObjectBridge
 
-clientId = "dbus_mqtt_device_manager"
+CLIENTID = "dbus_mqtt_device_manager" # the client id this process will connect to MQTT with
 
 class MQTTDeviceManager(MqttGObjectBridge):
 
     def __init__(self, mqtt_server=None, ca_cert=None, user=None, passwd=None, dbus_address=None, init_broker=False, debug=False):
-        self._dbus_address = dbus_address
-        self._debug = debug
+        self.dbus_address = dbus_address
+        self.debug = debug
         self._devices = {}
-        MqttGObjectBridge.__init__(self, mqtt_server, clientId, ca_cert, user, passwd, debug)
+        MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
 
     # RC is the Connection Result 0: Connection successful 1: Connection refused - incorrect protocol version 
     # 2: Connection refused - invalid client identifier 3: Connection refused - server unavailable 
@@ -45,11 +45,11 @@ class MQTTDeviceManager(MqttGObjectBridge):
 
     def _process_device(self, status):
         mqtt = self._client
-        clientId = status["clientId"]
+        clientId = status["clientId"] # the device's client id
         device = self._devices.get(clientId)
         if device is None:
             # create a new device
-            self._devices[clientId] = device = MQTTDevice(device_status=status, dbus_address=self._dbus_address, debug=self._debug)
-        topic = "device/" + clientId + "/DeviceInstance"
+            self._devices[clientId] = device = MQTTDevice(device_mgr=self, device_status=status)
+        topic = "device/{}/DeviceInstance".format(clientId)
         res = mqtt.publish(topic, json.dumps(device.device_instances()))
         logging.info('publish %s to %s, status is %s', device.device_instances(), topic, res.rc)
