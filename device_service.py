@@ -4,7 +4,8 @@ import sys
 import json
 import dbus
 
-from dbus_mqtt_devices import VERSION
+#from dbus_mqtt_devices import VERSION
+VERSION=0.1
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib-python'))
