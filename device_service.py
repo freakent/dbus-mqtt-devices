@@ -35,6 +35,7 @@ class MQTTDeviceService(object):
     def _set_up_local_settings(self):
         local_settings = {
             'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceId(self.service)), 'My Temp Sensor', 0, 1],
+            'TemperatureType': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceId(self.service)), 2, 0, 1],
         }
         self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
 
@@ -58,7 +59,7 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/Connected', 1)
         dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
         
-        dbus_service.add_path('/TemperatureType', value=2, writeable=True)
+        dbus_service.add_path('/TemperatureType', value=2, writeable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/Temperature', value=5, description="Cabin temperature", writeable=True)
         #dbus_service.add_path('/Humidity', value=59.56, description="Cabin humidity", writeable=True)
         #dbus_service.add_path('/Pressure', value=None, description="Cabin pressure", writeable=True)
@@ -70,7 +71,9 @@ class MQTTDeviceService(object):
 
     def _handle_changed_value(self, path, value):
         logging.info("value changed, path: %s, value: %s", path, value)
-        self._settings['CustomName'] = value
+        setting = path.replace('/', '')
+        if self._settings[setting]:
+            self._settings[setting] = value
         #settings_path = "/Settings/Devices/{}".format(self._serviceId('temperature'))
         #logging.info("Setting before, /CustomName: %s", self._settings[settings_path+"/CustomName"])
         #self._settings[settings_path+"/CustomName"] = value
