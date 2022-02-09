@@ -59,8 +59,8 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
         
         dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
-        dbus_service.add_path('/Temperature', description="Temperature C", writeable=True)
-        dbus_service.add_path('/Humidity', description="Humidity m3", writeable=True)
+        dbus_service.add_path('/Temperature', value=None description="Temperature C", writeable=True)
+        dbus_service.add_path('/Humidity', value=None description="Humidity m3", writeable=True)
         #dbus_service.add_path('/Pressure', value=None, description="Cabin pressure", writeable=True)
 
 
