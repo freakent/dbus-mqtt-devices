@@ -50,7 +50,7 @@ class MQTTDeviceService(object):
         # Add objects required by ve-api
         dbus_service.add_path('/Mgmt/ProcessName', 'dbus-mqtt-devices')
         dbus_service.add_path('/Mgmt/ProcessVersion', VERSION)
-        dbus_service.add_path('/Mgmt/Connection', 'Mqtt {}'.format(self._clientId))
+        dbus_service.add_path('/Mgmt/Connection', 'Mqtt {}'.format(self.device.clientId))
         dbus_service.add_path('/DeviceInstance', self.device_instance)
         dbus_service.add_path('/DeviceName', self.device.clientId)
         dbus_service.add_path('/ProductId', 0xFFFF) # ???
