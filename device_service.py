@@ -3,7 +3,6 @@ import os
 import sys
 import dbus
 
-#from dbus_mqtt_devices import VERSION
 VERSION=0.1
 
 AppDir = os.path.dirname(os.path.realpath(__file__))

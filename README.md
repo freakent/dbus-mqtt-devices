@@ -74,3 +74,9 @@ registration, using the following protocol:
     cd etc etc
     git submodule update --init
     python dbus_mqtt_devices
+
+## To Do
+1) Change handling of payload of status message to allow for multiple services of the same type
+2) Use of command line args
+3) Figure out why ctrl-C isn't working right
+
