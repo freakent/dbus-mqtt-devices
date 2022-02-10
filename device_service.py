@@ -31,6 +31,10 @@ class MQTTDeviceService(object):
             
         logging.info("Registered Service under %s (%s)", self.servicePath(service), self.device_instance)
 
+    def __del__(self):
+        logging.info("Deleting device service %s", self.serviceId)
+
+
     def _set_up_local_settings(self):
         local_settings = {
             'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceId(self.service)), 'My Temp Sensor', 0, 0],
