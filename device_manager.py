@@ -67,6 +67,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         clientId = status["clientId"] # the device's client id
         device = self._devices.get(clientId)
         if  device is not None:
+            device.__del__()
             del device
             self._devices[clientId] = None
             logging.info('Device %s has been removed', clientId)

@@ -24,6 +24,12 @@ class MQTTDevice(object):
 
     def __del__(self):
         logging.info("Deleting device %s", self.clientId)
+        for service in self._services:
+            logging.info("Deleting Service %s for client %s", service, self.clientId)
+            service.__del__()
+            del service
+        del self._services
+
 
     def device_instances(self):
         return dict( map( lambda s : (s[0], s[1].device_instance), self._services.items() ))
