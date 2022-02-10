@@ -70,6 +70,6 @@ class MQTTDeviceManager(MqttGObjectBridge):
             device.__del__()
             del device
             self._devices[clientId] = None
-            logging.info('Device %s has been removed', clientId)
+            logging.info('Removed device %s', clientId)
         else:
             logging.warning('tried to remove device %s that is not registered', clientId)

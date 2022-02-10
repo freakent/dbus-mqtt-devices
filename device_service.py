@@ -36,7 +36,7 @@ class MQTTDeviceService(object):
         del self._settings
         del self._dbus_service
         del self._dbus_conn
-        logging.info("Deleting device service %s: %s", self.serviceId(self.service), dir(self))
+        logging.info("Unregistered %s from dbus", self.serviceId(self.service))
 
 
     def _set_up_local_settings(self):
