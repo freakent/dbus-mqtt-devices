@@ -34,16 +34,23 @@ class MQTTDeviceManager(MqttGObjectBridge):
         MqttGObjectBridge._on_message(self, client, userdata, msg)
 
         if MQTT.topic_matches_sub("device/+/Status", msg.topic):
-            logging.info("Received device status message")
-            self._process_device(json.loads(msg.payload))
+            status = json.loads(msg.payload)
+            logging.info("Received device status message %s", status)
+            
+            if status.connected == 1:
+                self._process_device(status)
+            elif msg.connected == 0:
+                self._remove_device(status)
+            else:
+                logging.info("Unrecognised device Connected status %s for client %s", status["clientId"])
+
         else:
-            logging.info('Received message on topic %s, but no action ifs defined', msg.topic)
+            logging.warning('Received message on topic %s, but no action is defined', msg.topic)
 
     def _subscribe_to_device_topic(self):
         mqtt = self._client
         mqtt.subscribe("device/+/Status")
 
-    #ToDo : Check connected status and register connected devices and delete disconnected devices
     def _process_device(self, status):
         mqtt = self._client
         clientId = status["clientId"] # the device's client id
@@ -54,3 +61,8 @@ class MQTTDeviceManager(MqttGObjectBridge):
         topic = "device/{}/DeviceInstance".format(clientId)
         res = mqtt.publish(topic, json.dumps(device.device_instances()))
         logging.info('publish %s to %s, status is %s', device.device_instances(), topic, res.rc)
+    
+    def _remove_device(self, status):
+        clientId = status["clientId"] # the device's client id
+        del self._devices[clientId]
+        logging.info('Device %s has been removed', clientId)
