@@ -33,7 +33,7 @@ class MQTTDeviceService(object):
 
     def __del__(self):
         del self._settings
-        del self.dbus_service
+        del self._dbus_service
         del self._dbus_conn
         logging.info("Deleting device service %s", self.serviceId(self.service))
 
