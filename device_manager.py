@@ -37,9 +37,9 @@ class MQTTDeviceManager(MqttGObjectBridge):
             status = json.loads(msg.payload)
             logging.info("Received device status message %s", status)
             
-            if status.connected == 1:
+            if status['connected'] == 1:
                 self._process_device(status)
-            elif msg.connected == 0:
+            elif status['connected'] == 0:
                 self._remove_device(status)
             else:
                 logging.info("Unrecognised device Connected status %s for client %s", status["clientId"])
