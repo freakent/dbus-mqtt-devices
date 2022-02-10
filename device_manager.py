@@ -61,11 +61,14 @@ class MQTTDeviceManager(MqttGObjectBridge):
         topic = "device/{}/DeviceInstance".format(clientId)
         res = mqtt.publish(topic, json.dumps(device.device_instances()))
         logging.info('publish %s to %s, status is %s', device.device_instances(), topic, res.rc)
-    
+
+
     def _remove_device(self, status):
         clientId = status["clientId"] # the device's client id
-        if self._devices.get(clientId) is not None:
-            del self._devices[clientId]
+        device = self._devices.get(clientId)
+        if  device is not None:
+            del device
+            self._devices[clientId] = None
             logging.info('Device %s has been removed', clientId)
         else:
             logging.warning('tried to remove device %s that is not registered', clientId)

@@ -32,6 +32,7 @@ class MQTTDeviceService(object):
         logging.info("Registered Service under %s (%s)", self.servicePath(service), self.device_instance)
 
     def __del__(self):
+        del self._dbus_conn
         logging.info("Deleting device service %s", self.serviceId)
 
 
