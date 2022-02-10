@@ -69,7 +69,7 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/Mgmt/ProcessVersion', VERSION)
         dbus_service.add_path('/Mgmt/Connection', 'MQTT:{}'.format(self.device.clientId))
         dbus_service.add_path('/DeviceInstance', self.device_instance)
-        dbus_service.add_path('/DeviceName', self.device.clientId)
+        dbus_service.add_path('/DeviceName', "{}:{}".format(self.device.clientId, self.serviceId)
         dbus_service.add_path('/ProductId', 0xFFFF) # ???
         dbus_service.add_path('/ProductName', "{} Sensor via MQTT".format(self.serviceType.capitalize()))
         dbus_service.add_path('/FirmwareVersion', self.device.version)
