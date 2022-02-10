@@ -18,8 +18,8 @@ class MQTTDevice(object):
 
     def __init__(self, device_mgr=None, device_status=None):
         self.device_mgr = device_mgr
-        self.clientId = device_status["clientId"]
-        self.version = device_status["version"]
+        self.clientId = device_status.get("clientId")
+        self.version = device_status.get("version")
         self._status = device_status
         logging.info("*** New device: %s, services: %s", self.clientId, self._status['services'])
 
@@ -31,9 +31,9 @@ class MQTTDevice(object):
 
 
     def __del__(self):
-        for service_id in self._services:
-            self._services[service_id].__del__()
-            logging.info("Removed Service %s from client %s", service, self.clientId)
+        for serviceId in self._services:
+            self._services[serviceId].__del__()
+            logging.info("Removed Service %s from client %s", serviceId, self.clientId)
         del self._services
 
 
