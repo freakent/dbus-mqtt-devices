@@ -51,7 +51,7 @@ class MQTTDeviceService(object):
 
     def _set_up_local_settings(self):
         local_settings = {
-            'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My Temp Sensor', 0, 0],
+            'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],
             'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
         }
         self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
