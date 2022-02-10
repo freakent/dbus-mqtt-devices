@@ -24,10 +24,13 @@ class MQTTDevice(object):
         logging.info("*** New device: %s, services: %s", self.clientId, self._status['services'])
 
         self._services = {}
-        for id, service in self._status["services"].items():
-            logging.info("Registering Service %s for client %s", service, self.clientId)
-            device_service = MQTTDeviceService(self, id, service)
-            self._services[id] = device_service
+        if self._status.get("services") is not None and type(self._status.get("services")) is dict:
+            for id, service in self._status["services"].items():
+                logging.info("Registering Service %s for client %s", service, self.clientId)
+                device_service = MQTTDeviceService(self, id, service)
+                self._services[id] = device_service
+        else:
+            logging.warning("Device registration for client %s did not contain a valid services object", self.clientId)
 
 
     def __del__(self):
