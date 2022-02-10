@@ -2,8 +2,8 @@
 
 This Venus GX Driver works in concert with the Victron dbus-mqtt gateway. It 
 enables devices (such as Arduino microcontrollers or Raspberry Pi) to self 
-register to the dbus over MQTT, without needing additional dedicated custom 
-drivers to be developed and deployed.
+register to the dbus over MQTT. This avoids the need for additional dedicated 
+custom drivers to be developed and deployed.
 
 It uses a pair of MQTT topics under the "devices/*" namespace to establish the 
 registration, using the following protocol:
@@ -17,7 +17,7 @@ registration, using the following protocol:
 		
         The payload is a json object containing :
     	
-        `{ "clientid": <client id>, "connected": <either 1 or 0>, "services": [<a dictionary or services that this device wants to use>] }`
+        `{ "clientid": <client id>, "connected": <either 1 or 0>, "services": [<a dictionary of services that this device wants to use>] }`
    	
     for example:
 		

@@ -1,3 +1,13 @@
+"""
+Device Manager ---> Device ---> DEVICE SERVICE
+
+The Device Service represents each service on the dbus that the device will be 
+publishing data to. Each device service needs a unique DeviceInstance allocated 
+to it by the dbus in order to publish data. A new device service is allocated a 
+default name which can be customised from the GX device interface. This name will
+be visible in VRM and is saved in device settings to preserve its value over 
+restarts.
+"""
 import logging
 import os
 import sys
@@ -31,7 +41,7 @@ class MQTTDeviceService(object):
         logging.info("Registered Service under %s (%s)", self.servicePath(service), self.device_instance)
 
     def __del__(self):
-        self._dbus_service.__del__()
+        self._dbus_service.__del__() # Very important!
         del self._settings
         del self._dbus_service
         del self._dbus_conn

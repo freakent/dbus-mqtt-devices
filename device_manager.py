@@ -1,3 +1,9 @@
+"""
+DEVICE MANAGER ---> Device ---> Device Service
+
+The Device Manager subscribes to the MQTT device/+/Status topics and handles 
+registration and de-registration of devices.
+"""
 import logging
 import paho.mqtt.client as MQTT
 import json

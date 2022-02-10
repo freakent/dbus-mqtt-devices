@@ -1,3 +1,10 @@
+"""
+Device Manager ---> DEVICE ---> Device Service
+
+The Device represents the actual client device sending data to the dbus over 
+MQTT. Each device can support multiple device services, either of the same of 
+different types.
+"""
 import logging
 import os
 import sys
