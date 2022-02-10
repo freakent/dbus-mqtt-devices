@@ -87,8 +87,7 @@ registration, using the following protocol:
     python dbus_mqtt_devices
 
 ## To Do
-1) Change handling of payload of status message to allow for multiple services of the same type
-2) Pass firmware version information from the device to dbus for display on GX device
+1) Paramerterise service specific paths to extend service support beyond Temperature
 2) Use of command line args
 3) Figure out why ctrl-C isn't working right
 
