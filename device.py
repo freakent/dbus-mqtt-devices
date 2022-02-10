@@ -26,7 +26,7 @@ class MQTTDevice(object):
         logging.info("Deleting device %s", self.clientId)
         for service in self._services:
             logging.info("Deleting Service %s for client %s", service, self.clientId)
-            self.services[service].__del__()
+            self._services[service].__del__()
         del self._services
 
 
