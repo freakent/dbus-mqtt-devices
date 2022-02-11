@@ -37,7 +37,8 @@ class MQTTDevice(object):
         for serviceId in self._services:
             self._services[serviceId].__del__()
             logging.info("Removed Service %s from client %s", serviceId, self.clientId)
-        del self._services
+        if self._services:
+            del self._services
 
 
     def device_instances(self):
