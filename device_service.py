@@ -42,14 +42,13 @@ class MQTTDeviceService(object):
         logging.info("Registered Service %s under DeviceInstance %s", self.serviceDbusPath(), self.device_instance)
 
     def __del__(self):
-        logging.info("About to unregistered %s from dbus", self.serviceName())        
-        if self._dbus_service:
+        logging.info("About to unregistered %s from dbus", self.serviceName())     
+        if hasattr(self, '_dbus_service'):   
             self._dbus_service.__del__()  # Very important!
-        if self._settings:
-            del self._settings 
-        if self._dbus_service:
             del self._dbus_service
-        if self._dbus_conn:
+        if hasattr(self, '_settings'):   
+            del self._settings 
+        if hasattr(self, '_dbus_conn'):   
             del self._dbus_conn
         logging.info("Unregistered %s from dbus", self.serviceName())
 
@@ -93,7 +92,7 @@ class MQTTDeviceService(object):
 
     def _handle_changed_value(self, path, value):
         logging.info("value changed, path: %s, value: %s", path, value)
-        setting = path.replace('/', '')
+        setting = path.replace('/', '') # A regex to replace initial / might be safer
         if self._settings[setting]:
             self._settings[setting] = value
         return True
