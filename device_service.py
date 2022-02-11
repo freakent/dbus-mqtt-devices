@@ -47,7 +47,7 @@ class MQTTDeviceService(object):
             self._dbus_service.__del__()  # Very important!
         if self._settings:
             del self._settings 
-        if self._dbus_services:
+        if self._dbus_service:
             del self._dbus_service
         if self._dbus_conn:
             del self._dbus_conn
