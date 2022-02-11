@@ -1,0 +1,13 @@
+temperature:
+  TemperatureType:
+    description: "Battery, Fridge or Generic"
+    persist: true
+    default: 2
+    min: 0
+    max: 2
+  Temperature:
+    description: "C"
+  Pressure:
+    description: "hPa"
+  Humidity:
+    description: "%"
