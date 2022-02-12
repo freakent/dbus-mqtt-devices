@@ -34,10 +34,10 @@ class MQTTDevice(object):
 
 
     def __del__(self):
-        for serviceId in self._services:
-            self._services[serviceId].__del__()
-            logging.info("Removed Service %s from client %s", serviceId, self.clientId)
         if hasattr(self, '_services'):
+            for serviceId in self._services:
+                self._services[serviceId].__del__()
+                logging.info("Removed Service %s from client %s", serviceId, self.clientId)
             del self._services
 
 

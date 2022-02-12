@@ -1,4 +1,7 @@
 temperature:
+  CustomName:
+    default: "My Temperature Sensor"
+    persist: true
   TemperatureType:
     description: "Battery, Fridge or Generic"
     persist: true
