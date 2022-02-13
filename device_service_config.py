@@ -24,24 +24,24 @@ class MQTTDeviceServiceConfig(object):
         with open('services.yml', 'r') as services_file:
             self._config = yaml.safe_load(services_file)
 
-    def local_settings(self, service):
+    def local_settings(self, device_service):
         #local_settings = {
         #    'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],
         #    'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
-        service_config = self._config.get(service)
+        service_config = self._config.get(device_service.serviceType)
         if service_config != None:
             persist = dict(filter(lambda e: e[1].get('persist', False), service_config.items()))
-            settings = {k: self._config_to_setting(service, k, v) for k, v in persist.items()}
+            settings = {k: self._config_to_setting(device_service, k, v) for k, v in persist.items()}
             return settings
         else:
             logging.info("No configuration for Service %s, please update services.yml")
             return None
         
 
-    def _config_to_setting(self, service, attr, config):
-        setting = []
-        setting[PATH] = "/setting/MqttDevices/{}/{}".format(service, attr)
+    def _config_to_setting(self, device_service, attr, config):
+        setting = [None, None, None, None]
+        setting[PATH] = "/setting/MqttDevices/{}/{}".format(device_service.serviceId, attr)
         setting[VALUE] = config.get('default', None) 
         setting[MINIMUM] = config.get('min',0)  
         setting[MAXIMUM] = config.get('max', 0)
-        return({attr: setting})
+        return(setting)
