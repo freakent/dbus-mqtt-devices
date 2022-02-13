@@ -12,11 +12,12 @@ import logging
 import os
 import sys
 import dbus
+from device_service_config import MQTTDeviceServiceConfig
 
 VERSION=0.1
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib-python'))
+sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
 from vedbus import VeDbusService
 from settingsdevice import SettingsDevice
 
@@ -24,8 +25,9 @@ class MQTTDeviceService(object):
 
     def __init__(self, device, serviceId, serviceType):
         self.device = device
-        self.serviceId = serviceId
-        self.serviceType = serviceType
+        self.serviceId = serviceId # e.g. t1
+        self.serviceType = serviceType # e.g. temperature
+        self._config = MQTTDeviceServiceConfig(onchangecallback=self._handle_changed_value)
         
         logging.info("Registering service %s for client %s at path %s", serviceType, device.clientId, self.serviceDbusPath())
 
@@ -54,10 +56,12 @@ class MQTTDeviceService(object):
 
 
     def _set_up_local_settings(self):
-        local_settings = {
-            'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],
-            'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
-        }
+        #local_settings = {
+         #   'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],
+         #   'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
+        #}
+        #self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
+        local_settings = self._config.local_settings(self.serviceType)
         self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
 
     def _set_up_device_instance(self):
@@ -80,7 +84,9 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/Connected', 1)
         dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
         
-        dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
+        tt = {'path': '/TemperatureType', 'value':self._settings['TemperatureType'], 'writeable':True, 'onchangecallback': self._handle_changed_value}
+        dbus_service.add_path(**tt)
+        #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
         dbus_service.add_path('/Humidity', value=None, description="Humidity %", writeable=True)
         dbus_service.add_path('/Pressure', value=None, description="Pressure hPa", writeable=True)
