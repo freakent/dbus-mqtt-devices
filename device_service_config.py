@@ -19,14 +19,14 @@ from settingsdevice import PATH, VALUE, MINIMUM, MAXIMUM, SILENT
 
 class MQTTDeviceServiceConfig(object):
 
-    def __init__(self, serviceId, serviceType):
+    def __init__(self, serviceName, serviceType):
         self._serviceType = serviceType 
-        self._serviceId = serviceId
+        self._serviceName = serviceName
         with open('services.yml', 'r') as services_file:
             configs = yaml.safe_load(services_file)
         self._config = configs.get(serviceType)
         if self._config == None:
-            logging.info("No configuration for Service %s, please update services.yml")
+            logging.info("No configuration for Service %s, please update services.yml", serviceType)
 
     def local_settings(self):
         #local_settings = {
@@ -42,7 +42,7 @@ class MQTTDeviceServiceConfig(object):
 
     def _config_to_setting(self, key, values):
         setting = [None, None, None, None]
-        setting[PATH] = "/setting/MqttDevices/{}/{}".format(self._serviceId, key)
+        setting[PATH] = "/Settings/MqttDevices/{}/{}".format(self._serviceName, key)
         setting[VALUE] = values.get('default', None) 
         setting[MINIMUM] = values.get('min',0)  
         setting[MAXIMUM] = values.get('max', 0)

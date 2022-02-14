@@ -83,9 +83,9 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/ProductName', "{} sensor via MQTT".format(self.serviceType.capitalize()))
         dbus_service.add_path('/FirmwareVersion', self.device.version)
         dbus_service.add_path('/Connected', 1)
-        dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
+        dbus_service.add_path('/CustomName', value=self._settings.get('CustomName'), writeable=True, onchangecallback=self._handle_changed_value)
         
-        tt = {'path': '/TemperatureType', 'value':self._settings['TemperatureType'], 'writeable':True, 'onchangecallback': self._handle_changed_value}
+        tt = {'path': '/TemperatureType', 'value': self._settings.get('TemperatureType'), 'writeable': True, 'onchangecallback': self._handle_changed_value}
         dbus_service.add_path(**tt)
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
