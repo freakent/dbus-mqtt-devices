@@ -27,7 +27,7 @@ class MQTTDeviceService(object):
         self.device = device
         self.serviceId = serviceId # e.g. t1
         self.serviceType = serviceType # e.g. temperature
-        self._config = MQTTDeviceServiceConfig(onchangecallback=self._handle_changed_value)
+        self._config = MQTTDeviceServiceConfig(serviceId, serviceType) #onchangecallback=self._handle_changed_value)
         
         logging.info("Registering service %s for client %s at path %s", serviceType, device.clientId, self.serviceDbusPath())
 
@@ -61,7 +61,7 @@ class MQTTDeviceService(object):
          #   'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
         #}
         #self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
-        local_settings = self._config.local_settings(self.serviceType)
+        local_settings = self._config.local_settings()
         self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
 
     def _set_up_device_instance(self):
