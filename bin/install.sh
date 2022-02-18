@@ -12,11 +12,16 @@ echo "Pip install module dependencies"
 python -m pip install -r requirements.txt
 
 echo "Set up device service to autorun on restart"
+chmod +x $BASE/dbus_mqtt_devices.py
 # Use awk to inject correct BASE path into the run script
 awk -v base=$BASE '{gsub(/\$\{BASE\}/,base);}1' $BASE/bin/service/run.tmpl >$BASE/bin/service/run
 chmod -R a+rwx $BASE/bin/service
 rm -f /service/dbus-mqtt-devices
 ln -s $BASE/bin/service /service/dbus-mqtt-devices
-echo "ln -s $BASE/bin/service /service/dbus-mqtt-devices" >> /data/rc.local
+
+CMD="ln -s $BASE/bin/service /service/dbus-mqtt-devices"
+if ! grep -q "$CMD" /data/rc.local; then
+    echo "$CMD" >> /data/rc.local
+fi
 
 echo "Install dbus-mqtt-devices complete"
