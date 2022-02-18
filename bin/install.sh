@@ -1,14 +1,22 @@
 #!/bin/sh
 #BASE=/data/drivers/dbus-mqtt-devices
 BASE=$(dirname $(dirname $(realpath "$0")))
+
+echo "Install dbus-mqtt-devices to $BASE started"
 cd $BASE
-echo "Ensure Python's Pip is installed..."
+
+echo "Ensure Python's Pip is installed"
 python -m ensurepip
-echo "Pip install module dependencies..."
+
+echo "Pip install module dependencies"
 python -m pip install -r requirements.txt
+
 echo "Set up device service to autorun on restart"
+# Use awk to inject correct BASE path into the run script
+awk -v base=$BASE '{gsub(/\$\{BASE\}/,base);}1' $BASE/bin/service/run.tmpl >$BASE/bin/service/run
 chmod -R a+rwx $BASE/bin/service
-rm -fq /service/dbus-mqtt-devices
+rm -f /service/dbus-mqtt-devices
 ln -s $BASE/bin/service /service/dbus-mqtt-devices
 echo "ln -s $BASE/bin/service /service/dbus-mqtt-devices" >> /data/rc.local
-echo "Install complete"
+
+echo "Install dbus-mqtt-devices complete"
