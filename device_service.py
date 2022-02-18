@@ -83,10 +83,14 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/ProductName', "{} sensor via MQTT".format(self.serviceType.capitalize()))
         dbus_service.add_path('/FirmwareVersion', self.device.version)
         dbus_service.add_path('/Connected', 1)
-        dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
+        #dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
         
         for k, v in self._config.dbus_paths():
-            dbus_service.add_path("/"+k, value=self._settings[k], description=v.get('description'), writable=True, onchangecallback=self._handle_changed_value)
+            if v.get('persist') == True:
+                dbus_service.add_path("/"+k, value=self._settings[k], description=v.get('description'), writeable=True, onchangecallback=self._handle_changed_value)
+            else:
+                dbus_service.add_path("/"+k, value=None, description=v.get('description'), writeable=True)
+                
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
         #dbus_service.add_path('/Humidity', value=None, description="Humidity %", writeable=True)
