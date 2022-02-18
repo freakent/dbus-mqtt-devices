@@ -1,12 +1,12 @@
 """
-Device Manager ---> Device ---> DEVICE SERVICE
+Device Manager ---> Device ---> Device Service
+                                      |
+                                      v
+                             DEVICE SERVICE CONFIG
 
-The Device Service represents each service on the dbus that the device will be 
-publishing data to. Each device service needs a unique DeviceInstance allocated 
-to it by the dbus in order to publish data. A new device service is allocated a 
-default name which can be customised from the GX device interface. This name will
-be visible in VRM and is saved in device settings to preserve its value over 
-restarts.
+The Device Service Config wraps the services.yml config file and provides the 
+required dbus paths and settings to the Device Service. The services.yml file enables
+the driver to support all dbus-mqtt service types.
 """
 import logging
 import yaml
@@ -28,6 +28,7 @@ class MQTTDeviceServiceConfig(object):
         if self._config == None:
             logging.info("No configuration for Service %s, please update services.yml", serviceType)
 
+
     def local_settings(self):
         #local_settings = {
         #    'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],
@@ -47,3 +48,25 @@ class MQTTDeviceServiceConfig(object):
         setting[MINIMUM] = values.get('min',0)  
         setting[MAXIMUM] = values.get('max', 0)
         return(setting)
+
+
+    def dbus_paths(self):
+        # tt = {'path': '/TemperatureType', 'value': self._settings['TemperatureType'], 'writeable': True, 'onchangecallback': self._handle_changed_value}
+        if self._config != None:
+            #paths = {k: self._config_to_path(k, v, settings, callback) for k, v in self._config.items()}
+            return self._config.items()
+        else:
+            return None
+
+
+    def _config_to_path(self, key, values, settings, callback):
+        p = {}
+        p["path"] = "/" + key
+        p["writable"] = True
+        if values.get("persist", False) == True:
+            p["value"] = settings[key]
+        else:
+            p["value"] = None 
+        p["description"] = values.get("description", None)
+        p["onchangecallback"] = callback
+        return p

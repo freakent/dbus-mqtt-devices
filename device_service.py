@@ -85,12 +85,12 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/Connected', 1)
         dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
         
-        tt = {'path': '/TemperatureType', 'value': self._settings['TemperatureType'], 'writeable': True, 'onchangecallback': self._handle_changed_value}
-        dbus_service.add_path(**tt)
+        for k, v in self._config.dbus_paths():
+            dbus_service.add_path("/"+k, value=self._settings[k], description=v.get('description'), writable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
-        dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
-        dbus_service.add_path('/Humidity', value=None, description="Humidity %", writeable=True)
-        dbus_service.add_path('/Pressure', value=None, description="Pressure hPa", writeable=True)
+        #dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
+        #dbus_service.add_path('/Humidity', value=None, description="Humidity %", writeable=True)
+        #dbus_service.add_path('/Pressure', value=None, description="Pressure hPa", writeable=True)
 
 
     def _handle_changed_setting(self, setting, oldvalue, newvalue):
