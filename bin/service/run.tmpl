@@ -1,4 +1,5 @@
 #!/bin/sh
 echo "*** starting dbus-mqtt-devices ***"
+BASE=${BASE}
 exec 2>&1
-HOME=/data/drivers/dbus-mqtt-devices exec /data/drivers/dbus-mqtt-devices/dbus_mqtt_devices.py
+HOME=$BASE exec $BASE/dbus_mqtt_devices.py
