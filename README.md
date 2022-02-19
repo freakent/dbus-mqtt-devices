@@ -7,9 +7,9 @@ custom drivers to be developed and deployed.
 
 ## Registration Protocol
 This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
-registration, using the following protocol:
+registration, using the following protocol. <client id> is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
 
-1)  When a device initialises, it does 2 things:
+1)  When a device initialises, it does 2 things :
 
     1) subscribes to a topic `"device/<client id>/DeviceInstance"`.
 
@@ -23,8 +23,8 @@ registration, using the following protocol:
 		
         `{ "clientid": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature", "t2": "temperature"} }`
 
-2)	The driver will the use this information to :
-    - obtain a numeric device instance (for VRM) for each device service, 
+2)	The driver will then use this information to :
+    - obtain a numeric device instance (for VRM) for each device service (using the ClassAndVrmInstance dbus service), 
     - set up local settings for persistent storage of some attributes
     - register the device on the dbus, 
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
@@ -108,5 +108,6 @@ tail -f /var/log/dbus-mqtt-devices/current
 ## To Do
 1) Use of command line args
 2) Figure out why ctrl-C isn't working right
-3) Add support for more dbus-mqtt services
+3) Substitute any special characters in the client id for safe underscores _
+4) Add support for more dbus-mqtt services
 
