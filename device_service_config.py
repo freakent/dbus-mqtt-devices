@@ -22,13 +22,18 @@ class MQTTDeviceServiceConfig(object):
     def __init__(self, serviceName, serviceType):
         self._serviceType = serviceType 
         self._serviceName = serviceName
-        
-        base = os.path.dirname(os.path.realpath(__file__))
-        with open(os.path.join(base, 'services.yml'), 'r') as services_file:
-            configs = yaml.safe_load(services_file)
-        self._config = configs.get(serviceType)
-        if self._config == None:
-            logging.error("No configuration for Service %s, please update services.yml", serviceType)
+        logging.info("About to open config file")               
+        try:                                                    
+            base = os.path.dirname(os.path.realpath(__file__))  
+            with open(os.path.join(base, 'services.yml'), 'r') as services_file:
+                configs = yaml.safe_load(services_file)                         
+            self._config = configs.get(serviceType)                             
+            if self._config == None:                                            
+                logging.info("No configuration for Service %s, please update services.yml", serviceType)
+        except IOError as e:                                                                            
+            logging.error("I/O error(%s): %s", e.errno, e.strerror)
+        except: #handle other exceptions such as attribute errors                                       
+            logging.error("Unexpected error: %s", sys.exc_info()[0])
 
 
     def local_settings(self):
