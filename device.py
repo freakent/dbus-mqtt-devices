@@ -21,7 +21,7 @@ class MQTTDevice(object):
         self.clientId = device_status.get("clientId")
         self.version = device_status.get("version")
         self._status = device_status
-        logging.info("*** New device: %s, services: %s", self.clientId, self._status['services'])
+        logging.info("**** Registering device: %s, services: %s ****", self.clientId, self._status['services'])
 
         self._services = {}
         if self._status.get("services") is not None and type(self._status.get("services")) is dict:

@@ -48,7 +48,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
             elif status['connected'] == 0:
                 self._remove_device(status)
             else:
-                logging.info("Unrecognised device Connected status %s for client %s", status["clientId"])
+                logging.warning("Unrecognised device Connected status %s for client %s", status["clientId"])
 
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
@@ -76,6 +76,6 @@ class MQTTDeviceManager(MqttGObjectBridge):
             device.__del__()
             del device
             self._devices[clientId] = None
-            logging.info('--- Removed device %s', clientId)
+            logging.info('**** Unregistering device %s ****', clientId)
         else:
             logging.warning('tried to remove device %s that is not registered', clientId)
