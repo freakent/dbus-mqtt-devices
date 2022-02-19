@@ -12,7 +12,7 @@ echo "Pip install module dependencies"
 python -m pip install -r requirements.txt
 
 echo "Set up Victron module libraries"
-rm -f $BASE/ext/dbus-mqtt $BASE/ext/velib_python
+rm -fr $BASE/ext/dbus-mqtt $BASE/ext/velib_python
 ln -s /opt/victronvi energy/dbus-mqtt $BASE/ext
 ln -s /opt/victronenergy/dbus-digitalinputs/ext/velib_python $BASE/ext
 
