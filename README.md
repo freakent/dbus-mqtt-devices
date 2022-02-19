@@ -80,7 +80,7 @@ registration, using the following protocol:
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
 ## Install and Setup:
-Why does this whole thing become a code block?
+To get the driver up and running, download the latest release from github and then run the setup script.
 
 1. ssh into venus device
 
@@ -94,14 +94,14 @@ unzip main.zip
 ```
 
 3. Run the set up script
-'''
+```
 ./dbus-mqtt-devices/bin/setup.sh
-'''
+```
 
 4. Check everything is running by looking at the log
-'''
+```
 tail -f /var/log/dbus-mqtt-devices/current
-'''
+```
 
 5. Reboot (recommended)
 
