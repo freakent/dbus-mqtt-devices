@@ -7,7 +7,7 @@ custom drivers to be developed and deployed.
 
 ## Registration Protocol
 This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
-registration, using the following protocol. <client id> is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
+registration, using the following protocol.  `<client id>` is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
 
 1)  When a device initialises, it does 2 things :
 
@@ -22,6 +22,8 @@ registration, using the following protocol. <client id> is the unique MQTT clien
         for example:
 		
         `{ "clientid": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature", "t2": "temperature"} }`
+
+		please note: in the example, t1 and t2 are just unique arbitrary identifiers that distinguish one service from another within a device.
 
 2)	The driver will then use this information to :
     - obtain a numeric device instance (for VRM) for each device service (using the ClassAndVrmInstance dbus service), 
