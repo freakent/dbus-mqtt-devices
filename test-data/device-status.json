@@ -1,8 +1,9 @@
-// device/arduino_freakent1/Status
+// device/fe002/Status
 {
-    "clientId": "arduino_freakent1",
-    "connected": 1,
-    "services": [
-      "temperature"
-    ]
+  "clientId": "fe002",
+  "connected": 1,
+  "version": "v1.2",
+  "services": {
+    "t1": "temperature"
   }
+}
