@@ -13,8 +13,8 @@ python -m pip install -r requirements.txt
 
 echo "Set up Victron module libraries"
 rm -f $BASE/ext/dbus-mqtt $BASE/ext/velib_python
-ln -s /opt/victromenergy/dbus-mqtt $BASE/ext
-ln -s /opt/victromenergy/dbus-digitalinputs/ext/velib_python $BASE/ext
+ln -s /opt/victronvi energy/dbus-mqtt $BASE/ext
+ln -s /opt/victronenergy/dbus-digitalinputs/ext/velib_python $BASE/ext
 
 echo "Set up device service to autorun on restart"
 chmod +x $BASE/dbus_mqtt_devices.py
