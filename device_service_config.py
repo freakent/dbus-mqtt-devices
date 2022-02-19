@@ -22,11 +22,13 @@ class MQTTDeviceServiceConfig(object):
     def __init__(self, serviceName, serviceType):
         self._serviceType = serviceType 
         self._serviceName = serviceName
-        with open('services.yml', 'r') as services_file:
+        
+        base = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(base, 'services.yml'), 'r') as services_file:
             configs = yaml.safe_load(services_file)
         self._config = configs.get(serviceType)
         if self._config == None:
-            logging.info("No configuration for Service %s, please update services.yml", serviceType)
+            logging.error("No configuration for Service %s, please update services.yml", serviceType)
 
 
     def local_settings(self):
