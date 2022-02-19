@@ -53,15 +53,15 @@ registration, using the following protocol:
 
 5) 	When a device disconnects it should notify the driver by publishing a 
 	status message with a connected value of 0. With MQTT the preferred
-	methos of achieving this is through am MQTT "last will". 
+	methods of achieving this is through am MQTT "last will". 
     
     For example:
 
 		`{ "clientid": "fe001", "version": "v1.0", "connected": 0, "services": {"t1": "temperature", "t2": "temperature"}}`
 	
     
-    plead note: the contents of the "services" are actually irrelevant as all 
-	the device services are cleared by the message
+    please note: on disconnect the contents of the "services" are actually irrelevant as all 
+	the device services are cleared by this action.
 
 
 ## Things to consider:
@@ -79,19 +79,31 @@ registration, using the following protocol:
     Adafruit AHT20 temperature and humidty module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
-## Install and Setup
+## Install and Setup:
+Why does this whole thing become a code block?
 
-    1. ssh into venus device
-    2. Download the latest zip from github and extract contents
-	`mkdir -p /data/driver
-	cd /data/driver
-	wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.1.1.zip
-	unzip main.zip`
-	3. Run the set up script
-	`./dbus-mqtt-devices/bin/setup.sh`
-    4. Check everything is running by looking at the log
-	`tail -f /var/log/dbus-mqtt-devices/current`
-	5. Reboot (recommended)
+1. ssh into venus device
+
+2. Download the latest zip from github and extract contents
+
+```
+mkdir -p /data/driver
+cd /data/driver
+wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.1.1.zip
+unzip main.zip
+```
+
+3. Run the set up script
+'''
+./dbus-mqtt-devices/bin/setup.sh
+'''
+
+4. Check everything is running by looking at the log
+'''
+tail -f /var/log/dbus-mqtt-devices/current
+'''
+
+5. Reboot (recommended)
 
 ## To Do
 1) Use of command line args
