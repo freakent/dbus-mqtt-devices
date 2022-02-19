@@ -2,7 +2,7 @@
 #BASE=/data/drivers/dbus-mqtt-devices
 BASE=$(dirname $(dirname $(realpath "$0")))
 
-echo "Install dbus-mqtt-devices to $BASE started"
+echo "Setup dbus-mqtt-devices in $BASE started"
 cd $BASE
 
 echo "Ensure Python's Pip is installed"
@@ -29,4 +29,4 @@ if ! grep -q "$CMD" /data/rc.local; then
     echo "$CMD" >> /data/rc.local
 fi
 
-echo "Install dbus-mqtt-devices complete"
+echo "Setup dbus-mqtt-devices complete"
