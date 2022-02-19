@@ -74,20 +74,27 @@ registration, using the following protocol:
 	VRM.
 - 	Currently this driver only supports temperature services but the 
 	protocol and the driver have been designed to be easily extended for 
-	other services supported by dbus-mqtt.
+	other services supported by dbus-mqtt (see services.yml).
 -   A working Arduino Sketch that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidty module using this driver and 
-    mqtt-dbus is available at github. etc etc
+    mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
-## Running
+## Install and Setup
 
-    git clone git@github.com: etc etc
-    cd etc etc
-    git submodule update --init
-    python dbus_mqtt_devices
+    1. ssh into venus device
+    2. Download the latest zip from github and extract contents
+	`mkdir -p /data/driver
+	cd /data/driver
+	wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.1.1.zip
+	unzip main.zip`
+	3. Run the set up script
+	`./dbus-mqtt-devices/bin/setup.sh`
+    4. Check everything is running by looking at the log
+	`tail -f /var/log/dbus-mqtt-devices/current`
+	5. Reboot (recommended)
 
 ## To Do
-1) Paramerterise service specific paths to extend service support beyond Temperature
-2) Use of command line args
-3) Figure out why ctrl-C isn't working right
+1) Use of command line args
+2) Figure out why ctrl-C isn't working right
+3) Add support for more dbus-mqtt services
 
