@@ -40,8 +40,8 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     
     For example:
 
-		`Topic: "device/<client id>DeviceInstance"
-		Payload: {"t1": 5, "t2":12}`
+		Topic: "device/<client id>DeviceInstance"
+		Payload: {"t1": 5, "t2":12}
 
 
 4)	The device uses the device instance to periodically publish messages to the 
@@ -49,8 +49,8 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 	
     For example:
 	
-    	`Topic: "W/<portal id>/temperature/<device instance>/Temperature"
-		Payload: { "value": 24.91 }`
+    	Topic: "W/<portal id>/temperature/<device instance>/Temperature"
+		Payload: { "value": 24.91 }
 
 
 5) 	When a device disconnects it should notify the driver by publishing a 
@@ -59,7 +59,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     
     For example:
 
-		`{ "clientid": "fe001", "version": "v1.0", "connected": 0, "services": {"t1": "temperature", "t2": "temperature"}}`
+		{ "clientid": "fe001", "version": "v1.0", "connected": 0, "services": {"t1": "temperature", "t2": "temperature"}}
 	
     
     please note: on disconnect the contents of the "services" are actually irrelevant as all 
