@@ -23,8 +23,8 @@ registration, using the following protocol:
 		
         `{ "clientid": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature", "t2": "temperature"} }`
 
-2)	The driver will the use this infomation to :
-    - obtain a numeric device instance (for VRM) for each devicee service, 
+2)	The driver will the use this information to :
+    - obtain a numeric device instance (for VRM) for each device service, 
     - set up local settings for persistent storage of some attributes
     - register the device on the dbus, 
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
@@ -76,7 +76,7 @@ registration, using the following protocol:
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see services.yml).
 -   A working Arduino Sketch that publishes temperature readings from an 
-    Adafruit AHT20 temperature and humidty module using this driver and 
+    Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
 ## Install and Setup:
