@@ -6,7 +6,11 @@ echo "Setup dbus-mqtt-devices in $BASE started"
 cd $BASE
 
 echo "Ensure Python's Pip is installed"
-python -m ensurepip
+python -m pip --version
+piperr=$?
+if [ "$piperr" -ne 0 ]; then
+    opkg update && opkg install python3-pip
+fi
 
 echo "Pip install module dependencies"
 python -m pip install -r requirements.txt
