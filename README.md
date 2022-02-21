@@ -89,8 +89,8 @@ To get the driver up and running, download the latest release from github and th
 2. Download the latest zip from github and extract contents
 
 ```
-mkdir -p /data/driver
-cd /data/driver
+mkdir -p /data/drivers
+cd /data/drivers
 wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.1.1.zip
 unzip main.zip
 ```
