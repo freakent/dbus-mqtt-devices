@@ -55,7 +55,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 
 5) 	When a device disconnects it should notify the driver by publishing a 
 	status message with a connected value of 0. With MQTT the preferred
-	methods of achieving this is through am MQTT "last will". 
+	method of achieving this is through publishing an MQTT "last will" message.  
     
     For example:
 
