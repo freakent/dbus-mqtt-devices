@@ -77,7 +77,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 - 	Currently this driver only supports temperature services but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see services.yml).
--   A working Arduino Sketch that publishes temperature readings from an 
+-   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
