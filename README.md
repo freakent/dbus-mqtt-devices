@@ -26,8 +26,8 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 		please note: in the example, the device is registering that it is equipped with two temperature sensors. The t1 and t2 are just unique arbitrary identifiers that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
 
 2)	The driver will then use this information to :
-    - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance][https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance] dbus service), 
-    - set up [local settings][https://github.com/victronenergy/localsettings] for persistent storage of some attributes
+    - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance](https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance) dbus service), 
+    - set up [local settings](https://github.com/victronenergy/localsettings) for persistent storage of some attributes
     - register the device on the dbus, 
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
     
