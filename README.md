@@ -1,7 +1,7 @@
 # dbus-mqtt-devices
 
 This Venus GX Driver works in concert with the Victron dbus-mqtt gateway. It 
-enables devices (such as Arduino microcontrollers or Raspberry Pi) to self 
+allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self 
 register to the dbus over MQTT. This avoids the need for additional dedicated 
 custom drivers to be developed and deployed.
 
@@ -26,8 +26,8 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 		please note: in the example, the device is registering that it is equipped with two temperature sensors. The t1 and t2 are just unique arbitrary identifiers that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
 
 2)	The driver will then use this information to :
-    - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance][https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance] dbus service), 
-    - set up [local settings][https://github.com/victronenergy/localsettings] for persistent storage of some attributes
+    - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance](https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance) dbus service), 
+    - set up [local settings](https://github.com/victronenergy/localsettings) for persistent storage of some attributes
     - register the device on the dbus, 
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
     
@@ -55,7 +55,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 
 5) 	When a device disconnects it should notify the driver by publishing a 
 	status message with a connected value of 0. With MQTT the preferred
-	methods of achieving this is through am MQTT "last will". 
+	method of achieving this is through publishing an MQTT "last will" message.  
     
     For example:
 
@@ -77,7 +77,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 - 	Currently this driver only supports temperature services but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see services.yml).
--   A working Arduino Sketch that publishes temperature readings from an 
+-   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
