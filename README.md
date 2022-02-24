@@ -101,12 +101,13 @@ unzip dbus-mqtt-devices.zip
 
 3. Run the set up script
 ```
-./dbus-mqtt-devices/bin/setup.sh
+./dbus-mqtt-devices-0.2.1/bin/setup.sh
 ```
 
-4. Check everything is running by looking at the log
+4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
-tail -f /var/log/dbus-mqtt-devices/current
+cat /data/rc.local
+ln -s /data/drivers/dbus-mqtt-devices-0.2.1/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
