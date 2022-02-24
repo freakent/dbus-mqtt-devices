@@ -93,24 +93,27 @@ To get the driver up and running, download the latest release from github and th
 2. Download the latest zip from github and extract contents
 
 ```
-mkdir -p /data/drivers
-cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
-unzip dbus-mqtt-devices.zip
+$ mkdir -p /data/drivers
+$ cd /data/drivers
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
+$unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-./dbus-mqtt-devices-0.2.1/bin/setup.sh
+$ ./dbus-mqtt-devices-0.2.1/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
-cat /data/rc.local
+$ cat /data/rc.local
 ln -s /data/drivers/dbus-mqtt-devices-0.2.1/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
+```
+$ reboot
+```
 
 ## To Do
 1) Use of command line args
