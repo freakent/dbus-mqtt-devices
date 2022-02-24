@@ -19,11 +19,15 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     	
         `{ "clientid": <client id>, "connected": <either 1 or 0>, "version": "<text string>", "services": [<a dictionary of services that this device wants to use>] }`
    	
-        for example:
+        example 1:
 		
-        `{ "clientid": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature", "t2": "temperature"} }`
+        `{ "clientid": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature"} }`
+		In example 1, the device is registering that it is equipped with two temperature sensors. The label t1 is just an arbitrary identifier that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
 
-		please note: in the example, the device is registering that it is equipped with two temperature sensors. The t1 and t2 are just unique arbitrary identifiers that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
+        example 2:
+		
+        `{ "clientid": "fe002", "connected": 1, "version": "v2.3", "services": {"t1": "temperature", "t2": "temperature", "tk1": "tank" } }`
+		In example 2, the device is registering that it is equipped with two temperature sensors and a tank level sensor. The labels t1, t2, tk2 are the unique arbitrary identifiers that distinguish one service from another within a device. 
 
 2)	The driver will then use this information to :
     - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance](https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance) dbus service), 
@@ -91,8 +95,8 @@ To get the driver up and running, download the latest release from github and th
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
-unzip main.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
+unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
