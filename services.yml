@@ -14,3 +14,21 @@ temperature:
     description: "hPa"
   Humidity:
     description: "%"
+
+tank:               
+  Capacity:
+    description: "m3"
+    persist: true
+    default: 0.1
+    min: 0
+    max: 9999         
+  FluidType:
+    description: "0=Fuel; 1=Fresh water; 2=Waste water; 3=Live well; 4=Oil; 5=Black water (sewage)"
+    persist: true
+    default: 1
+    min: 0
+    max: 5         
+  Level:            
+    description: "0 to 100%" 
+  Remaining:
+    description: "m3"

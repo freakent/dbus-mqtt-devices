@@ -74,9 +74,9 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 - 	Each device service will appear separately on the Venus GX device, and 
 	each can have a customised name that will show on the GX display and in 
 	VRM.
-- 	Currently this driver only supports temperature services but the 
+- 	Currently this driver only supports temperature and tank level services but the 
 	protocol and the driver have been designed to be easily extended for 
-	other services supported by dbus-mqtt (see services.yml).
+	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
@@ -91,7 +91,7 @@ To get the driver up and running, download the latest release from github and th
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.1.1.zip
+wget https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
 unzip main.zip
 ```
 
