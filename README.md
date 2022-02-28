@@ -22,7 +22,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
         example 1:
 		
         `{ "clientid": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature"} }`
-		In example 1, the device is registering that it is equipped with two temperature sensors. The label t1 is just an arbitrary identifier that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
+		In example 1, the device is registering that it is equipped with one temperature sensor which we are calling "t1". The label t1 is just an arbitrary identifier that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
 
         example 2:
 		
