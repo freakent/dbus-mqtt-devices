@@ -96,7 +96,7 @@ To get the driver up and running, download the latest release from github and th
 $ mkdir -p /data/drivers
 $ cd /data/drivers
 $ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
-$unzip dbus-mqtt-devices.zip
+$ unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
