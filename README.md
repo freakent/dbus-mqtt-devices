@@ -121,3 +121,48 @@ $ reboot
 3) Substitute any special characters in the client id for safe underscores _
 4) Add support for more dbus-mqtt services
 
+
+## Troubleshooting
+1) First thing to check is that the dbus-mqtt-devices service is running, from the ssh command line use
+```
+$ svstat /service/dbus-mqtt-devices
+```
+More info on deamontools that VenusOs uses here: https://cr.yp.to/daemontools.html
+
+2) If the service is running, then next thing to check is the log with the command:
+```
+$ more /var/log/dbus-mqtt-devices/current
+```
+It should contain something like this:
+```
+@400000006238ead134c233e4 INFO:device_manager:Received device status message {'clientId': 'fe001', 'connected': 1, 'version': 'v1.0', 'services': {'t1': 'temperature'}}
+@400000006238ead134c25324 INFO:device:**** Registering device: fe001, services: {'t1': 'temperature'} ****
+@400000006238ead134c25edc INFO:device:Registering Service temperature for client fe001
+@400000006238ead134c26a94 INFO:device_service_config:About to open config file
+@400000006238ead136d95fcc INFO:device_service:Unregistered mqtt_fe001_t1 from dbus
+@400000006238ead136df10d4 INFO:device_service:Unregistered mqtt_fe001_t1 from dbus
+@400000006238ead136ea9ddc INFO:device_service:Unregistered mqtt_fe001_t1 from dbus
+@400000006238ead13755bbbc INFO:device_service:Registering service temperature for client fe001 at path com.victronenergy.temperature.mqtt_fe001_t1
+@400000006238ead13903b20c INFO:settingsdevice:Setting /Settings/Devices/mqtt_fe001_t1/ClassAndVrmInstance does not exist yet or must be adjusted
+@400000006238ead13a94dd44 INFO:vedbus:registered ourselves on D-Bus as com.victronenergy.temperature.mqtt_fe001_t1
+@400000006238ead13ac572c4 INFO:device_service:Registered Service com.victronenergy.temperature.mqtt_fe001_t1 under DeviceInstance 1
+@400000006238ead13ad8d79c INFO:device_manager:publish {'t1': '1'} to device/fe001/DeviceInstance, status is 0
+```
+
+If you can have ssh open in another window, then
+```
+$ tail -f /var/log/dbus-mqtt-devices/current 
+```
+is a useful way to monitor the driver
+
+3) Finally, if you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
+```
+$ more /data/rc.local 
+```
+
+4) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the queues while debugging and if you are doing anything with MQTT.
+
+
+5) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
+I get email alerts from Github which I don't seem to get from the Victron community forum.
+
