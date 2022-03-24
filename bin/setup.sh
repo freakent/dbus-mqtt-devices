@@ -32,5 +32,5 @@ CMD="ln -s $BASE/bin/service /service/dbus-mqtt-devices"
 if ! grep -q "$CMD" /data/rc.local; then
     echo "$CMD" >> /data/rc.local
 fi
-
+chmod +x /data/rc.local
 echo "Setup dbus-mqtt-devices complete"

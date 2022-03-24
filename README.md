@@ -129,7 +129,13 @@ $ svstat /service/dbus-mqtt-devices
 ```
 More info on deamontools that VenusOs uses here: https://cr.yp.to/daemontools.html
 
-2) If the service is running, then next thing to check is the log with the command:
+2) If the service is not running then ensure that your rc.local script has execute permissions.
+```
+$ ls -l /data/rc.local
+...
+$ chmod +x /data/rc.local
+```
+3) If the service is running, then next thing to check is the log with the command:
 ```
 $ more /var/log/dbus-mqtt-devices/current
 ```
@@ -153,16 +159,16 @@ If you can have ssh open in another window, then
 ```
 $ tail -f /var/log/dbus-mqtt-devices/current 
 ```
-is a useful way to monitor the driver
+is a useful way to monitor the driver.
 
-3) Finally, if you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
+4) Finally, if you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 $ more /data/rc.local 
 ```
 
-4) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the queues while debugging and if you are doing anything with MQTT.
+5) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the queues while debugging and if you are doing anything with MQTT.
 
 
-5) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
+6) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
 I get email alerts from Github which I don't seem to get from the Victron community forum.
 
