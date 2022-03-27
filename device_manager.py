@@ -9,6 +9,7 @@ import paho.mqtt.client as MQTT
 import json
 import os
 import sys
+import re
 
 from device import MQTTDevice
 
@@ -52,6 +53,46 @@ class MQTTDeviceManager(MqttGObjectBridge):
 
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
+
+    def status_is_valid(self, status):
+        validFormat = "^[a-zA-Z0-9_]*$"
+        isValid = True
+
+        # Check the connected attribute
+        connected = status.get('connected')
+        if connected is None or connected == "":
+            isValid = False
+            logging.warning("status.connected can not be blank")
+        else:
+            if connected < 0 or connected > 1 :
+                isValid = False
+                logging.warning("status.connected must be either 1 or 0")
+
+        # Check the clientId attribute
+        clientId = status.get('clientId')
+        if clientId is None or clientId == "":
+            isValid = False
+            logging.warning("status.clientId can not be blank")
+        else:
+            if re.search(validFormat, clientId) == None :
+                isValid = False
+                logging.warning("status.clientId can only contain alpha numeric characters and _ (underscores)")
+
+        # Check the services dictionary object
+        services = status.get('services')
+        if connected == 1:
+            if (services is None or services == "") and not isinstance(services, dict):
+                isValid = False
+                logging.warning("status.services must contain a dictionary of values if connected = 1")
+            else:
+                for service_id in services.keys():
+                    if re.search(validFormat, service_id) == None :
+                        isValid = False
+                        logging.warning("status.services contains a service with an invalid identifier, only alpha numeric characters and _ (underscores) are allowed")
+                        # Please note, service types, such as  "temperature" and "tank", are validated later by matching against services.yml
+
+        return isValid
+
 
     def _subscribe_to_device_topic(self):
         mqtt = self._client

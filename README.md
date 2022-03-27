@@ -172,3 +172,12 @@ $ more /data/rc.local
 6) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
 I get email alerts from Github which I don't seem to get from the Victron community forum.
 
+## Developers
+if you are wanting to run the pytests on macos you need to install a few dependencies:
+
+#### using homebrew
+```
+$ brew install dbus pygobject3 gtk+3
+$ pip3 install pytest
+$ pytest --ignore=ext
+```
