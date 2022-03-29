@@ -47,8 +47,9 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 		Topic: "device/<client id>/DBus"
 		Payload: {"portalId": "<vrm portal id>", deviceInstance":"t1": 5, "t2":12}
 
-	Please note: the `device/<client id>/DeviceInstance` topic has been deprecated and publishing to the topic will be removed in a future release.
-	Including the `<portal id>` and `<device instance>` in the same message payload will simply client code and leaves scope for future expansion.
+	Please note: the `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus` and publishing to 
+	the topic will be removed in a future release. By including the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and 
+	it leaves scope for future expansion.
 
 
 4)	The device uses the device instance to periodically publish messages to the 
