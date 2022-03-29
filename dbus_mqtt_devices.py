@@ -16,7 +16,7 @@ Device Manager ---> Device ---> Device Service
 
 import logging
 import argparse
-#import dbus
+import dbus
 import os
 import sys
 import signal

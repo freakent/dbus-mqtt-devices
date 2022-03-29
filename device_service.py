@@ -31,7 +31,11 @@ class MQTTDeviceService(object):
         self.serviceId = serviceId # e.g. t1
         self.serviceType = serviceType # e.g. temperature
         self._config = MQTTDeviceServiceConfig(self.serviceName(), serviceType) #onchangecallback=self._handle_changed_value)
-        
+        self._dbus_conn = (dbus.SessionBus(private=True) if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus(private=True)) \
+			if device.device_mgr.dbus_address is None \
+			else dbus.bus.BusConnection(device.device_mgr.dbus_address)
+
+
         logging.info("Registering service %s for client %s at path %s", serviceType, device.clientId, self.serviceDbusPath())
 
         self._set_up_local_settings()
@@ -49,8 +53,8 @@ class MQTTDeviceService(object):
             del self._dbus_service
         if hasattr(self, '_settings'):   
             del self._settings 
-        #if hasattr(self, '_dbus_conn'):   
-        #    del self._dbus_conn
+        if hasattr(self, '_dbus_conn'):   
+            del self._dbus_conn
         logging.info("Unregistered %s from dbus", self.serviceName())
 
 
@@ -61,7 +65,7 @@ class MQTTDeviceService(object):
         #}
         local_settings = self._config.local_settings()
         logging.debug("Local settings for device service %s are %s", self.serviceName(), local_settings)
-        self._settings = SettingsDevice(bus=self.device.dbus_conn(), supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
+        self._settings = SettingsDevice(bus=self._dbus_conn, supportedSettings=local_settings, eventCallback=self._handle_changed_setting)
 
     def _set_up_device_instance(self):
         settings_device_path = "/Settings/Devices/{}/ClassAndVrmInstance".format(self.serviceName())
@@ -70,7 +74,7 @@ class MQTTDeviceService(object):
         s, self.device_instance = r.get_value().split(':') # Return the allocated ID provided from dbus SettingDevices
 
     def _set_up_dbus_paths(self):
-        self._dbus_service = dbus_service = VeDbusService(self.serviceDbusPath(), bus=self.device.dbus_conn())
+        self._dbus_service = dbus_service = VeDbusService(self.serviceDbusPath(), bus=self._dbus_conn)
         # Add objects required by ve-api
         dbus_service.add_path('/Mgmt/ProcessName', 'dbus-mqtt-devices')
         dbus_service.add_path('/Mgmt/ProcessVersion', VERSION)

@@ -9,6 +9,7 @@ registration and de-registration of devices.
 """
 import logging
 import paho.mqtt.client as MQTT
+import dbus
 import json
 import os
 import sys
@@ -28,11 +29,11 @@ CLIENTID = "dbus_mqtt_device_manager" # the client id this process will connect 
 class MQTTDeviceManager(MqttGObjectBridge):
 
     def __init__(self, mqtt_server=None, ca_cert=None, user=None, passwd=None, dbus_address=None, init_broker=False, debug=False):
-        self.dbus_conn = (dbus.SessionBus(private=True) if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus(private=True)) \
+        self._dbus_conn = (dbus.SessionBus(private=True) if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus(private=True)) \
 			if dbus_address is None \
 			else dbus.bus.BusConnection(dbus_address)
-
-        self.portalId = VeDbusItemImport(self.dus_conn, "com.victronenergy.system", "/Serial").getValue()
+        self.dbus_address = dbus_address
+        self.portalId = self._lookup_portalId()
         self.debug = debug
         self._devices = {}
         MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
@@ -54,12 +55,15 @@ class MQTTDeviceManager(MqttGObjectBridge):
             status = json.loads(msg.payload)
             logging.info("Received device status message %s", status)
             
-            if status['connected'] == 1:
-                self._process_device(status)
-            elif status['connected'] == 0:
-                self._remove_device(status)
+            if self._status_is_valid(status):
+                if status['connected'] == 1:
+                    self._process_device(status)
+                elif status['connected'] == 0:
+                    self._remove_device(status)
+                else:
+                    logging.warning("Unrecognised device Connected status %s for client %s", status["clientId"])
             else:
-                logging.warning("Unrecognised device Connected status %s for client %s", status["clientId"])
+                logging.warning("Status message from client %s failed validation and has been rejected", status["clientId"])
 
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
@@ -86,7 +90,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         else:
             if re.search(validFormat, clientId) == None :
                 isValid = False
-                logging.warning("status.clientId can only contain alpha numeric characters and _ (underscores)")
+                logging.warning("status.clientId %s can only contain alpha numeric characters and _ (underscores)", clientId)
 
         # Check the services dictionary object
         services = status.get('services')
@@ -98,11 +102,16 @@ class MQTTDeviceManager(MqttGObjectBridge):
                 for service_id in services.keys():
                     if re.search(validFormat, service_id) == None :
                         isValid = False
-                        logging.warning("status.services contains a service with an invalid identifier, only alpha numeric characters and _ (underscores) are allowed")
+                        logging.warning("status.services contains a service %s with an invalid identifier, only alpha numeric characters and _ (underscores) are allowed", service_id)
                         # Please note, service types, such as  "temperature" and "tank", are validated later by matching against services.yml
 
         return isValid
 
+    def _lookup_portalId(self):
+        portalId = VeDbusItemImport(self._dbus_conn, "com.victronenergy.system", "/Serial").get_value()
+        logging.info("Using portalId %s", portalId)
+        return portalId
+        
 
     def _subscribe_to_device_topic(self):
         mqtt = self._client
@@ -121,7 +130,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         #deprecated - end
 
         topic = "device/{}/DBus".format(clientId)
-        res = mqtt.publish(topic, { "portalId": self.portalId(), "deviceInstance": json.dumps(device.device_instances()) } )
+        res = mqtt.publish(topic, json.dumps( { "portalId": self.portalId, "deviceInstance": device.device_instances() } ) )
 
         logging.info('publish %s to %s, status is %s', device.device_instances(), topic, res.rc)
 
