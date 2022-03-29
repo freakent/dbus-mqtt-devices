@@ -36,11 +36,11 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
     
 
-3)	The driver publishes a DeviceInstance message under the same MQTT Topic
+3)	The driver publishes a DBus message under the same MQTT Topic
 	namespace. This is the topic the device subscribed to in step 1.1. The 
-	DeviceInstance message contains the numeric device instances (one for each 
+	DBus message contains the numeric device instances (one for each 
 	service) that the device should use when publishing messages for dbus-mqtt
-	to process (see 5). 
+	to process. It also contains the portal id needed to construct a dbus-mqtt topic (see 4). 
     
     For example:
 
