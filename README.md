@@ -153,7 +153,7 @@ It should contain something like this:
 @400000006238ead13903b20c INFO:settingsdevice:Setting /Settings/Devices/mqtt_fe001_t1/ClassAndVrmInstance does not exist yet or must be adjusted
 @400000006238ead13a94dd44 INFO:vedbus:registered ourselves on D-Bus as com.victronenergy.temperature.mqtt_fe001_t1
 @400000006238ead13ac572c4 INFO:device_service:Registered Service com.victronenergy.temperature.mqtt_fe001_t1 under DeviceInstance 1
-@400000006238ead13ad8d79c INFO:device_manager:publish {'portalId': '<portal id>', 'deviceInstance': 't1': '1'} to device/fe001/DeviceInstance, status is 0
+@400000006238ead13ad8d79c INFO:device_manager:publish {'portalId': '<portal id>', 'deviceInstance': 't1': '1'} to device/fe001/DBus, status is 0
 ```
 
 If you can have ssh open in another window, then
