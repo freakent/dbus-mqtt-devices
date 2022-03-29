@@ -132,7 +132,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         topic = "device/{}/DBus".format(clientId)
         res = mqtt.publish(topic, json.dumps( { "portalId": self.portalId, "deviceInstance": device.device_instances() } ) )
 
-        logging.info('publish %s to %s, status is %s', device.device_instances(), topic, res.rc)
+        logging.info('publish %s to %s, status is %s', { "portalId": self.portalId, "deviceInstance": device.device_instances() }, topic, res.rc)
 
 
     def _remove_device(self, status):
