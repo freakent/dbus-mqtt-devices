@@ -44,8 +44,11 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     
     For example:
 
-		Topic: "device/<client id>DeviceInstance"
-		Payload: {"t1": 5, "t2":12}
+		Topic: "device/<client id>/DBus"
+		Payload: {"portalId": "<vrm portal id>", deviceInstance":"t1": 5, "t2":12}
+
+	Please note: the "device/<client id>/DeviceInstance has been deprecated and publishing to the topic will be removed in a future release.
+	Including the <portal id> and <device instance> in the same message payload will simply client code and leaves scope for future expansion.
 
 
 4)	The device uses the device instance to periodically publish messages to the 
@@ -95,13 +98,13 @@ To get the driver up and running, download the latest release from github and th
 ```
 $ mkdir -p /data/drivers
 $ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.2.1.zip
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.3.1.zip
 $ unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.2.1/bin/setup.sh
+$ ./dbus-mqtt-devices-0.3.1/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
@@ -117,8 +120,7 @@ $ reboot
 
 ## To Do
 1) Use of command line args
-2) Figure out why ctrl-C isn't working right
-3) Add support for more dbus-mqtt services
+2) Add support for more dbus-mqtt services
 
 
 ## Troubleshooting
@@ -151,7 +153,7 @@ It should contain something like this:
 @400000006238ead13903b20c INFO:settingsdevice:Setting /Settings/Devices/mqtt_fe001_t1/ClassAndVrmInstance does not exist yet or must be adjusted
 @400000006238ead13a94dd44 INFO:vedbus:registered ourselves on D-Bus as com.victronenergy.temperature.mqtt_fe001_t1
 @400000006238ead13ac572c4 INFO:device_service:Registered Service com.victronenergy.temperature.mqtt_fe001_t1 under DeviceInstance 1
-@400000006238ead13ad8d79c INFO:device_manager:publish {'t1': '1'} to device/fe001/DeviceInstance, status is 0
+@400000006238ead13ad8d79c INFO:device_manager:publish {'portalId': '<portal id>', 'deviceInstance': 't1': '1'} to device/fe001/DeviceInstance, status is 0
 ```
 
 If you can have ssh open in another window, then
