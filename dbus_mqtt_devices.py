@@ -7,6 +7,11 @@ register to the dbus over MQTT. This avoids the need for additional dedicated
 custom drivers to be developed and deployed.
 
 See README for details.
+
+Device Manager ---> Device ---> Device Service
+                                      |
+                                      v
+                             Device Service Config
 """
 
 import logging
@@ -28,7 +33,7 @@ from ve_utils import get_vrm_portal_id, exit_on_error, wrap_dbus_value, unwrap_d
 
 from device_manager import MQTTDeviceManager
 
-VERSION = '0.10'
+VERSION = '0.3.1'
 
 def dumpstacks(signal, frame):
 	import threading

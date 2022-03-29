@@ -1,5 +1,8 @@
 """
 DEVICE MANAGER ---> Device ---> Device Service
+                                      |
+                                      v
+                             Device Service Config
 
 The Device Manager subscribes to the MQTT device/+/Status topics and handles 
 registration and de-registration of devices.
@@ -16,13 +19,20 @@ from device import MQTTDevice
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
 from mqtt_gobject_bridge import MqttGObjectBridge
+sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
+from vedbus import VeDbusItemImport
+
 
 CLIENTID = "dbus_mqtt_device_manager" # the client id this process will connect to MQTT with
 
 class MQTTDeviceManager(MqttGObjectBridge):
 
     def __init__(self, mqtt_server=None, ca_cert=None, user=None, passwd=None, dbus_address=None, init_broker=False, debug=False):
-        self.dbus_address = dbus_address
+        self.dbus_conn = (dbus.SessionBus(private=True) if 'DBUS_SESSION_BUS_ADDRESS' in os.environ else dbus.SystemBus(private=True)) \
+			if dbus_address is None \
+			else dbus.bus.BusConnection(dbus_address)
+
+        self.portalId = VeDbusItemImport(self.dus_conn, "com.victronenergy.system", "/Serial").getValue()
         self.debug = debug
         self._devices = {}
         MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
@@ -54,7 +64,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
 
-    def status_is_valid(self, status):
+    def _status_is_valid(self, status):
         validFormat = "^[a-zA-Z0-9_]*$"
         isValid = True
 
@@ -81,7 +91,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         # Check the services dictionary object
         services = status.get('services')
         if connected == 1:
-            if (services is None or services == "") and not isinstance(services, dict):
+            if services is None or services == "" or not isinstance(services, dict):
                 isValid = False
                 logging.warning("status.services must contain a dictionary of values if connected = 1")
             else:
@@ -105,8 +115,14 @@ class MQTTDeviceManager(MqttGObjectBridge):
         if device is None:
             # create a new device
             self._devices[clientId] = device = MQTTDevice(device_mgr=self, device_status=status)
+        #deprecated - start
         topic = "device/{}/DeviceInstance".format(clientId)
         res = mqtt.publish(topic, json.dumps(device.device_instances()))
+        #deprecated - end
+
+        topic = "device/{}/DBus".format(clientId)
+        res = mqtt.publish(topic, { "portalId": self.portalId(), "deviceInstance": json.dumps(device.device_instances()) } )
+
         logging.info('publish %s to %s, status is %s', device.device_instances(), topic, res.rc)
 
 

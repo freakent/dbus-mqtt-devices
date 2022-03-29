@@ -118,8 +118,7 @@ $ reboot
 ## To Do
 1) Use of command line args
 2) Figure out why ctrl-C isn't working right
-3) Substitute any special characters in the client id for safe underscores _
-4) Add support for more dbus-mqtt services
+3) Add support for more dbus-mqtt services
 
 
 ## Troubleshooting
