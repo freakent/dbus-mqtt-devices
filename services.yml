@@ -1,3 +1,4 @@
+# https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
   CustomName:
     default: "My Temperature Sensor"
@@ -15,6 +16,7 @@ temperature:
   Humidity:
     description: "%"
 
+# https://github.com/victronenergy/venus/wiki/dbus#tank-levels
 tank:               
   CustomName:
     default: "My Tank Sensor"
@@ -35,3 +37,69 @@ tank:
     description: "0 to 100%" 
   Remaining:
     description: "m3"
+
+# https://github.com/victronenergy/venus/wiki/dbus#pv-inverters
+pvinverter:
+  CustomName:
+    default: "PV Inverter MQTT"
+    persist: true
+  ErrorCode:
+    description: "0=No Error"
+    persist: true
+    default: 0
+    min: 0
+    max: 1
+  Position:
+    description: "0=AC input 1; 1=AC output; 2=AC input 2"
+    persist: true
+    default: 0
+    min: 0
+    max: 2
+  StatusCode:
+    description: "0=Startup 0; 1=Startup 1; 2=Startup 2; 3=Startup 3; 4=Startup 4; 5=Startup 5; 6=Startup 6; 7=Running; 8=Standby; 9=Boot loading; 10=Error"
+    persist: true
+    default: 7
+    min: 0
+    max: 10
+#  AllowedRoles:
+#    default: '["grid", "pvinverter", "genset", "acload"]'
+#  Role:
+#    description: "grid, pvinverter, genset, acload"    
+#    default: "pvinverter"
+#  PhaseConfig:
+#    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
+#    persist: true
+#    default: 7
+#    min: 0
+#    max: 4
+  Ac/Energy/Forward:
+    description: "kWh"
+  Ac/Power:
+    description: "W"
+  Ac/MaxPower:
+    description: "W"
+    default: 0
+  Ac/L1/Current:
+    description: "A"
+  Ac/L1/Energy/Forward:
+    description: "kWh"
+  Ac/L1/Power:
+    description: "W"
+  Ac/L1/Voltage:
+    description: "V"
+  Ac/L2/Current:
+    description: "A"
+  Ac/L2/Energy/Forward:
+    description: "kWh"
+  Ac/L2/Power:
+    description: "W"
+  Ac/L2/Voltage:
+    description: "V"
+  Ac/L3/Current:
+    description: "A"
+  Ac/L3/Energy/Forward:
+    description: "kWh"
+  Ac/L3/Power:
+    description: "W"
+  Ac/L3/Voltage:
+    description: "V"
