@@ -186,7 +186,7 @@ grid:
     format: "{} V"
   Ac/L2/Current:
     description: "A AC"
-      format: "{} A"
+    format: "{} A"
   Ac/L2/Energy/Forward:
     description: "kWh"
     format: "{} kWh"
