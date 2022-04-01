@@ -127,3 +127,90 @@ pvinverter:
   Ac/L3/Energy/Forward:
     format: "{} kWh"
     description: "kWh"
+
+# https://github.com/victronenergy/venus/wiki/dbus#grid-and-genset-meter
+grid:
+  CustomName:
+    default: "Grid Meter MQTT"
+    persist: true
+  ErrorCode:
+    description: "0=No Error"
+    persist: true
+    default: 0
+    min: 0
+    max: 1
+  DeviceType: # ?
+    description: ""
+    persist: true
+    default: 0
+    min: 0
+    max: 2
+#  AllowedRoles:
+#    default: '["grid", "pvinverter", "genset", "acload"]'
+#  Role:
+#    description: "grid, pvinverter, genset, acload"    
+#    persist: true
+#    default: "pvinverter"
+#  PhaseConfig:
+#    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
+#    persist: true
+#    default: 0
+#    min: 0
+#    max: 4
+  Ac/Energy/Forward: # Total bought energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Energy/Reverse: # Total sold energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Power: # Total power of all phases, preferably real power
+    description: "W"
+    format: "{} W"
+  Ac/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L1/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L2/Current:
+    description: "A AC"
+      format: "{} A"
+  Ac/L2/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L2/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L3/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L3/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L3/Voltage:
+    description: "V AC"
+    format: "{} V"
