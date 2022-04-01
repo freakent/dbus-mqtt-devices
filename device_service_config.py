@@ -35,6 +35,11 @@ class MQTTDeviceServiceConfig(object):
         except: #handle other exceptions such as attribute errors                                       
             logging.error("Unexpected error: %s", sys.exc_info()[0])
 
+    def value(self, key):
+        if self._config and self._config.get(key, None) != None:
+            return self._config[key].get("default", None)
+        else:
+            return None
 
     def local_settings(self):
         #local_settings = {

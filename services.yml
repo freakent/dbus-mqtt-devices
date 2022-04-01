@@ -1,5 +1,7 @@
 # https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
+  ProductId:
+    default: 65535 # 0xFFFF
   CustomName:
     default: "My Temperature Sensor"
     persist: true
@@ -16,8 +18,11 @@ temperature:
   Humidity:
     description: "%"
 
+
 # https://github.com/victronenergy/venus/wiki/dbus#tank-levels
-tank:               
+tank:             
+  ProductId:
+    default: 65535 # 0xFFFF
   CustomName:
     default: "My Tank Sensor"
     persist: true
@@ -38,17 +43,17 @@ tank:
   Remaining:
     description: "m3"
 
+
 # https://github.com/victronenergy/venus/wiki/dbus#pv-inverters
 pvinverter:
+  ProductId:
+    default: 45069 # 0xB00D
   CustomName:
-    default: "PV Inverter MQTT"
+    default: "My PV Inverter"
     persist: true
-  ErrorCode:
+  ErrorCode: # https://www.victronenergy.com/live/mppt-error-codes
     description: "0=No Error"
-    persist: true
     default: 0
-    min: 0
-    max: 1
   Position:
     description: "0=AC input 1; 1=AC output; 2=AC input 2"
     persist: true
@@ -57,7 +62,6 @@ pvinverter:
     max: 2
   StatusCode:
     description: "0=Startup 0; 1=Startup 1; 2=Startup 2; 3=Startup 3; 4=Startup 4; 5=Startup 5; 6=Startup 6; 7=Running; 8=Standby; 9=Boot loading; 10=Error"
-    persist: true
     default: 7
     min: 0
     max: 10
@@ -65,41 +69,61 @@ pvinverter:
 #    default: '["grid", "pvinverter", "genset", "acload"]'
 #  Role:
 #    description: "grid, pvinverter, genset, acload"    
+#    persist: true
 #    default: "pvinverter"
 #  PhaseConfig:
 #    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
 #    persist: true
-#    default: 7
+#    default: 0
 #    min: 0
 #    max: 4
-  Ac/Energy/Forward:
-    description: "kWh"
-  Ac/Power:
+  Ac/MaxPower: # Max rated power (in Watts) of the inverter
     description: "W"
-  Ac/MaxPower:
-    description: "W"
+    persist: true
     default: 0
-  Ac/L1/Current:
-    description: "A"
-  Ac/L1/Energy/Forward:
+    format: "{} W"
+  Ac/Energy/Forward: # Total produced energy over all phases
     description: "kWh"
-  Ac/L1/Power:
+    format: "{} kWh"
+  Ac/Current: 
+    format: "{} A"
+    description: "A"
+  Ac/Power: # Total power of all phases, preferably real power
+    format: "{} W"
     description: "W"
   Ac/L1/Voltage:
-    description: "V"
-  Ac/L2/Current:
-    description: "A"
-  Ac/L2/Energy/Forward:
+    description: "V AC"
+    format: "{} V"
+  Ac/L1/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L1/Energy/Forward:
     description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Voltage:
+    format: "{} V"
+    description: "V AC"
+  Ac/L2/Current:
+    format: "{} A"
+    description: "A"
   Ac/L2/Power:
     description: "W"
-  Ac/L2/Voltage:
-    description: "V"
-  Ac/L3/Current:
-    description: "A"
-  Ac/L3/Energy/Forward:
+    format: "{} W"
+  Ac/L2/Energy/Forward:
     description: "kWh"
-  Ac/L3/Power:
-    description: "W"
+    format: "{} kWh"
   Ac/L3/Voltage:
-    description: "V"
+    format: "{} V"
+    description: "V AC"
+  Ac/L3/Current:
+    format: "{} A"
+    description: "A AC"
+  Ac/L3/Power:
+    format: "{} W"
+    description: "W"
+  Ac/L3/Energy/Forward:
+    format: "{} kWh"
+    description: "kWh"

@@ -81,23 +81,33 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/Mgmt/Connection', 'MQTT:{}'.format(self.device.clientId))
         dbus_service.add_path('/DeviceInstance', self.device_instance)
         dbus_service.add_path('/DeviceName', "{}:{}".format(self.device.clientId, self.serviceId))
-        dbus_service.add_path('/ProductId', 0xFFFF) # ???
+        #dbus_service.add_path('/ProductId', self._config 0xFFFF) # ???
         dbus_service.add_path('/ProductName', "{} sensor via MQTT".format(self.serviceType.capitalize()))
         dbus_service.add_path('/FirmwareVersion', self.device.version)
         dbus_service.add_path('/Connected', 1)
-        #dbus_service.add_path('/CustomName', value=self._settings['CustomName'], writeable=True, onchangecallback=self._handle_changed_value)
         
         for k, v in self._config.dbus_paths():
-            if v.get('persist') == True:
-                dbus_service.add_path("/"+k, value=self._settings[k], description=v.get('description'), writeable=True, onchangecallback=self._handle_changed_value)
+            if v.get('format'):
+                formattedText = TextFormatter(v.get('format')) # str(vv) # v.get('format').format(vv)
+                textformatcallback = formattedText.format
             else:
-                dbus_service.add_path("/"+k, value=None, description=v.get('description'), writeable=True)
+                textformatcallback = None
+
+            if v.get('persist') == True:
+                changecallback = self._handle_changed_value
+            else:
+                changecallback = None
+
+            dbus_service.add_path("/"+k, value=v.get('default'), description=v.get('description'), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
                 
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
         #dbus_service.add_path('/Humidity', value=None, description="Humidity %", writeable=True)
         #dbus_service.add_path('/Pressure', value=None, description="Pressure hPa", writeable=True)
 
+
+    def _getTextFormatedValue(self, value, format):
+        return format.format(value)
 
     def _handle_changed_setting(self, setting, oldvalue, newvalue):
         logging.info("setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
@@ -115,4 +125,16 @@ class MQTTDeviceService(object):
     
     def serviceDbusPath(self): # Full path used on the dbus
         return 'com.victronenergy.{}.mqtt_{}_{}'.format(self.serviceType, self.device.clientId, self.serviceId)
+
+class TextFormatter(object):
+
+    def __init__(self, format):
+        if format:
+            self._format = format
+        else:
+            self._format = "{}"
+
+    def format(self, path, value):
+        logging.info("Text format: %s, path %s, value: %s, ", self._format, path, value)
+        return self._format.format(value) 
         
