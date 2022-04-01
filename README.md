@@ -9,6 +9,7 @@ The following Victron dbus services are supported:
 - temperature (com.victronenergy.temperature._device_)
 - tank (com.victronenergy.tank._device_)
 - pvinverter (com.victronenergy.pvinverter._device_)
+- grid (com.victronenergy.grid._device_)
 
 ## Registration Protocol
 This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
@@ -87,7 +88,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 - 	Each device service will appear separately on the Venus GX device, and 
 	each can have a customised name that will show on the GX display and in 
 	VRM.
-- 	Currently this driver supports temperature, tank level and pvinverter services but the 
+- 	Currently this driver supports four services but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
