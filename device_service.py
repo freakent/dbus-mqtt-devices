@@ -17,7 +17,7 @@ import sys
 import dbus
 from device_service_config import MQTTDeviceServiceConfig
 
-VERSION="0.3.1"
+VERSION="0.4.1"
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
@@ -135,6 +135,6 @@ class TextFormatter(object):
             self._format = "{}"
 
     def format(self, path, value):
-        logging.info("Text format: %s, path %s, value: %s, ", self._format, path, value)
+        #logging.info("Text format: %s, path %s, value: %s, ", self._format, path, value)
         return self._format.format(value) 
         

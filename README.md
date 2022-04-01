@@ -5,6 +5,11 @@ allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Ra
 register to the dbus over MQTT. This avoids the need for additional dedicated 
 custom drivers to be developed and deployed.
 
+The following Victron dbus services are supported:
+- temperature (com.victronenergy.temperature._device_)
+- tank (com.victronenergy.tank._device_)
+- pvinverter (com.victronenergy.pvinverter._device_)
+
 ## Registration Protocol
 This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
 registration, using the following protocol.  `<client id>` is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
@@ -82,7 +87,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 - 	Each device service will appear separately on the Venus GX device, and 
 	each can have a customised name that will show on the GX display and in 
 	VRM.
-- 	Currently this driver only supports temperature and tank level services but the 
+- 	Currently this driver supports temperature, tank level and pvinverter services but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
@@ -99,7 +104,7 @@ To get the driver up and running, download the latest release from github and th
 ```
 $ mkdir -p /data/drivers
 $ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.3.1.zip
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.4.1.zip
 $ unzip dbus-mqtt-devices.zip
 ```
 
