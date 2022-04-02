@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import re
+import yaml
 
 from device import MQTTDevice
 
@@ -34,6 +35,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
 			else dbus.bus.BusConnection(dbus_address)
         self.dbus_address = dbus_address
         self.portalId = self._lookup_portalId()
+        self.service_types = self._read_service_types()
         self.debug = debug
         self._devices = {}
         MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
@@ -72,9 +74,9 @@ class MQTTDeviceManager(MqttGObjectBridge):
         validFormat = "^[a-zA-Z0-9_]*$"
         isValid = True
 
-        # Check the connected attribute
-        connected = status.get('connected')
-        if connected is None or connected == "":
+        # Check the connected attribute, expect 1 = connected, 0 = disconnected 
+        connected = status.get('connected') 
+        if connected is None or connected == "": 
             isValid = False
             logging.warning("status.connected can not be blank")
         else:
@@ -99,11 +101,14 @@ class MQTTDeviceManager(MqttGObjectBridge):
                 isValid = False
                 logging.warning("status.services must contain a dictionary of values if connected = 1")
             else:
-                for service_id in services.keys():
-                    if re.search(validFormat, service_id) == None :
+                for service_id in services.keys(): # Check each service in the dictionary
+                    if re.search(validFormat, service_id) == None : 
                         isValid = False
                         logging.warning("status.services contains a service %s with an invalid identifier, only alpha numeric characters and _ (underscores) are allowed", service_id)
-                        # Please note, service types, such as  "temperature" and "tank", are validated later by matching against services.yml
+
+                    if services.get(service_id) not in self.service_types: # as defined in services.yml
+                        isValid = False
+                        logging.warning("status.service type %s is not supported, please check services.yml", services.get(service_id))
 
         return isValid
 
@@ -111,7 +116,19 @@ class MQTTDeviceManager(MqttGObjectBridge):
         portalId = VeDbusItemImport(self._dbus_conn, "com.victronenergy.system", "/Serial").get_value()
         logging.info("Using portalId %s", portalId)
         return portalId
-        
+
+
+    def _read_service_types(self):
+        try:                                                    
+            base = os.path.dirname(os.path.realpath(__file__))  
+            with open(os.path.join(base, 'services.yml'), 'r') as services_file:
+                configs = yaml.safe_load(services_file)                         
+                return configs.keys()
+        except IOError as e:                                                                            
+            logging.error("I/O error(%s): %s", e.errno, e.strerror)
+        except: #handle other exceptions such as attribute errors                                       
+            logging.error("Unexpected error: %s", sys.exc_info()[0])
+
 
     def _subscribe_to_device_topic(self):
         mqtt = self._client

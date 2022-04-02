@@ -6,8 +6,12 @@ test_dir = os.path.dirname(__file__)
 sys.path.insert(1, os.path.join(test_dir, '..'))
 sys.path.insert(1, os.path.join(test_dir, '..', 'ext', 'dbus-mqtt'))
 
-
 from device_manager import MQTTDeviceManager
+
+class Mock(object):
+    def __init__(self):
+        self.service_types = ['temperature', 'tank', 'pvinverter']
+
 
 test_data = { 
     "valid": {
@@ -52,7 +56,7 @@ test_data = {
         "services": None
     }
 }
-_self = None
+_self = Mock()
 
 def test_valid_status():
     assert MQTTDeviceManager._status_is_valid(_self, test_data["valid"]) == True, "connect status message should have validated OK"
@@ -77,7 +81,7 @@ def test_status_services():
     assert MQTTDeviceManager._status_is_valid(_self, test_data["missing services"]) == False, "Missing status.services value should not have passed validation"
     assert MQTTDeviceManager._status_is_valid(_self, test_data["no service dictionary"]) == False, "status.services is not a dictionary and should not have passed validation"
     status = copy.deepcopy(test_data["valid"])
-    for test_value in [ [{"t1": "temperature"}, True],  [{"t_1": "tank"}, True],  [{"t:001": "tank"}, False],  [["t1", "t2", "t3"], False] ]:
+    for test_value in [ [{"t1": "temperature"}, True],  [{"t_1": "tank"}, True],  [{"t:001": "tank"}, False],  [{"sp1": "spicyness"}, False], [["t1", "t2", "t3"], False] ]:
         status["services"] = test_value[0]
         print(status)
         assert MQTTDeviceManager._status_is_valid(_self, status) == test_value[1], "Incorrect status.services value of {} should {}have passed validation".format(test_value[0], "" if test_value[1] else "NOT ")    
