@@ -25,7 +25,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 
 1)  When a device initialises, it does 2 things :
 
-    1) subscribes to a topic `"device/<client id>/DeviceInstance"`.
+    1) subscribes to a topic `"device/<client id>/DBus"`.
 
 	2) publishes a status message on the MQTT topic `"device/<client id>/Status"`. 
 		
@@ -61,9 +61,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 		Topic: "device/<client id>/DBus"
 		Payload: {"portalId": "<vrm portal id>", deviceInstance":"t1": 5, "t2":12}
 
-	Please note: the `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus` and publishing to 
-	the topic will be removed in a future release. By including the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and 
-	it leaves scope for future expansion.
+	_Please note_: the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
 
 
 4)	The device uses the device instance to periodically publish messages to the 
@@ -103,7 +101,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
-	
+
 ## Install and Setup
 To get the driver up and running, download the latest release from github and then run the setup script.
 
