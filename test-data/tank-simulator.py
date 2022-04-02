@@ -2,14 +2,14 @@ import paho.mqtt.client as mqtt
 import json
 import copy
 
-clientid = "st002"
+clientid = "fe002"
 
 registration = {
   "clientId": clientid,
   "connected": 1,
-  "version": "v0.9",
+  "version": "v0.2",
   "services": {
-    "pv1": "pvinverter"
+    "tk1": "tank"
   }
 }
 
@@ -17,23 +17,8 @@ unregister = copy.deepcopy(registration)
 unregister["connected"] = 0
 
 data = {
-    "ErrorCode": 0,
-    "Ac/MaxPower": 133,
-    "Ac/Energy/Forward" : 1.1,
-    "Ac/Power": 1100,
-    "Ac/Current": 11,
-    "Ac/L1/Current": 3,
-    "Ac/L1/Energy/Forward": 30,
-    "Ac/L1/Power": 33.3,
-    "Ac/L1/Voltage": 12.3,
-    "Ac/L2/Current": 4,
-    "Ac/L2/Energy/Forward": 40,
-    "Ac/L2/Power": 44.4,
-    "Ac/L2/Voltage": 12.4,
-    "Ac/L3/Current": 5,
-    "Ac/L3/Energy/Forward": 50,
-    "Ac/L3/Power": 55.5,
-    "Ac/L3/Voltage": 12.5
+    "Level": 12.34,
+    "Remaining": 0.5678
 }
 
 def on_connect(client, userdata, flags, rc):
@@ -49,17 +34,17 @@ def on_message(client, userdata, msg):
 
     dbus_msg = json.loads(msg.payload)
     portalId = dbus_msg.get("portalId")
-    deviceId = dbus_msg.get("deviceInstance").get("pv1")
+    deviceId = dbus_msg.get("deviceInstance").get("tk1") # UPDATE THIS
 
     for key in data:
-        topic = "W/{}/pvinverter/{}/{}".format(portalId, deviceId, key)
+        topic = "W/{}/tank/{}/{}".format(portalId, deviceId, key) # UPDATE THIS
         print("{} = {}".format(topic, data.get(key) ) )
         client.publish(topic, json.dumps({ "value": data.get(key) }) )
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.will_set("device/st001/Status", json.dumps(unregister))
+client.will_set("device/fe002/Status", json.dumps(unregister)) # UPDATE THIS
 
 client.connect("venus.local", 1883, 60)
 
