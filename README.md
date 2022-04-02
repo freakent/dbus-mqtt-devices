@@ -11,7 +11,15 @@ The following Victron dbus services are supported:
 - pvinverter (com.victronenergy.pvinverter._device_)
 - grid (com.victronenergy.grid._device_)
 
-## Registration Protocol
+## Contents
+1. [The Registration Protocol](#Registration-Protocol)
+2. [Design Notes](#Design-Notes)
+3. [Install and Setup](#Install-and-Setup)
+4. [Troubleshooting](#Troubleshooting)
+5. [To Do](#To-Do)
+6. [Developers](#Developers)
+
+## The Registration Protocol
 This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
 registration, using the following protocol.  `<client id>` is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
 
@@ -80,7 +88,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 	the device services are cleared by this action.
 
 
-## Things to consider:
+## Design Notes
 
 - 	The device can have multiple sensors of the same type (e.g. two 
 	temperature sensors), each publishing to different dbus-mqtt topics as 
@@ -95,7 +103,8 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
-## Install and Setup:
+	
+## Install and Setup
 To get the driver up and running, download the latest release from github and then run the setup script.
 
 1. ssh into venus device
@@ -124,10 +133,6 @@ ln -s /data/drivers/dbus-mqtt-devices-0.2.1/bin/service /service/dbus-mqtt-devic
 ```
 $ reboot
 ```
-
-## To Do
-1) Use of command line args
-2) Add support for more dbus-mqtt services
 
 
 ## Troubleshooting
@@ -179,6 +184,14 @@ $ more /data/rc.local
 
 6) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
 I get email alerts from Github which I don't seem to get from the Victron community forum.
+
+
+## To Do
+1) Use of command line args
+2) Add support for more dbus-mqtt services
+3) Validate dbus service passed into the registration status payload
+4) Automatically comment out old lines in /data/rc.local when new version installed
+
 
 ## Developers
 if you are wanting to run the pytests on macos you need to install a few dependencies:
