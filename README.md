@@ -188,8 +188,7 @@ I get email alerts from Github which I don't seem to get from the Victron commun
 ## To Do
 1) Use of command line args
 2) Add support for more dbus-mqtt services
-3) Validate dbus service passed into the registration status payload
-4) Automatically comment out old lines in /data/rc.local when new version installed
+3) Automatically comment out old lines in /data/rc.local when new version installed
 
 
 ## Developers
