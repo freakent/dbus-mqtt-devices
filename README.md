@@ -20,7 +20,7 @@ The following Victron dbus services are supported:
 6. [Developers](#Developers)
 
 ## The Registration Protocol
-This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
+This driver uses a pair of MQTT topics under the "device/*" namespace to establish the 
 registration, using the following protocol.  `<client id>` is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
 
 1)  When a device initialises, it does 2 things :
