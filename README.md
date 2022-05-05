@@ -1,5 +1,7 @@
 # dbus-mqtt-devices
 
+*** DO NOT INSTALL ON A CCGX AT THIS TIME ***
+
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It 
 allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self 
 register to the dbus over MQTT. This avoids the need for additional dedicated 
@@ -20,7 +22,7 @@ The following Victron dbus services are supported:
 6. [Developers](#Developers)
 
 ## The Registration Protocol
-This driver uses a pair of MQTT topics under the "devices/*" namespace to establish the 
+This driver uses a pair of MQTT topics under the "device/*" namespace to establish the 
 registration, using the following protocol.  `<client id>` is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
 
 1)  When a device initialises, it does 2 things :
@@ -97,6 +99,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 - 	Currently this driver supports four services but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
+-  client devices should always self register (by sending sending a Status message with connected = 1) on connecting to MQTT. Re-registering an already registered device has no adverse affect. 
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
@@ -124,7 +127,7 @@ $ ./dbus-mqtt-devices-0.4.1/bin/setup.sh
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
 $ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.2.1/bin/service /service/dbus-mqtt-devices
+ln -s /data/drivers/dbus-mqtt-devices-0.4.1/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
@@ -187,8 +190,7 @@ I get email alerts from Github which I don't seem to get from the Victron commun
 ## To Do
 1) Use of command line args
 2) Add support for more dbus-mqtt services
-3) Validate dbus service passed into the registration status payload
-4) Automatically comment out old lines in /data/rc.local when new version installed
+3) Automatically comment out old lines in /data/rc.local when new version installed
 
 
 ## Developers
