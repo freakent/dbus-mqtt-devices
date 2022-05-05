@@ -2,9 +2,7 @@
 
 *** IF YOU ARE INSTALLING ON CCGX PLEASE READ SECTION ON CCGX INSTALLATION ***
 
-This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It 
-allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self 
-register to the dbus over MQTT. This avoids the need for additional dedicated 
+This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated 
 custom drivers to be developed and deployed.
 
 The following Victron dbus services are supported:
@@ -12,6 +10,7 @@ The following Victron dbus services are supported:
 - tank (com.victronenergy.tank._device_)
 - pvinverter (com.victronenergy.pvinverter._device_)
 - grid (com.victronenergy.grid._device_)
+- gps (com.victronenergy.gps._device_
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
@@ -166,13 +165,15 @@ registration, using the following protocol.  `<client id>` is a unique, short na
 - 	Each device service will appear separately on the Venus GX device, and 
 	each can have a customised name that will show on the GX display and in 
 	VRM.
-- 	Currently this driver supports four services but the 
+- 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
--  client devices should always self register (by sending sending a Status message with connected = 1) on connecting to MQTT. Re-registering an already registered device has no adverse affect. 
+-   client devices MUST always self register (by sending sending a Status message with connected = 1) on connecting to MQTT. Re-registering an already registered device has no adverse affect. 
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
+-   Simple client examples (gps-simulator and tank-simulator) can be found in the test-data directory. 
+    These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
 	
 
 ## Troubleshooting
