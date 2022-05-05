@@ -25,7 +25,7 @@ The following Victron dbus services are supported:
 
 ### Install and setup (not CCGX)
 
-*** If you are installing on a CCGX device, please follow the CCGX specific instructions ***
+*** _If you are installing on a CCGX device, please follow the CCGX specific instructions below_ ***
 
 To get the driver up and running, download the latest release from github and then run the setup script.
 
@@ -58,7 +58,7 @@ $ reboot
 
 ### Install and Setup (only for CCGX)
 
-*** Installation on CCGX devices has been known to cause the device to reboot, requiring manual re-installation of firmware to recover. This issue should be resolved now, but please ensure you are able to reset the CCGX device in case of issues. ***
+*** _Installation on CCGX devices has been known to cause the device to reboot, requiring manual re-installation of firmware to recover. This issue should be resolved now, but please ensure you are able to reset the CCGX device in case of issues._ ***
 
 To get the driver up and running, download the latest release from github and then run the setup script.
 
