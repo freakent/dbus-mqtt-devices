@@ -222,3 +222,25 @@ grid:
   Ac/L3/Voltage:
     description: "V AC"
     format: "{} V"
+
+# https://github.com/victronenergy/venus/wiki/dbus#gps
+gps:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My GPS Sensor"
+    persist: true
+  Position/Longitude:
+    description: "Decimal degrees"
+  Position/Latitude:
+    description: "Decimal degrees"
+  Course:
+    description: "Degrees"
+  Speed:
+    description: "m/s"
+  Fix:
+    description: "0 = no fix, 1 = GPS Fix"
+  Altitude:
+    description: "m"
+  NrOfSatellites:
+    description: "Count"
