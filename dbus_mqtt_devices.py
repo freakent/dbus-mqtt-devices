@@ -33,7 +33,7 @@ from ve_utils import get_vrm_portal_id, exit_on_error, wrap_dbus_value, unwrap_d
 
 from device_manager import MQTTDeviceManager
 
-VERSION = '0.4.1'
+VERSION = '0.5.1'
 
 def dumpstacks(signal, frame):
 	import threading

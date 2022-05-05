@@ -1,6 +1,6 @@
 # dbus-mqtt-devices
 
-*** DO NOT INSTALL ON A CCGX AT THIS TIME ***
+*** IF YOU ARE INSTALLING ON CCGX PLEASE READ SECTION ON CCGX INSTALLATION ***
 
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It 
 allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self 
@@ -14,18 +14,88 @@ The following Victron dbus services are supported:
 - grid (com.victronenergy.grid._device_)
 
 ## Contents
-1. [The Registration Protocol](#Registration-Protocol)
-2. [Design Notes](#Design-Notes)
-3. [Install and Setup](#Install-and-Setup)
+1. [Install and Setup](#Install-and-Setup)
+2. [The Registration Protocol](#Registration-Protocol)
+3. [Design Notes](#Design-Notes)
 4. [Troubleshooting](#Troubleshooting)
 5. [To Do](#To-Do)
 6. [Developers](#Developers)
 
+
+## Install and Setup 
+
+### Install and setup (not CCGX)
+
+*** If you are installing on a CCGX device, please follow the CCGX specific instructions ***
+
+To get the driver up and running, download the latest release from github and then run the setup script.
+
+1. ssh into venus device (as root)
+
+2. Download the latest zip from github and extract contents
+
+```
+$ mkdir -p /data/drivers
+$ cd /data/drivers
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.5.1.zip
+$ unzip dbus-mqtt-devices.zip
+```
+
+3. Run the set up script
+```
+$ ./dbus-mqtt-devices-0.5.1/bin/setup.sh
+```
+
+4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
+```
+$ cat /data/rc.local
+ln -s /data/drivers/dbus-mqtt-devices-0.5.1/bin/service /service/dbus-mqtt-devices
+```
+
+5. Reboot (recommended)
+```
+$ reboot
+```
+
+### Install and Setup (only for CCGX)
+
+*** Installation on CCGX devices has been known to cause the device to reboot, requiring manual re-installation of firmware to recover. This issue should be resolved now, but please ensure you are able to reset the CCGX device in case of issues. ***
+
+To get the driver up and running, download the latest release from github and then run the setup script.
+
+1. ssh into venus device (as root)
+
+2. Download the latest zip from github and extract contents
+
+```
+$ mkdir -p /data/drivers
+$ cd /data/drivers
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.5.1.zip
+$ unzip dbus-mqtt-devices.zip
+```
+
+3. Run the set up script
+```
+$ ./dbus-mqtt-devices-0.5.1/bin/setup-ccgx.sh
+```
+
+4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
+```
+$ cat /data/rc.local
+ln -s /data/drivers/dbus-mqtt-devices-0.5.1/bin/service /service/dbus-mqtt-devices
+```
+
+5. Reboot (recommended)
+```
+$ reboot
+```
+
+
 ## The Registration Protocol
 This driver uses a pair of MQTT topics under the "device/*" namespace to establish the 
-registration, using the following protocol.  `<client id>` is the unique MQTT client ID set during MQTT initialisation (avoid using special characters ,.-/: in the client id).
+registration, using the following protocol.  `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (by not essential) that you use the same client ID during MQTT initialisation and connection.
 
-1)  When a device initialises, it does 2 things :
+1)  When a device initialises and EVERY time it connects to MQTT, it MUST do 2 things :
 
     1) subscribes to a topic `"device/<client id>/DBus"`.
 
@@ -84,7 +154,7 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
 		{ "clientId": "fe001", "version": "v1.0", "connected": 0, "services": {"t1": "temperature", "t2": "temperature"}}
 	
     
-    please note: on disconnect the contents of the "services" are actually irrelevant as all 
+    _please note_: on disconnect the contents of the "services" are actually irrelevant as all 
 	the device services are cleared by this action.
 
 
@@ -104,37 +174,6 @@ registration, using the following protocol.  `<client id>` is the unique MQTT cl
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
 	
-
-## Install and Setup
-To get the driver up and running, download the latest release from github and then run the setup script.
-
-1. ssh into venus device
-
-2. Download the latest zip from github and extract contents
-
-```
-$ mkdir -p /data/drivers
-$ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.4.1.zip
-$ unzip dbus-mqtt-devices.zip
-```
-
-3. Run the set up script
-```
-$ ./dbus-mqtt-devices-0.4.1/bin/setup.sh
-```
-
-4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
-```
-$ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.4.1/bin/service /service/dbus-mqtt-devices
-```
-
-5. Reboot (recommended)
-```
-$ reboot
-```
-
 
 ## Troubleshooting
 1) First thing to check is that the dbus-mqtt-devices service is running, from the ssh command line use

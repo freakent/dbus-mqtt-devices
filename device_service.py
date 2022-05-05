@@ -17,7 +17,7 @@ import sys
 import dbus
 from device_service_config import MQTTDeviceServiceConfig
 
-VERSION="0.4.1"
+VERSION="0.5.1"
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
