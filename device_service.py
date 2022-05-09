@@ -95,10 +95,12 @@ class MQTTDeviceService(object):
 
             if v.get('persist') == True:
                 changecallback = self._handle_changed_value
+                value = self._settings[k]
             else:
                 changecallback = None
+                value = v.get('default')
 
-            dbus_service.add_path("/"+k, value=v.get('default'), description=v.get('description'), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
+            dbus_service.add_path("/"+k, value=value, description=v.get('description'), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
                 
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)

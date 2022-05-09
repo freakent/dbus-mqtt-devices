@@ -215,15 +215,17 @@ $ tail -f /var/log/dbus-mqtt-devices/current
 ```
 is a useful way to monitor the driver.
 
-4) Finally, if you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
+4) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 $ more /data/rc.local 
 ```
 
 5) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the queues while debugging and if you are doing anything with MQTT.
 
+6) In the unlikely event that the installation fails, and you ccgx device will not boot, follow these instructions to recover it.
+https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-problem.html
 
-6) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
+7) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
 I get email alerts from Github which I don't seem to get from the Victron community forum.
 
 
