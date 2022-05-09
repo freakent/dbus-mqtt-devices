@@ -46,17 +46,24 @@ def on_message(client, userdata, msg):
 
     dbus_msg = json.loads(msg.payload)
     portalId = dbus_msg.get("portalId")
-    deviceId = dbus_msg.get("deviceInstance").get("gps1") # UPDATE THIS
+    deviceId = dbus_msg.get("deviceInstance").get("t1") # UPDATE THIS
 
-    for key in data:
-        topic = "W/{}/gps/{}/{}".format(portalId, deviceId, key) # UPDATE THIS
-        print("{} = {}".format(topic, data.get(key) ) )
-        client.publish(topic, json.dumps({ "value": data.get(key) }) )
+    for key in temp_data:
+        topic = "W/{}/temperature/{}/{}".format(portalId, deviceId, key) # UPDATE THIS
+        print("{} = {}".format(topic, temp_data.get(key) ) )
+        client.publish(topic, json.dumps({ "value": temp_data.get(key) }) )
+
+    deviceId = dbus_msg.get("deviceInstance").get("tk1") # UPDATE THIS
+
+    for key in tank_data:
+        topic = "W/{}/tank/{}/{}".format(portalId, deviceId, key) # UPDATE THIS
+        print("{} = {}".format(topic, tank_data.get(key) ) )
+        client.publish(topic, json.dumps({ "value": tank_data.get(key) }) )
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.will_set("device/fe003/Status", json.dumps(unregister)) # UPDATE THIS
+client.will_set("device/{}/Status".format(clientid), json.dumps(unregister)) # UPDATE THIS
 
 client.connect("venus.local", 1883, 60)
 
