@@ -49,7 +49,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.will_set("device/fe003/Status", json.dumps(unregister)) # UPDATE THIS
+client.will_set("device/{}/Status".format(clientid), json.dumps(unregister)) # UPDATE THIS
 
 client.connect("venus.local", 1883, 60)
 
