@@ -93,7 +93,7 @@ $ reboot
 
 ## The Registration Protocol
 This driver uses a pair of MQTT topics under the "device/*" namespace to establish the 
-registration, using the following protocol.  `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (by not essential) that you use the same client ID during MQTT initialisation and connection.
+registration, using the following protocol.  `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (but not essential) that you use the same client ID during MQTT initialisation and connection.
 
 1)  When a device initialises and EVERY time it connects to MQTT, it MUST do 2 things :
 
