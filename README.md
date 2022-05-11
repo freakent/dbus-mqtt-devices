@@ -5,12 +5,12 @@
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It allows Wi-Fi enabled devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated 
 custom drivers to be developed and deployed.
 
-The following Victron dbus services are supported:
+The following Victron dbus services are currently supported:
 - temperature (com.victronenergy.temperature._device_)
 - tank (com.victronenergy.tank._device_)
 - pvinverter (com.victronenergy.pvinverter._device_)
 - grid (com.victronenergy.grid._device_)
-- gps (com.victronenergy.gps._device_
+- gps (com.victronenergy.gps._device_)
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
