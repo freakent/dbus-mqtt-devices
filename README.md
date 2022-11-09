@@ -169,7 +169,7 @@ registration, using the following protocol.  `<client id>` is a unique, short na
 - 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
--   client devices MUST always self register (by sending sending a Status message with connected = 1) on connecting to MQTT. Re-registering an already registered device has no adverse affect. 
+-   client devices MUST always self register (by sending a Status message with connected = 1) on connecting to MQTT. Re-registering an already registered device has no adverse affect. 
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
