@@ -31,6 +31,7 @@ The following Victron dbus services are currently supported:
 To get the driver up and running, download the latest release from github and then run the setup script.
 
 1. ssh into venus device (as root)
+If you have not yet enabled root (uperuser) access via SSH, follow the instructions here: https://www.victronenergy.com/live/ccgx:root_access.
 
 2. Download the latest zip from github and extract contents
 
