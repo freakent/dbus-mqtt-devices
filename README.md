@@ -32,7 +32,7 @@ To get the driver up and running, download the latest release from github and th
 
 1. ssh into venus device (as root)
 
-If you have not yet enabled root (uperuser) access via SSH, follow the instructions here: https://www.victronenergy.com/live/ccgx:root_access.
+If you have not yet enabled root (superuser) access via SSH, follow the instructions here: https://www.victronenergy.com/live/ccgx:root_access.
 
 2. Download the latest zip from github and extract contents
 
@@ -93,9 +93,9 @@ $ reboot
 ```
 
 
-## The Registration Protocol
-This driver uses a pair of MQTT topics under the "device/*" namespace to establish the 
-registration, using the following protocol.  `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (but not essential) that you use the same client ID during MQTT initialisation and connection.
+## How this driver works - The Registration Protocol
+This driver uses a pair of MQTT topics under the "device/*" MQTT namespace to establish the 
+registration using the following protocol.  `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (but not essential) that you use the same client ID during MQTT initialisation and connection.
 
 1)  When a device initialises and EVERY time it connects to MQTT, it MUST do 2 things :
 
@@ -110,7 +110,7 @@ registration, using the following protocol.  `<client id>` is a unique, short na
         example 1:
 		
         `{ "clientId": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature"} }`
-		In example 1, the device is registering that it is equipped with one temperature sensor which we are calling "t1". The label t1 is just an arbitrary identifier that distinguish one service from another within a device. The version field can contain any string you like and is displayed within the GX console and on VRM.
+		In example 1, the device is registering that it is equipped with one temperature sensor which we are calling "t1". The label t1 is just an arbitrary identifier that distinguishes one service from another within a device. "temperature" is the exact name of the service used in Victron's dbus. The version field can contain any string you like and is displayed within the GX console and on VRM.
 
         example 2:
 		
@@ -124,9 +124,9 @@ registration, using the following protocol.  `<client id>` is a unique, short na
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
     
 
-3)	The driver publishes a DBus message under the same MQTT Topic
-	namespace. This is the topic the device subscribed to in step 1.1. The 
-	DBus message contains the numeric device instances (one for each 
+3)	Once regsieterd, the driver publishes a message on the device/<client id>/DBus topic. 
+	This must be the topic the device subscribed to in step 1.1. The 
+	DBus message contains the all important numeric device instances (one for each 
 	service) that the device should use when publishing messages for dbus-mqtt
 	to process. It also contains the portal id needed to construct a dbus-mqtt topic (see 4). 
     
@@ -138,8 +138,9 @@ registration, using the following protocol.  `<client id>` is a unique, short na
 	_Please note_: the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
 
 
-4)	The device uses the device instance to periodically publish messages to the 
-	appropriate dbus-mqtt topics for the service they are providing. 
+4)	Custom code on the device then uses the device instance to periodically publish messages to the 
+	appropriate dbus-mqtt topics for the service(s) they are providing. 
+	Note the "W" at the start of the topc. See the dbus-mqtt documentation for an explanation.
 	
     For example:
 	
@@ -162,6 +163,8 @@ registration, using the following protocol.  `<client id>` is a unique, short na
 
 ## Design Notes
 
+-       Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
+	already registered device has no adverse affect. 
 - 	The device can have multiple sensors of the same type (e.g. two 
 	temperature sensors), each publishing to different dbus-mqtt topics as 
 	different device services and unique Device Instance values.
@@ -171,7 +174,6 @@ registration, using the following protocol.  `<client id>` is a unique, short na
 - 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
 	protocol and the driver have been designed to be easily extended for 
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
--   client devices MUST always self register (by sending a Status message with connected = 1) on connecting to MQTT. Re-registering an already registered device has no adverse affect. 
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
