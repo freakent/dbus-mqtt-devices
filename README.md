@@ -15,7 +15,7 @@ The following Victron dbus services are currently supported:
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [The Registration Protocol](#Registration-Protocol)
+2. [How this driver works - The Registration Protocol](#Registration-Protocol)
 3. [Design Notes](#Design-Notes)
 4. [Troubleshooting](#Troubleshooting)
 5. [To Do](#To-Do)
@@ -95,7 +95,9 @@ $ reboot
 
 ## How this driver works - The Registration Protocol
 This driver uses a pair of MQTT topics under the "device/*" MQTT namespace to establish the 
-registration using the following protocol.  `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (but not essential) that you use the same client ID during MQTT initialisation and connection.
+device registration using the following protocol. 
+
+Please note: `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (but not essential) that you use the same client ID during MQTT initialisation and connection.
 
 1)  When a device initialises and EVERY time it connects to MQTT, it MUST do 2 things :
 
@@ -162,8 +164,7 @@ registration using the following protocol.  `<client id>` is a unique, short nam
 
 
 ## Design Notes
-
--       Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
+-	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
 	already registered device has no adverse affect. 
 - 	The device can have multiple sensors of the same type (e.g. two 
 	temperature sensors), each publishing to different dbus-mqtt topics as 
