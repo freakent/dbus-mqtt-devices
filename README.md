@@ -124,8 +124,8 @@ registration using the following protocol.  `<client id>` is a unique, short nam
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
     
 
-3)	Once regsieterd, the driver publishes a message on the device/<client id>/DBus topic. 
-	This must be the topic the device subscribed to in step 1.1. The 
+3)	Once successfully registered, the driver publishes a message on the device/<client id>/DBus topic. 
+	This must be the same topic the device subscribed to in step 1.1. The 
 	DBus message contains the all important numeric device instances (one for each 
 	service) that the device should use when publishing messages for dbus-mqtt
 	to process. It also contains the portal id needed to construct a dbus-mqtt topic (see 4). 
