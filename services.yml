@@ -244,3 +244,75 @@ gps:
     description: "m"
   NrOfSatellites:
     description: "Count"
+
+
+# https://github.com/victronenergy/venus/wiki/dbus#evcharger
+#
+# Please report updates/errors to this issue
+# https://github.com/freakent/dbus-mqtt-devices/issues/32
+evcharger:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "MyCharger"
+    persist: true
+  Ac/Energy/Forward:
+    description: "wh"
+    format: "{:.2f}W"
+  Ac/L1/Power:
+    description: "L1 Power used (W)"
+    format: "{:.2f} W"
+  Ac/L2/Power:
+    description: "L2 Power used (W)"
+    format: "{:.2f} W"
+  Ac/L3/Power:
+    description: "L3 Power used (W)"
+    format: "{:.2f} W"
+  Ac/Power:
+    description: "Total Power used (W)"
+    format: "{:.2f} W"
+  AutoStart:
+    description: ""
+    default: 0
+#    persist: true
+  ChargingTime:
+    description: "in seconds"
+    format: "{} s"
+  Current:
+    description: "A"
+    default: 0
+    format: "{:.1f} A"
+#    persist: true
+  EnableDisplay:
+    description: ""
+  MaxCurrent:
+    description: "A"
+    default: 0
+    persist: true   #wird nicht gespeichert reset nach disconnect/reconnect
+  Mode:
+    description: ""
+    default: 0
+  Model:
+    description: "w"
+    default: "AC22NS" # AC22NS=without display
+  Position:
+    description: "0=OUTPUT; 1=INPUT"
+    default: 1   #1=AC-Input 0=AC-Output
+    persist: true   # geht nicht
+    min: 0
+    max: 1
+#  Connected:
+#    description: "do not use, already in use"
+  Role:
+    description: "??"
+  SetCurrent:
+    description: "SetCurrent"
+    default: 0
+    min: 0
+    max: 20
+  Status:
+    description: "0=disconnected; 1=connected; 2=charging; 3=charged; 4=waiting for sun; 5=waiting for RFID; 6=waiting for start; 7=low SOC; 8=ground test error; 9=welded contacts error; 10=CP input test error (shorted); 11=residual current detected; 12=undervoltage detected; 13=overvoltage detected; 14=overheating detected; 15-19=reserved; 20=charging limit"
+    default: 0
+  StartStop:
+    description: "w"
+   #mqtt deamon sbeendet sich fatal wenn gesetzt
