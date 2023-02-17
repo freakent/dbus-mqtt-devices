@@ -236,7 +236,7 @@ https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-proble
 I get email alerts from Github which I don't seem to get from the Victron community forum.
 
 ## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
-If you find this driver useful and you want to say thanks, feel free to treat me a drink using the link below. 
+If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the link below. 
 
 [![Say Thanks](https://raw.githubusercontent.com/freakent/node-red-contrib-sunevents/main/docs/thankyou.jpg "Say Thanks")
 ](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
