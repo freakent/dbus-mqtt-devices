@@ -1,0 +1,881 @@
+[
+    {
+        "id": "1fa5be336304aa92",
+        "type": "tab",
+        "label": "ahoyDBusProxy",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a88cc8be25f5574b",
+        "type": "inject",
+        "z": "1fa5be336304aa92",
+        "name": "register ahoy",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "device/ahoy/Status",
+        "payload": "{\"clientId\":\"ahoy\",\"connected\":1,\"version\":\"v0.11 alpha\",\"services\":{\"MC1\":\"pvinverter\",\"MC2\":\"pvinverter\",\"MC3\":\"pvinverter\"}}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "2c5bb12096082931"
+            ]
+        ]
+    },
+    {
+        "id": "1e71bd72bbd3ae1a",
+        "type": "mqtt out",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9bfbdae1289a1953",
+        "x": 490,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "63e1f91b75e489e7",
+        "type": "mqtt in",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "device/ahoy/DBus",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9bfbdae1289a1953",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "b28b4e0ea80de87f"
+            ]
+        ]
+    },
+    {
+        "id": "b28b4e0ea80de87f",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ahoy",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "635a02b1ff2ae07d",
+        "type": "mqtt in",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "inverter/+/ch0/P_AC",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9bfbdae1289a1953",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "2a29b2a0988f97c8"
+            ]
+        ]
+    },
+    {
+        "id": "feb705902e958774",
+        "type": "debug",
+        "z": "1fa5be336304aa92",
+        "name": "debug 16",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "823af7dd321fcff1",
+        "type": "inject",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "inverter/MC1/ch0/P_AC",
+        "payload": "777",
+        "payloadType": "num",
+        "x": 720,
+        "y": 240,
+        "wires": [
+            [
+                "2a29b2a0988f97c8",
+                "63e09d2392a7aeb7"
+            ]
+        ]
+    },
+    {
+        "id": "c4b0e781e47bb029",
+        "type": "inject",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "inverter/MC2/ch0/P_AC",
+        "payload": "44",
+        "payloadType": "num",
+        "x": 710,
+        "y": 260,
+        "wires": [
+            [
+                "2a29b2a0988f97c8",
+                "63e09d2392a7aeb7"
+            ]
+        ]
+    },
+    {
+        "id": "d7529dea2daa9580",
+        "type": "inject",
+        "z": "1fa5be336304aa92",
+        "name": "unregister ahoy",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "device/ahoy/Status",
+        "payload": "{\"clientId\":\"ahoy\",\"connected\":0}",
+        "payloadType": "json",
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "1e71bd72bbd3ae1a"
+            ]
+        ]
+    },
+    {
+        "id": "2a29b2a0988f97c8",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "topicPrefix/<key>",
+        "rules": [
+            {
+                "t": "set",
+                "p": "devInst",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "inverter/",
+                "fromt": "str",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "/ch.+",
+                "fromt": "re",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "W/<portal id>/pvinverter/<device instance>/<key>",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<portal id>",
+                "fromt": "str",
+                "to": "ahoy.portalId",
+                "tot": "flow"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<device instance>",
+                "fromt": "str",
+                "to": "ahoy.deviceInstance[msg.devInst]",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 710,
+        "y": 360,
+        "wires": [
+            [
+                "2180fce1548afd17",
+                "5232586408ee5e65"
+            ]
+        ]
+    },
+    {
+        "id": "2180fce1548afd17",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "set Ac/Power",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tmp",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.value",
+                "pt": "msg",
+                "to": "tmp",
+                "tot": "msg"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<key>",
+                "fromt": "str",
+                "to": "Ac/Power",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 920,
+        "y": 360,
+        "wires": [
+            [
+                "feb705902e958774",
+                "3ab8dfb3af3fbb72"
+            ]
+        ]
+    },
+    {
+        "id": "3ab8dfb3af3fbb72",
+        "type": "mqtt out",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9bfbdae1289a1953",
+        "x": 1130,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "772e88f9e366ef23",
+        "type": "mqtt in",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "inverter/+/ch0/YieldDay",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "9bfbdae1289a1953",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 440,
+        "wires": [
+            [
+                "63e09d2392a7aeb7"
+            ]
+        ]
+    },
+    {
+        "id": "63e09d2392a7aeb7",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "topicPrefix/<key>",
+        "rules": [
+            {
+                "t": "set",
+                "p": "devInst",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "inverter/",
+                "fromt": "str",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "/ch.+",
+                "fromt": "re",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "W/<portal id>/pvinverter/<device instance>/<key>",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<portal id>",
+                "fromt": "str",
+                "to": "ahoy.portalId",
+                "tot": "flow"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<device instance>",
+                "fromt": "str",
+                "to": "ahoy.deviceInstance[msg.devInst]",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 440,
+        "wires": [
+            [
+                "7663164fb7a50615"
+            ]
+        ]
+    },
+    {
+        "id": "9ce002e14a15659a",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "set Ac/<Phase[devInst]>/Energy/Forward",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tmp",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.value",
+                "pt": "msg",
+                "to": "tmp",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "key",
+                "pt": "msg",
+                "to": "Ac/<Phase>/Energy/Forward",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "key",
+                "pt": "msg",
+                "from": "<Phase>",
+                "fromt": "str",
+                "to": "Phase[msg.devInst]",
+                "tot": "flow"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<key>",
+                "fromt": "str",
+                "to": "key",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 500,
+        "wires": [
+            [
+                "3ab8dfb3af3fbb72"
+            ]
+        ]
+    },
+    {
+        "id": "7663164fb7a50615",
+        "type": "range",
+        "z": "1fa5be336304aa92",
+        "minin": "0",
+        "maxin": "10000",
+        "minout": "0",
+        "maxout": "10",
+        "action": "scale",
+        "round": false,
+        "property": "payload",
+        "name": "div 10",
+        "x": 850,
+        "y": 440,
+        "wires": [
+            [
+                "9ce002e14a15659a"
+            ]
+        ]
+    },
+    {
+        "id": "5232586408ee5e65",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "set Ac/<Phase[devInst]>/Power",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tmp",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.value",
+                "pt": "msg",
+                "to": "tmp",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "key",
+                "pt": "msg",
+                "to": "Ac/<Phase>/Power",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "key",
+                "pt": "msg",
+                "from": "<Phase>",
+                "fromt": "str",
+                "to": "Phase[msg.devInst]",
+                "tot": "flow"
+            },
+            {
+                "t": "change",
+                "p": "topic",
+                "pt": "msg",
+                "from": "<key>",
+                "fromt": "str",
+                "to": "key",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 890,
+        "y": 400,
+        "wires": [
+            [
+                "3ab8dfb3af3fbb72"
+            ]
+        ]
+    },
+    {
+        "id": "2c5bb12096082931",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "init Status, Phase",
+        "rules": [
+            {
+                "t": "set",
+                "p": "Status",
+                "pt": "flow",
+                "to": "{\"clientId\":\"ahoy\",\"connected\":1,\"version\":\"v0.11 alpha\",\"services\":{\"MC1\":\"pvinverter\",\"MC2\":\"pvinverter\",\"MC3\":\"pvinverter\"}}",
+                "tot": "json",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "Phase",
+                "pt": "flow",
+                "to": "{\"MC1\":\"L3\",\"MC2\":\"L1\",\"MC3\":\"L1\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 80,
+        "wires": [
+            [
+                "1e71bd72bbd3ae1a"
+            ]
+        ]
+    },
+    {
+        "id": "8238e3b5bdcf9e73",
+        "type": "mqtt in",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "inverter/+/last_success",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "9bfbdae1289a1953",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 540,
+        "wires": [
+            [
+                "2a853f36949c92ad"
+            ]
+        ]
+    },
+    {
+        "id": "2a853f36949c92ad",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "last_success",
+        "rules": [
+            {
+                "t": "set",
+                "p": "devInst",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "inverter/",
+                "fromt": "str",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "/.+",
+                "fromt": "re",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "last_success[msg.devInst]",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5929e9a8a6135e8a",
+        "type": "mqtt in",
+        "z": "1fa5be336304aa92",
+        "name": "",
+        "topic": "inverter/+/ch0/FWVersion",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "9bfbdae1289a1953",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 470,
+        "y": 600,
+        "wires": [
+            [
+                "88973ccb12455512"
+            ]
+        ]
+    },
+    {
+        "id": "88973ccb12455512",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "FWVersion",
+        "rules": [
+            {
+                "t": "set",
+                "p": "devInst",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "inverter/",
+                "fromt": "str",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "devInst",
+                "pt": "msg",
+                "from": "/ch0.+",
+                "fromt": "re",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "FWVersion[msg.devInst]",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "240181a9d83e7e1b",
+        "type": "comment",
+        "z": "1fa5be336304aa92",
+        "name": "v0.6.0?",
+        "info": "",
+        "x": 290,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "d903b0a87d84906d",
+        "type": "change",
+        "z": "1fa5be336304aa92",
+        "name": "reregister with Status",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Status",
+                "tot": "flow",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "device/ahoy/Status",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 140,
+        "wires": [
+            [
+                "1e71bd72bbd3ae1a"
+            ]
+        ]
+    },
+    {
+        "id": "180304b3c31d09e5",
+        "type": "comment",
+        "z": "1fa5be336304aa92",
+        "name": "init",
+        "info": "a) Prepare registration message in Status \nThis Status JSON may be updated for later reregistration.\n\nb) assign Phase L1..3 to inverter instance\nThis is installation specific and cannot be read from elsewhere.",
+        "x": 270,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "a0d645c2ed42d54a",
+        "type": "comment",
+        "z": "1fa5be336304aa92",
+        "name": "registration success",
+        "info": "Read the DBus registration success and capture portalId and deviceInstance (numbers)",
+        "x": 130,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "9bfbdae1289a1953",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
