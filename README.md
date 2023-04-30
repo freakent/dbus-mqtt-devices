@@ -40,19 +40,19 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 $ mkdir -p /data/drivers
 $ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.5.1.zip
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.2.zip
 $ unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.5.1/bin/setup.sh
+$ ./dbus-mqtt-devices-0.6.2/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
 $ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.5.1/bin/service /service/dbus-mqtt-devices
+ln -s /data/drivers/dbus-mqtt-devices-0.6.2/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
@@ -73,19 +73,19 @@ To get the driver up and running, download the latest release from github and th
 ```
 $ mkdir -p /data/drivers
 $ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.5.1.zip
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.2.zip
 $ unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.5.1/bin/setup-ccgx.sh
+$ ./dbus-mqtt-devices-0.6.2/bin/setup-ccgx.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
 $ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.5.1/bin/service /service/dbus-mqtt-devices
+ln -s /data/drivers/dbus-mqtt-devices-0.6.2/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
