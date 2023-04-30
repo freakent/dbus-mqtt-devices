@@ -12,8 +12,15 @@ if [ "$piperr" -ne 0 ]; then
     opkg update && opkg install python3-modules python3-pip
 fi
 
-echo "dbus-mqtt-devices: Pip install module dependencies"
-python -m pip install -r requirements.txt
+memory=(`free | grep Mem:`)
+if [ ${memory[1]} -le 244400 ]; then
+  echo "dbus-mqtt-devices: CCGX device detected, basic install of PyYaml required"
+  wget -qO- https://files.pythonhosted.org/packages/36/2b/61d51a2c4f25ef062ae3f74576b01638bebad5e045f747ff12643df63844/PyYAML-6.0.tar.gz | tar xvz -C $BASE/ext
+  python $BASE/ext/PyYAML-6.0/setup.py --without-libyaml install
+else
+  echo "dbus-mqtt-devices: Pip install module dependencies"
+  python -m pip install -r requirements.txt
+fi
 
 echo "dbus-mqtt-devices: Set up Victron module libraries"
 rm -fr $BASE/ext/dbus-mqtt $BASE/ext/velib_python
