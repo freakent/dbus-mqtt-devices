@@ -253,6 +253,7 @@ if you are wanting to run the pytests on macos you need to install a few depende
 #### using homebrew
 ```
 $ brew install dbus pygobject3 gtk+3
-$ pip3 install pytest
+$ pip3 install pytest paho-mqtt PyGObject
 $ pytest --ignore=ext
+
 ```
