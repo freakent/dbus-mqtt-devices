@@ -82,3 +82,8 @@ def test_tank_config():
     assert dbus_paths['FluidType'].get('description') == '0=Fuel, 1=Fresh water, 2=Waste water, 3=Live well, 4=Oil, 5=Black water (sewage)'
     assert dbus_paths['FluidType'].getint('default') == 1
 
+def test_service_types():
+    service_types = MQTTDeviceServiceConfig.serviceTypes()
+    assert "temperature" in service_types
+    assert "tank" in service_types
+    assert "gps" in service_types

@@ -12,6 +12,9 @@ import configparser
 import logging
 import os
 import sys
+from glob import glob
+from pathlib import Path 
+
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
 
@@ -84,3 +87,7 @@ class MQTTDeviceServiceConfig(object):
         p["description"] = values.get("description", None)
         p["onchangecallback"] = callback
         return p
+    
+    @staticmethod
+    def serviceTypes():
+        return list(map(lambda f: Path(f).stem, glob("./services/*.ini")))

@@ -14,8 +14,8 @@ import json
 import os
 import sys
 import re
-import yaml
 
+from device_service_ini_config import MQTTDeviceServiceConfig
 from device import MQTTDevice
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
@@ -35,7 +35,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
 			else dbus.bus.BusConnection(dbus_address)
         self.dbus_address = dbus_address
         self.portalId = self._lookup_portalId()
-        self.service_types = self._read_service_types()
+        self.service_types = MQTTDeviceServiceConfig.serviceTypes()
         self.debug = debug
         self._devices = {}
         MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
@@ -116,19 +116,6 @@ class MQTTDeviceManager(MqttGObjectBridge):
         portalId = VeDbusItemImport(self._dbus_conn, "com.victronenergy.system", "/Serial").get_value()
         logging.info("Using portalId %s", portalId)
         return portalId
-
-
-    def _read_service_types(self):
-        try:                                                    
-            base = os.path.dirname(os.path.realpath(__file__))  
-            with open(os.path.join(base, 'services.yml'), 'r') as services_file:
-                configs = yaml.safe_load(services_file)                         
-                return configs.keys()
-        except IOError as e:                                                                            
-            logging.error("I/O error(%s): %s", e.errno, e.strerror)
-        except: #handle other exceptions such as attribute errors                                       
-            logging.error("Unexpected error: %s", sys.exc_info()[0])
-
 
     def _subscribe_to_device_topic(self):
         mqtt = self._client

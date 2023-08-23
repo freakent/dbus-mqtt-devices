@@ -5,16 +5,6 @@ BASE=$(dirname $(dirname $(realpath "$0")))
 echo "dbus-mqtt-devices: Setup in $BASE started"
 cd $BASE
 
-echo "dbus-mqtt-devices: Checking to see if Python's Pip is installed"
-python -m pip --version
-piperr=$?
-if [ "$piperr" -ne 0 ]; then
-    opkg update && opkg install python3-modules python3-pip
-fi
-
-echo "dbus-mqtt-devices: Pip install module dependencies"
-python -m pip install -r requirements.txt
-
 echo "dbus-mqtt-devices: Set up Victron module libraries"
 rm -fr $BASE/ext/dbus-mqtt $BASE/ext/velib_python
 ln -s /opt/victronenergy/dbus-mqtt $BASE/ext

@@ -9,6 +9,7 @@ The following Victron dbus services are currently supported:
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
 
+[VERSION]: 0.7.2-Alpha
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
 2. [How this driver works - The Registration Protocol](#Registration-Protocol)
@@ -25,7 +26,7 @@ The following Victron dbus services are currently supported:
 
 *** _If you are installing on a CCGX device, please follow the CCGX specific instructions below_ ***
 
-To get the driver up and running, download the latest release from github and then run the setup script.
+To get the driver up and running, follow the steps below to download the latest release from github and then run the setup script.
 
 1. ssh into venus device (as root)
 
@@ -36,19 +37,19 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 $ mkdir -p /data/drivers
 $ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.7.1.zip
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v[VERSION].zip
 $ unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.7.1/bin/setup.sh
+$ ./dbus-mqtt-devices-[VERSION]/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
 $ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.7.1/bin/service /service/dbus-mqtt-devices
+ln -s /data/drivers/dbus-mqtt-devices-[VERSION]/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
@@ -69,19 +70,19 @@ To get the driver up and running, download the latest release from github and th
 ```
 $ mkdir -p /data/drivers
 $ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.7.1.zip
+$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v[VERSION].zip
 $ unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.7.1/bin/setup-ccgx.sh
+$ ./dbus-mqtt-devices-[VERSION]/bin/setup-ccgx.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
 $ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.7.1/bin/service /service/dbus-mqtt-devices
+ln -s /data/drivers/dbus-mqtt-devices-[VERSION]/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
