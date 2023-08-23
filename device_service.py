@@ -15,9 +15,8 @@ import logging
 import os
 import sys
 import dbus
-from device_service_config import MQTTDeviceServiceConfig
-
-VERSION="0.5.1"
+from device_service_ini_config import MQTTDeviceServiceConfig
+from version import VERSION
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
@@ -77,7 +76,7 @@ class MQTTDeviceService(object):
         self._dbus_service = dbus_service = VeDbusService(self.serviceDbusPath(), bus=self._dbus_conn)
         # Add objects required by ve-api
         dbus_service.add_path('/Mgmt/ProcessName', 'dbus-mqtt-devices')
-        dbus_service.add_path('/Mgmt/ProcessVersion', VERSION)
+        dbus_service.add_path('/Mgmt/ProcessVersion', VERSION())
         dbus_service.add_path('/Mgmt/Connection', 'MQTT:{}'.format(self.device.clientId))
         dbus_service.add_path('/DeviceInstance', self.device_instance)
         dbus_service.add_path('/DeviceName', "{}:{}".format(self.device.clientId, self.serviceId))
@@ -93,7 +92,7 @@ class MQTTDeviceService(object):
             else:
                 textformatcallback = None
 
-            if v.get('persist') == True:
+            if v.getboolean('persist') == True:
                 changecallback = self._handle_changed_value
                 value = self._settings[k]
             else:

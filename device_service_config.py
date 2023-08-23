@@ -15,7 +15,14 @@ import sys
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
 
-from settingsdevice import PATH, VALUE, MINIMUM, MAXIMUM, SILENT
+#from settingsdevice import PATH, VALUE, MINIMUM, MAXIMUM, SILENT
+
+## Indexes for the setting dictonary.
+PATH = 0
+VALUE = 1
+MINIMUM = 2
+MAXIMUM = 3
+SILENT = 4
 
 class MQTTDeviceServiceConfig(object):
 
