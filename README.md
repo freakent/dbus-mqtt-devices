@@ -9,14 +9,19 @@ The following Victron dbus services are currently supported:
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
 
+## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
+If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the link below. 
+
+[![Say Thanks](https://raw.githubusercontent.com/freakent/node-red-contrib-sunevents/main/docs/thankyou.jpg "Say Thanks")
+](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
+
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
 2. [How this driver works - The Registration Protocol](#Registration-Protocol)
 3. [Design Notes](#Design-Notes)
-4. [How To Say Thanks](#How-To-Say-Thanks)
-5. [Troubleshooting](#Troubleshooting)
-6. [To Do](#To-Do)
-7. [Developers](#Developers)
+4. [Troubleshooting](#Troubleshooting)
+5. [To Do](#To-Do)
+6. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -142,13 +147,6 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 -   Simple client examples (gps-simulator and tank-simulator) can be found in the test-data directory. 
     These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
 	
-## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
-If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the link below. 
-
-[![Say Thanks](https://raw.githubusercontent.com/freakent/node-red-contrib-sunevents/main/docs/thankyou.jpg "Say Thanks")
-](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
-
-
 ## Troubleshooting
 1) First thing to check is that the dbus-mqtt-devices service is running, from the ssh command line use
 ```
