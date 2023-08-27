@@ -21,7 +21,7 @@ ln -s $BASE/bin/service /service/dbus-mqtt-devices
 echo "dbus-mqtt-devices: Adding device service to /data/rc.local"
 CMD="ln -s $BASE/bin/service /service/dbus-mqtt-devices"
 if ! grep -s -q "$CMD" /data/rc.local; then
-    sed -e "s/ln -s .* \/service\/dbus-mqtt-devices/# &/" -i /data/rc.local 
+    sed -e "s/^ln -s .* \/service\/dbus-mqtt-devices/# &/" -i /data/rc.local 
     echo "$CMD" >> /data/rc.local
 fi
 chmod +x /data/rc.local

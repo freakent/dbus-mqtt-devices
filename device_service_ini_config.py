@@ -90,4 +90,5 @@ class MQTTDeviceServiceConfig(object):
     
     @staticmethod
     def serviceTypes():
-        return list(map(lambda f: Path(f).stem, glob("./services/*.ini")))
+        base_path=os.path.dirname(os.path.realpath(__file__)) 
+        return list(map(lambda f: Path(f).stem, glob(os.path.join(base_path, "services/*.ini"))))

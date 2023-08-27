@@ -1,4 +1,4 @@
-# dbus-mqtt-devices 0.7.4-beta
+# dbus-mqtt-devices 0.7.5-beta
 
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -35,26 +35,26 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 2. Download the latest zip from github and extract contents
 
 ```
-$ mkdir -p /data/drivers
-$ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.7.4-beta.zip
-$ unzip dbus-mqtt-devices.zip
+mkdir -p /data/drivers
+cd /data/drivers
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.7.5-beta.zip
+unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.7.4-beta/bin/setup.sh
+./dbus-mqtt-devices-0.7.5-beta/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
-$ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.7.4-beta/bin/service /service/dbus-mqtt-devices
+cat /data/rc.local
+ln -s /data/drivers/dbus-mqtt-devices-0.7.5-beta/bin/service /service/dbus-mqtt-devices
 ```
 
-5. Reboot (recommended)
+5. Reboot device (recommended)
 ```
-$ reboot
+reboot
 ```
 
 
@@ -92,7 +92,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
     
 
-3)	Once successfully registered, the driver publishes a message on the device/<client id>/DBus topic. 
+3)	Once successfully registered, the driver publishes a message on the device/\<client id\>/DBus topic. 
 	This must be the same topic the device subscribed to in step 1.1. The 
 	DBus message contains the all important numeric device instances (one for each 
 	service) that the device should use when publishing messages for dbus-mqtt
@@ -140,25 +140,25 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 	VRM.
 - 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
 	protocol and the driver have been designed to be easily extended for 
-	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml)).
+	other services supported by dbus-mqtt (see [services](https://github.com/freakent/dbus-mqtt-devices/blob/main/services) directory).
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
--   Simple client examples (gps-simulator and tank-simulator) can be found in the test-data directory. 
+-   Simple client examples (gps-simulator and tank-simulator) can be found in the samples directory. 
     These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
 	
 ## Troubleshooting
 1) First thing to check is that the dbus-mqtt-devices service is running, from the ssh command line use
 ```
-$ svstat /service/dbus-mqtt-devices
+svstat /service/dbus-mqtt-devices
 ```
 More info on deamontools that VenusOs uses here: https://cr.yp.to/daemontools.html
 
 2) If the service is not running then ensure that your rc.local script has execute permissions.
 ```
-$ ls -l /data/rc.local
+ls -l /data/rc.local
 ...
-$ chmod +x /data/rc.local
+chmod +x /data/rc.local
 ```
 3) If the service is running, then next thing to check is the log with the command:
 ```
@@ -182,13 +182,13 @@ It should contain something like this:
 
 If you can have ssh open in another window, then
 ```
-$ tail -f /var/log/dbus-mqtt-devices/current 
+tail -f /var/log/dbus-mqtt-devices/current 
 ```
 is a useful way to monitor the driver.
 
 4) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
-$ more /data/rc.local 
+more /data/rc.local 
 ```
 
 5) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the queues while debugging and if you are doing anything with MQTT.
