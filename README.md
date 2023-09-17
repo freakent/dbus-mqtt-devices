@@ -1,7 +1,5 @@
 # dbus-mqtt-devices
 
-*** IF YOU ARE INSTALLING ON CCGX PLEASE READ SECTION ON CCGX INSTALLATION ***
-
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt). It has been designed to 
 allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids
 the need for additional dedicated custom drivers to be developed and deployed.
@@ -25,10 +23,6 @@ The following Victron dbus services are currently supported:
 
 ## Install and Setup 
 
-### Install and setup (not CCGX)
-
-*** _If you are installing on a CCGX device, please follow the CCGX specific instructions below_ ***
-
 To get the driver up and running, download the latest release from github and then run the setup script.
 
 1. ssh into venus device (as root)
@@ -38,60 +32,28 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 2. Download the latest zip from github and extract contents
 
 ```
-$ mkdir -p /data/drivers
-$ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.2.zip
-$ unzip dbus-mqtt-devices.zip
+mkdir -p /data/drivers
+cd /data/drivers
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.3.zip
+unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-$ ./dbus-mqtt-devices-0.6.2/bin/setup.sh
+./dbus-mqtt-devices-0.6.3/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
-$ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.6.2/bin/service /service/dbus-mqtt-devices
+cat /data/rc.local
+>> ln -s /data/drivers/dbus-mqtt-devices-0.6.3/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot (recommended)
 ```
-$ reboot
+reboot
 ```
 
-### Install and Setup (only for CCGX)
-
-*** _Installation on CCGX devices has been known to cause the device to reboot, requiring manual re-installation of firmware to recover. This issue should be resolved now, but please ensure you are able to reset the CCGX device in case of issues._ ***
-
-To get the driver up and running, download the latest release from github and then run the setup script.
-
-1. ssh into venus device (as root)
-
-2. Download the latest zip from github and extract contents
-
-```
-$ mkdir -p /data/drivers
-$ cd /data/drivers
-$ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.2.zip
-$ unzip dbus-mqtt-devices.zip
-```
-
-3. Run the set up script
-```
-$ ./dbus-mqtt-devices-0.6.2/bin/setup-ccgx.sh
-```
-
-4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
-```
-$ cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.6.2/bin/service /service/dbus-mqtt-devices
-```
-
-5. Reboot (recommended)
-```
-$ reboot
-```
 
 
 ## How this driver works - The Registration Protocol
