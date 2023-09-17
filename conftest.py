@@ -1,7 +1,8 @@
 # conftest.py
 import sys
+import logging
 
-print("Creating MOCK dbus and dbus.service modules")
+logging.warn("Creating MOCK dbus and dbus.service modules for testing")
 module = type(sys)('dbus')
 module.Array = lambda arr, signature, variant_level: [arr, signature, variant_level]
 module.Signature = lambda sig: sig

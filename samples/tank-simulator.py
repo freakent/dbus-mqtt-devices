@@ -1,8 +1,11 @@
 import paho.mqtt.client as mqtt
 import json
 import copy
+import os
 
 clientid = "fe002"
+mqtt_host = os.environ.get("MQTT_HOST", "venus.local")
+mqtt_port = int(os.environ.get("MQTT_PORT", "1883"))
 
 registration = {
   "clientId": clientid,
@@ -46,7 +49,7 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.will_set("device/{}/Status".format(clientid), json.dumps(unregister)) # UPDATE THIS
 
-client.connect("venus.local", 1883, 60)
+client.connect(mqtt_host, mqtt_port, 60)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
