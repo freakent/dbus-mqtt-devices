@@ -105,7 +105,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 
 4)	Custom code on the device then uses the device instance to periodically publish messages to the 
 	appropriate dbus-mqtt topics for the service(s) they are providing. 
-	Note the "W" at the start of the topc. See the dbus-mqtt documentation for an explanation.
+	Note the "W" at the start of the topic. See the dbus-mqtt documentation for an explanation.
 	
     For example:
 	
@@ -127,7 +127,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 
 
 ## Design Notes
--	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
+-	Client devices MUST always self register (by sending a Status message with connected = 1) every time they connect to MQTT. Re-registering an 
 	already registered device has no adverse affect. 
 - 	The device can have multiple sensors of the same type (e.g. two 
 	temperature sensors), each publishing to different dbus-mqtt topics as 

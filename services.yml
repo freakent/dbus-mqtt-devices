@@ -47,7 +47,7 @@ tank:
 # https://github.com/victronenergy/venus/wiki/dbus#pv-inverters
 pvinverter:
   ProductId:
-    default: 45069 # 0xB00D, ESS Demo mode uses 45058
+    default: 45069 # 0xB00D, 0xB00D, 45069 = ET340, 45068 = ET112, ESS Demo mode uses 45058
   CustomName:
     default: "My PV Inverter"
     persist: true
