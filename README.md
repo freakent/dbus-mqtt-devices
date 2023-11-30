@@ -42,12 +42,14 @@ unzip dbus-mqtt-devices.zip
 ```
 ./dbus-mqtt-devices-0.6.3/bin/setup.sh
 ```
-pleaae note: If you receive an error during aetup that includes the lines 
+please note: If you receive an error during setup that includes the lines 
 ```
 ModuleNotFoundError: No module named 'dataclasses'
 ```
 
-Try running the following before running the setup.sh script again. ```opkg install python3-modules```
+Try running the following before running the setup.sh script again. ```
+opkg install python3-modules
+```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
