@@ -56,7 +56,8 @@ def main():
 	parser.add_argument('-i', '--init-broker', action='store_true', help='Tries to setup communication with VRM MQTT broker')
 	args = parser.parse_args()
 
-	print("-------- dbus_mqtt_devices, v{} is starting up --------".format(VERSION))
+	print("dbus_mqtt_devices v{}",format(VERSION))
+	logger.info("-------- dbus_mqtt_devices, v{} is starting up --------".format(VERSION))
 	logger = setup_logging(args.debug)
 
 	mainloop = GLib.MainLoop()
