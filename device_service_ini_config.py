@@ -49,7 +49,7 @@ class MQTTDeviceServiceConfig(object):
         #    'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],
         #    'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
         if self._config != None:
-            print("this is what we found", self._config)
+            logging.info("this is what we found", self._config)
             persist = filter(lambda s: self._config[s].getboolean("persist", False), self._config.sections())
             settings = {k: self._config_to_setting(k, self._config[k]) for k in persist}
             return settings

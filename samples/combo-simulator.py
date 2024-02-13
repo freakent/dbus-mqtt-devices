@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import json
 import copy
+import time
 
 clientid = "nr001"
 
@@ -46,24 +47,25 @@ def on_message(client, userdata, msg):
 
     dbus_msg = json.loads(msg.payload)
     portalId = dbus_msg.get("portalId")
-    deviceId = dbus_msg.get("deviceInstance").get("t1") # UPDATE THIS
+    deviceId = dbus_msg.get("deviceInstance").get("t1") 
 
+    time.sleep(1)
     for key in temp_data:
-        topic = "W/{}/temperature/{}/{}".format(portalId, deviceId, key) # UPDATE THIS
+        topic = "W/{}/temperature/{}/{}".format(portalId, deviceId, key) 
         print("{} = {}".format(topic, temp_data.get(key) ) )
         client.publish(topic, json.dumps({ "value": temp_data.get(key) }) )
 
-    deviceId = dbus_msg.get("deviceInstance").get("tk1") # UPDATE THIS
+    deviceId = dbus_msg.get("deviceInstance").get("tk1") 
 
     for key in tank_data:
-        topic = "W/{}/tank/{}/{}".format(portalId, deviceId, key) # UPDATE THIS
+        topic = "W/{}/tank/{}/{}".format(portalId, deviceId, key) 
         print("{} = {}".format(topic, tank_data.get(key) ) )
         client.publish(topic, json.dumps({ "value": tank_data.get(key) }) )
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.will_set("device/{}/Status".format(clientid), json.dumps(unregister)) # UPDATE THIS
+client.will_set("device/{}/Status".format(clientid), json.dumps(unregister)) 
 
 client.connect("venus.local", 1883, 60)
 
