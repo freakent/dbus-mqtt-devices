@@ -1,6 +1,6 @@
 # dbus-mqtt-devices 0.6.4-rc1
 
-This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashMQ. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
+This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
 The following Victron dbus services are currently supported:
 - temperature (com.victronenergy.temperature._device_)
@@ -208,9 +208,11 @@ https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-proble
 I get email alerts from Github which I don't seem to get from the Victron community forum.
 
 ## To Do
-1) Use of command line args
-2) Add support for more dbus-mqtt services
-3) Automatically comment out old lines in /data/rc.local when new version installed
+1) Split services config file into separate service files
+2) Remove dependency on YAML
+3) Use of command line args
+4) Add support for more dbus-mqtt services
+5) Automatically comment out old lines in /data/rc.local when new version installed
 
 
 ## Developers
