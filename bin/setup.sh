@@ -12,6 +12,11 @@ if [ "$piperr" -ne 0 ]; then
     opkg update && opkg install python3-pip
 fi
 
+echo "dbus-mqtt-devices: Checking to see if python3-misc library is installed"
+if [ -z "`opkg list-installed | grep python3-misc`" ]; then
+    opkg update && opkg install python3-misc
+fi
+
 echo "dbus-mqtt-devices: Pip install module dependencies"
 python -m pip install -r requirements.txt
 
