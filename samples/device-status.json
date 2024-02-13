@@ -1,0 +1,18 @@
+// device/fe002/Status
+{
+  "clientId": "fe002",
+  "connected": 1,
+  "version": "v1.2",
+  "services": {
+    "t1": "temperature"
+  }
+}
+
+// device/fe005/Status
+{
+  "clientId": "fe005",
+  "connected": 1,
+  "version": "v4.0.6",
+  "services": {
+    "tl1": "tank"
+  }
