@@ -56,8 +56,8 @@ def main():
 	args = parser.parse_args()
 
 	print("dbus_mqtt_devices v{}",format(VERSION()))
-	logger.info("-------- dbus_mqtt_devices, v{} is starting up --------".format(VERSION()))
 	logger = setup_logging(args.debug)
+	logger.info("-------- dbus_mqtt_devices, v{} is starting up --------".format(VERSION()))
 
 	mainloop = GLib.MainLoop()
 	# Have a mainloop, so we can send/receive asynchronous calls to and from dbus
