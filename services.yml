@@ -65,26 +65,26 @@ pvinverter:
     default: 7
     min: 0
     max: 10
-AllowedRoles:
-   default: ["grid", "pvinverter", "genset", "acload"]
-Role:
-   description: "grid, pvinverter, genset, acload"    
-   persist: true
-   default: "pvinverter"
-#  PhaseConfig:
-#    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
-#    persist: true
-#    default: 0
-#    min: 0
-#    max: 4
-#  DeviceType: 
-#    description: "???"
-#    persist: true
-#    default: 71 # valued used by pvinverter in ESS demo mode
-#  Serial:
-#    description: "device serial number"
-#    persist: true
-#    default: ""
+  AllowedRoles:
+    default: ["grid", "pvinverter", "genset", "acload"]
+  Role:
+    description: "grid, pvinverter, genset, acload"    
+    persist: true
+    default: "pvinverter"
+    #  PhaseConfig:
+    #    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
+    #    persist: true
+    #    default: 0
+    #    min: 0
+    #    max: 4
+    #  DeviceType: 
+    #    description: "???"
+    #    persist: true
+    #    default: 71 # valued used by pvinverter in ESS demo mode
+    #  Serial:
+    #    description: "device serial number"
+    #    persist: true
+    #    default: ""
   Ac/MaxPower: # Max rated power (in Watts) of the inverter
     description: "W"
     persist: true
@@ -153,18 +153,18 @@ grid:
     default: 0
     min: 0
     max: 2
-#  AllowedRoles:
-#    default: '["grid", "pvinverter", "genset", "acload"]'
-#  Role:
-#    description: "grid, pvinverter, genset, acload"    
-#    persist: true
-#    default: "grid"
-#  PhaseConfig:
-#    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
-#    persist: true
-#    default: 0
-#    min: 0
-#    max: 4
+    #  AllowedRoles:
+    #    default: '["grid", "pvinverter", "genset", "acload"]'
+    #  Role:
+    #    description: "grid, pvinverter, genset, acload"    
+    #    persist: true
+    #    default: "grid"
+    #  PhaseConfig:
+    #    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
+    #    persist: true
+    #    default: 0
+    #    min: 0
+    #    max: 4
   Ac/Energy/Forward: # Total bought energy over all phases
     description: "kWh"
     format: "{} kWh"
