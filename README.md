@@ -1,4 +1,4 @@
-# dbus-mqtt-devices 0.6.4-rc2
+# dbus-mqtt-devices 0.6.4
 
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -37,13 +37,13 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.4-rc2.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.4.zip
 unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the set up script
 ```
-./dbus-mqtt-devices-0.6.4-rc2/bin/setup.sh
+./dbus-mqtt-devices-0.6.4/bin/setup.sh
 ```
 please note: If you receive an error during setup that includes the lines 
 ```
@@ -57,7 +57,7 @@ opkg install python3-modules
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
 cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.6.4-rc2/bin/service /service/dbus-mqtt-devices
+ln -s /data/drivers/dbus-mqtt-devices-0.6.4/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
