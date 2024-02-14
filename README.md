@@ -10,7 +10,7 @@ The following Victron dbus services are currently supported:
 - gps (com.victronenergy.gps._device_)
 
 ## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
-If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the link below. 
+If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the "Thank You" link below. 
 
 [![Say Thanks](https://raw.githubusercontent.com/freakent/node-red-contrib-sunevents/main/docs/thankyou.jpg "Say Thanks")
 ](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
@@ -41,10 +41,6 @@ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/arch
 unzip dbus-mqtt-devices.zip
 ```
 
-Try running the following before running the setup.sh script again.
-```
-opkg install python3-modules
-```
 3. Run the set up script
 ```
 ./dbus-mqtt-devices-0.6.4-rc2/bin/setup.sh
@@ -52,6 +48,10 @@ opkg install python3-modules
 please note: If you receive an error during setup that includes the lines 
 ```
 ModuleNotFoundError: No module named 'dataclasses'
+```
+Try running the following before running the setup.sh script again.
+```
+opkg install python3-modules
 ```
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
@@ -148,7 +148,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 	VRM.
 - 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
 	protocol and the driver have been designed to be easily extended for 
-	other services supported by dbus-mqtt (see [services](https://github.com/freakent/dbus-mqtt-devices/blob/main/services) directory).
+	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml) config file).
 -   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
     Adafruit AHT20 temperature and humidity module using this driver and 
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
