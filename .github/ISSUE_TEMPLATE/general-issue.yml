@@ -42,6 +42,7 @@ body:
     attributes:
       label: What does the status payload look like that you are publishing to the driver to register your device?
       description: Please include the JSON or line of code that generates the JSON.
+      placeholder: { "clientId": <client id>, "connected": <either 1 or 0>, "version": "<text string>", "services": [<a dictionary of services that this device wants to use>] }
     validations:
       required: false
   - type: textarea
