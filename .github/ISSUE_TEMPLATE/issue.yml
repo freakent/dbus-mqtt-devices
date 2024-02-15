@@ -9,7 +9,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for supporting this project abd taking the time to raise an issue. Please provide as much information as possible.
+        Thanks for supporting this project and taking the time to raise an issue. Please provide as much information as possible.
   - type: dropdown
     id: version
     attributes:
@@ -45,6 +45,7 @@ body:
     attributes:
       label: Is there a Discussion thread for this issue? Please paste a link.
       description: If there isn't a Discussion thread please create one before raising an issue.
+      placeholder: "https://github.com/freakent/dbus-mqtt-devices/discussions/[number]"
     validations:
       required: false
   - type: textarea
