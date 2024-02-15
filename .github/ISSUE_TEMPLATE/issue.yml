@@ -19,6 +19,7 @@ body:
         - 0.6.4 (current)
         - 0.6.3 (previous)
         - 0.7.5 (beta/experimental)
+        - Other
     validations:
       required: true
   - type: dropdown
@@ -28,6 +29,7 @@ body:
       options:
         - 3.20 (current release)
         - 3.30-x (beta release)
+        - Other
     validations:
       required: true
   - type: dropdown
