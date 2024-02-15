@@ -1,6 +1,6 @@
 name: General Issues
 description: Report an issue
-title: ""
+title: "Issues with dbus-mqtt-devices"
 labels: []
 projects: []
 # assignees:
