@@ -54,7 +54,7 @@ body:
     id: description
     attributes:
       label: What is the issue you are actually experiencing?
-      description: Please provide a detailed description with screenshots and/or code samples as appropriate. Include any steps to recreate this issue.
+      description: Please provide a detailed description with screenshots and/or code samples as appropriate. Include any steps to recreate this issue. If you answered Other to any question above then also incude details here.
     validations:
       required: true
   - type: textarea
