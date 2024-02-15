@@ -38,19 +38,19 @@ body:
     validations:
       required: false
   - type: textarea
+    id: registration
+    attributes:
+      label: What does the status payload look like that you are publishing to the driver to register your device?
+      description: Please include the JSON or line of code that generates the JSON.
+    validations:
+      required: false
+  - type: textarea
     id: description
     attributes:
       label: What is the issue you are actually experiencing?
       description: Please provide a detailed description with screenshots and/or code samples as appropriate. Include any steps to recreate this issue.
     validations:
       required: true
-  - type: textarea
-    id: registration
-    attributes:
-      label: What does the registration payload look like that you are sending to the driver?
-      description: Please include the JSON or line of code that generates the JSON
-    validations:
-      required: false
   - type: textarea
     id: logs
     attributes:
