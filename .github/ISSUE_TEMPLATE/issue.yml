@@ -30,19 +30,21 @@ body:
         - 3.30-x (beta release)
     validations:
       required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Does this issue occur during installation or at runtime ?
+      options:
+        - Installation
+        - Runtime
+        - Other
+    validations:
+      required: true
   - type: input
     id: discussion
     attributes:
       label: Is there a Discussion thread for this issue? Please paste a link.
       description: If there isn't a Discussion thread please create one before raising an issue.
-    validations:
-      required: false
-  - type: textarea
-    id: registration
-    attributes:
-      label: What does the status payload look like that you are publishing to the driver to register your device?
-      description: Please include the JSON or line of code that generates the JSON.
-      placeholder: "{ \"clientId\": <client id>, \"connected\": <1>, \"version\": \"<text string>\", \"services\": [<a dictionary of services that this device wants to use>] }"
     validations:
       required: false
   - type: textarea
@@ -52,6 +54,14 @@ body:
       description: Please provide a detailed description with screenshots and/or code samples as appropriate. Include any steps to recreate this issue.
     validations:
       required: true
+  - type: textarea
+    id: registration
+    attributes:
+      label: What does the status payload look like that you are publishing to the driver to register your device?
+      description: Please include the JSON or line of code that generates the JSON.
+      placeholder: "{ \"clientId\": <client id>, \"connected\": <1>, \"version\": \"<text string>\", \"services\": [<a dictionary of services that this device wants to use>] }"
+    validations:
+      required: false
   - type: textarea
     id: logs
     attributes:
