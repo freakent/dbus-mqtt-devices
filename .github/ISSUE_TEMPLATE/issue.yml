@@ -1,4 +1,4 @@
-name: Runtime Issues
+name: Issue with dbus-mqtt-devices
 description: Report an issue with dbus-mqtt-devices
 #title: "your issue title"
 labels: []
@@ -9,7 +9,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        Thanks for supporting this project abd taking the time to raise an issue. Please provide as much information as possible.
   - type: dropdown
     id: version
     attributes:
