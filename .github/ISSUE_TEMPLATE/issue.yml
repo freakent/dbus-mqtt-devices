@@ -1,4 +1,4 @@
-name: Issue with dbus-mqtt-devices
+name: dbus-mqtt-devices
 description: Report an issue with dbus-mqtt-devices
 #title: "your issue title"
 labels: []
