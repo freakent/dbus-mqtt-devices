@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions dbus-mqtt-devices 
+    url: https://github.com/freakent/dbus-mqtt-devices/discussions
+    about: Please ask questions here before raising an issue ticket.
+  - name: Victron Modifications Community
+    url: https://community.victronenergy.com/spaces/31/index.html
+    about: If you need help with Victron's MQTT api on VenusOS please use Victron's Modification forum

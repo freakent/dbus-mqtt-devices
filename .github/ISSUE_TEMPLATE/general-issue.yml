@@ -1,0 +1,58 @@
+name: General Issues
+description: Report an issue
+title: ""
+labels: []
+projects: []
+# assignees:
+  # - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of dbus-mqtt-devices are you running?
+      options:
+        - 0.6.4 (current)
+        - 0.6.3 (previous)
+        - 0.7.5 (beta/experimental)
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: venusos
+    attributes:
+      label: What version of VenusOS are you running on your GX device
+      options:
+        - 3.20 (current release)
+        - 3.30-x (beta release)
+  - type: input
+    id: discussion
+    attributes:
+      label: Is there a Discussion thread for this issue? Please paste a link.
+      description: If there isn't a Discussion thread please create one before raising an issue.
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: What is the issue you are actually experiencing?
+      description: Please provide a detailed description with screenshots and/or code samples as appropriate. Include any steps to recreate this issue.
+    validations:
+      required: true
+  - type: textarea
+    id: registration
+    attributes:
+      label: What does the registration payload look like that you are sending to the driver?
+      description: Please include the JSON or line of code that generates the JSON
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
