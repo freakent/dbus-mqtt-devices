@@ -60,7 +60,7 @@ body:
   - type: textarea
     id: registration
     attributes:
-      label: What does the status payload look like that you are publishing to the driver to register your device?
+      label: If this is not installation related, what does the status payload look like that you are publishing to the driver to register your device?
       description: Please include the JSON or line of code that generates the JSON.
       placeholder: "{ \"clientId\": <client id>, \"connected\": <1>, \"version\": \"<text string>\", \"services\": [<a dictionary of services that this device wants to use>] }"
     validations:
