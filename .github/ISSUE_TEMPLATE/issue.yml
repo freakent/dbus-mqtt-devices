@@ -27,7 +27,8 @@ body:
     attributes:
       label: What version of VenusOS are you running on your GX device
       options:
-        - 3.20 (current release)
+        - 3.20
+        - 3.21 (currect release)
         - 3.30-x (beta release)
         - Other
     validations:
