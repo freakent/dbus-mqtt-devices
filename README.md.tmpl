@@ -17,11 +17,12 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [How this driver works - The Registration Protocol](#Registration-Protocol)
-3. [Design Notes](#Design-Notes)
-4. [Troubleshooting](#Troubleshooting)
-5. [To Do](#To-Do)
-6. [Developers](#Developers)
+2. [Updating](#Updating)
+3. [How this driver works - The Registration Protocol](#Registration-Protocol)
+4. [Design Notes](#Design-Notes)
+5. [Troubleshooting](#Troubleshooting)
+6. [To Do](#To-Do)
+7. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -41,7 +42,7 @@ wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/arch
 unzip dbus-mqtt-devices.zip
 ```
 
-3. Run the set up script
+3. Run the setup script
 ```
 ./dbus-mqtt-devices-$VERSION/bin/setup.sh
 ```
@@ -56,7 +57,7 @@ opkg install python3-modules
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
-cat /data/rc.local
+# cat /data/rc.local
 ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-devices
 ```
 
@@ -65,6 +66,30 @@ ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-de
 reboot
 ```
 
+## Updating
+
+After upgrading VenusOS, this driver also needs to be updated manually. We're assuming you didn't cleanup the previous files, so we're doing a clean install.
+
+1. Set the root password in the VenusOS (this is reset after an upgrade)
+
+2. Ssh into venus device (as root)
+
+3. Cleanup the existing files from a previous installation
+```
+cd /data/drivers
+rm -r dbus-mqtt*
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v$VERSION.zip
+unzip dbus-mqtt-devices.zip
+```
+4. Run the setup script
+```
+./dbus-mqtt-devices-$VERSION/bin/setup.sh
+```
+5. Check the contents of /data/rc.local to ensure dbus-mqtt-device is there only once. If it exists twice, make sure to delete 1 line.
+```
+# cat /data/rc.local
+ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-devices
+```
 
 
 ## How this driver works - The Registration Protocol
