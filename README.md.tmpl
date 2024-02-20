@@ -17,7 +17,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [Updating](#Updating)
+2. [Updating after VenusOS updates](#VenusOS Updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
 4. [Design Notes](#Design-Notes)
 5. [Troubleshooting](#Troubleshooting)
@@ -66,30 +66,22 @@ ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-de
 reboot
 ```
 
-## Updating
+## VenusOS Updates
 
-After upgrading VenusOS, this driver also needs to be updated manually. We're assuming you didn't cleanup the previous files, so we're doing a clean install.
+Upgrading (or downgrading) VenusOS will remove the libararies that this driver relies on so setup.sh must be run again. 
+1. Ssh into venus device (as root)
 
-1. Set the root password in the VenusOS (this is reset after an upgrade)
-
-2. Ssh into venus device (as root)
-
-3. Cleanup the existing files from a previous installation
+2. Run the setup script
 ```
 cd /data/drivers
-rm -r dbus-mqtt*
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v$VERSION.zip
-unzip dbus-mqtt-devices.zip
-```
-4. Run the setup script
-```
 ./dbus-mqtt-devices-$VERSION/bin/setup.sh
 ```
-5. Check the contents of /data/rc.local to ensure dbus-mqtt-device is there only once. If it exists twice, make sure to delete 1 line.
+3. Check the contents of /data/rc.local to ensure dbus-mqtt-device is there only once. If it exists twice, make sure to delete 1 line.
 ```
 # cat /data/rc.local
 ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-devices
 ```
+4. Reboot device
 
 
 ## How this driver works - The Registration Protocol
