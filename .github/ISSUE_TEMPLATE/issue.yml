@@ -16,8 +16,9 @@ body:
       label: Version
       description: What version of dbus-mqtt-devices are you running?
       options:
-        - 0.6.4 (current)
-        - 0.6.3 (previous)
+        - 0.6.5 (current)
+        - 0.6.4 
+        - 0.6.3 
         - 0.7.5 (beta/experimental)
         - Other
     validations:
@@ -27,8 +28,8 @@ body:
     attributes:
       label: What version of VenusOS are you running on your GX device
       options:
+        - 3.21 (current release)
         - 3.20
-        - 3.21 (currect release)
         - 3.30-x (beta release)
         - Other
     validations:
