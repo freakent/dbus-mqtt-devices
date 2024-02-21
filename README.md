@@ -46,18 +46,11 @@ unzip dbus-mqtt-devices.zip
 ```
 ./dbus-mqtt-devices-v0.6.5-rc1/bin/setup.sh
 ```
-please note: If you receive an error during setup that includes the lines 
-```
-ModuleNotFoundError: No module named 'dataclasses'
-```
-Try running the following before running the setup.sh script again.
-```
-opkg install python3-modules
-```
 
-4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
+4. Check the contents of /data/rc.local to ensure the correct version of dbus-mqtt-device automatically starts on reboot
 ```
 # cat /data/rc.local
+/data/drivers/dbus-mqtt-devices-v0.6.5-rc1/bin/setup-dependencies.sh
 ln -s /data/drivers/dbus-mqtt-devices-v0.6.5-rc1/bin/service /service/dbus-mqtt-devices
 ```
 
@@ -161,6 +154,16 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
 	
 ## Troubleshooting
+### during installation
+If you receive an error during setup that includes the lines 
+```
+ModuleNotFoundError: No module named 'dataclasses'
+```
+Try running the following before running the setup.sh script again.
+```
+opkg install python3-modules
+```
+### at runtime
 1) First thing to check is that the dbus-mqtt-devices service is running, from the ssh command line use
 ```
 svstat /service/dbus-mqtt-devices
