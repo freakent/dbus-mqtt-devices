@@ -47,7 +47,7 @@ unzip dbus-mqtt-devices.zip
 ./dbus-mqtt-devices-v0.6.5-rc1/bin/setup.sh
 ```
 
-4. Check the contents of /data/rc.local to ensure the correct version of dbus-mqtt-device automatically starts on reboot
+4. Check the contents of /data/rc.local to ensure the correct version starts automatically on reboot
 ```
 # cat /data/rc.local
 /data/drivers/dbus-mqtt-devices-v0.6.5-rc1/bin/setup-dependencies.sh
