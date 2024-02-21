@@ -5,20 +5,7 @@ BASE=$(dirname $(dirname $(realpath "$0")))
 echo "dbus-mqtt-devices: Setup in $BASE started"
 cd $BASE
 
-echo "dbus-mqtt-devices: Checking to see if Python's Pip is installed"
-python -m pip --version
-piperr=$?
-if [ "$piperr" -ne 0 ]; then
-    opkg update && opkg install python3-pip
-fi
-
-echo "dbus-mqtt-devices: Checking to see if python3-misc library is installed"
-if [ -z "`opkg list-installed | grep python3-misc`" ]; then
-    opkg update && opkg install python3-misc
-fi
-
-echo "dbus-mqtt-devices: Pip install module dependencies"
-python -m pip install -r requirements.txt
+. ./bin/setup-dependencies.sh
 
 echo "dbus-mqtt-devices: Set up Victron module libraries"
 rm -fr $BASE/ext/dbus-mqtt $BASE/ext/velib_python
@@ -34,9 +21,21 @@ rm -f /service/dbus-mqtt-devices
 ln -s $BASE/bin/service /service/dbus-mqtt-devices
 
 echo "dbus-mqtt-devices: Adding device service to /data/rc.local"
+
+CMD="$BASE/bin/setup-dependencies"
+if ! grep -s -q "$CMD" /data/rc.local; then
+    echo "$CMD" >> /data/rc.local
+fi
+
 CMD="ln -s $BASE/bin/service /service/dbus-mqtt-devices"
 if ! grep -s -q "$CMD" /data/rc.local; then
     echo "$CMD" >> /data/rc.local
 fi
+
+# comment out lines that match different versions of dbus-mqtt-devices 
+# by a) ignoring lines that start with comments, b) only selecting lines that contain dbus-mqtt0-devices, c) ignore any that match the current BASE path
+awk -v BASE="$BASE" '/^[^#]/ && /dbus-mqtt-devices/ && $0 !~ BASE f{$0 = "# " $0}{print}' /data/rc.local > /data/rc.local.tmp
+mv /data/rc.local.tmp /data/rc.local
 chmod +x /data/rc.local
+
 echo "dbus-mqtt-devices: Setup complete"
