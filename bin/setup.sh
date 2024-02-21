@@ -5,7 +5,7 @@ BASE=$(dirname $(dirname $(realpath "$0")))
 echo "dbus-mqtt-devices: Setup in $BASE started"
 cd $BASE
 
-. ./bin/setup-dependencies.sh
+./bin/setup-dependencies.sh
 
 echo "dbus-mqtt-devices: Set up Victron module libraries"
 rm -fr $BASE/ext/dbus-mqtt $BASE/ext/velib_python
