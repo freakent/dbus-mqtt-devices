@@ -17,7 +17,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [Updating after VenusOS updates](#VenusOS Updates)
+2. [Updating after VenusOS updates](#VenusOS-Updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
 4. [Design Notes](#Design-Notes)
 5. [Troubleshooting](#Troubleshooting)
