@@ -34,7 +34,7 @@ fi
 
 # comment out lines that match different versions of dbus-mqtt-devices 
 # by a) ignoring lines that start with comments, b) only selecting lines that contain dbus-mqtt0-devices, c) ignore any that match the current BASE path
-awk -v BASE="$BASE" '/^[^#]/ && /dbus-mqtt-devices/ && $0 !~ BASE f{$0 = "# " $0}{print}' /data/rc.local > /data/rc.local.tmp
+awk -v BASE="$BASE/" '/^[^#]/ && /dbus-mqtt-devices/ && $0 !~ BASE f{$0 = "# " $0}{print}' /data/rc.local > /data/rc.local.tmp
 mv /data/rc.local.tmp /data/rc.local
 chmod +x /data/rc.local
 
