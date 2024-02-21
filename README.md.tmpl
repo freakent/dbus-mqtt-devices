@@ -17,12 +17,11 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [Updating after VenusOS updates](#VenusOS-Updates)
+2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
-4. [Design Notes](#Design-Notes)
+4. [Design notes](#Design-notes)
 5. [Troubleshooting](#Troubleshooting)
-6. [To Do](#To-Do)
-7. [Developers](#Developers)
+6. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -59,7 +58,7 @@ ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-de
 reboot
 ```
 
-## VenusOS Updates
+## Updating after VenusOS updates
 
 The driver will automatically update it's own module dependencies on every reboot, so there should be no need to do anything to the installation after a VenusOS upgrade. 
 If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
@@ -135,7 +134,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 	the device services are cleared by this action.
 
 
-## Design Notes
+## Design notes
 -	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
 	already registered device has no adverse affect. 
 - 	The device can have multiple sensors of the same type (e.g. two 
@@ -214,13 +213,6 @@ https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-proble
 
 7) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
 I get email alerts from Github which I don't seem to get from the Victron community forum.
-
-## To Do
-1) Split services config file into separate service files
-2) Remove dependency on YAML
-3) Use of command line args
-4) Add support for more dbus-mqtt services
-5) Automatically comment out old lines in /data/rc.local when new version installed
 
 
 ## Developers
