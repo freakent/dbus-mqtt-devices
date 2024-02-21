@@ -22,7 +22,7 @@ ln -s $BASE/bin/service /service/dbus-mqtt-devices
 
 echo "dbus-mqtt-devices: Adding device service to /data/rc.local"
 
-CMD="$BASE/bin/setup-dependencies"
+CMD="$BASE/bin/setup-dependencies.sh"
 if ! grep -s -q "$CMD" /data/rc.local; then
     echo "$CMD" >> /data/rc.local
 fi
