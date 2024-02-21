@@ -68,20 +68,8 @@ reboot
 
 ## VenusOS Updates
 
-Upgrading (or downgrading) VenusOS will remove the libararies that this driver relies on so setup.sh must be run again. 
-1. Ssh into venus device (as root)
-
-2. Run the setup script
-```
-cd /data/drivers
-./dbus-mqtt-devices-$VERSION/bin/setup.sh
-```
-3. Check the contents of /data/rc.local to ensure dbus-mqtt-device is there only once. If it exists twice, make sure to delete 1 line.
-```
-# cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-$VERSION/bin/service /service/dbus-mqtt-devices
-```
-4. Reboot device
+The driver will automatically update it's own module dependencies on every reboot, so there should be no need to do anything to the installation after a VenusOS upgrade. 
+If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
 
 
 ## How this driver works - The Registration Protocol

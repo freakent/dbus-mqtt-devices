@@ -1,4 +1,4 @@
-# dbus-mqtt-devices 0.6.4
+# dbus-mqtt-devices v0.6.5-rc1
 
 This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -17,11 +17,12 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [How this driver works - The Registration Protocol](#Registration-Protocol)
-3. [Design Notes](#Design-Notes)
-4. [Troubleshooting](#Troubleshooting)
-5. [To Do](#To-Do)
-6. [Developers](#Developers)
+2. [Updating after VenusOS updates](#VenusOS Updates)
+3. [How this driver works - The Registration Protocol](#Registration-Protocol)
+4. [Design Notes](#Design-Notes)
+5. [Troubleshooting](#Troubleshooting)
+6. [To Do](#To-Do)
+7. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -37,13 +38,13 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.4.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/vv0.6.5-rc1.zip
 unzip dbus-mqtt-devices.zip
 ```
 
-3. Run the set up script
+3. Run the setup script
 ```
-./dbus-mqtt-devices-0.6.4/bin/setup.sh
+./dbus-mqtt-devices-v0.6.5-rc1/bin/setup.sh
 ```
 please note: If you receive an error during setup that includes the lines 
 ```
@@ -56,8 +57,8 @@ opkg install python3-modules
 
 4. Check the contents of /data/rc.local to ensure dbus-mqtt-device automatically starts on reboot
 ```
-cat /data/rc.local
-ln -s /data/drivers/dbus-mqtt-devices-0.6.4/bin/service /service/dbus-mqtt-devices
+# cat /data/rc.local
+ln -s /data/drivers/dbus-mqtt-devices-v0.6.5-rc1/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
@@ -65,6 +66,10 @@ ln -s /data/drivers/dbus-mqtt-devices-0.6.4/bin/service /service/dbus-mqtt-devic
 reboot
 ```
 
+## VenusOS Updates
+
+The driver will automatically update it's own module dependencies on every reboot, so there should be no need to do anything to the installation after a VenusOS upgrade. 
+If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
 
 
 ## How this driver works - The Registration Protocol
