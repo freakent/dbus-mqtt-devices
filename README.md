@@ -1,6 +1,6 @@
-# dbus-mqtt-devices 0.6.5
+# dbus-mqtt-devices 0.6.6
 
-This Venus GX Driver works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
+This VenusOS Driver for GX devices works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
 The following Victron dbus services are currently supported:
 - temperature (com.victronenergy.temperature._device_)
@@ -17,12 +17,11 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
-2. [Updating after VenusOS updates](#VenusOS-Updates)
+2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
-4. [Design Notes](#Design-Notes)
+4. [Design notes](#Design-notes)
 5. [Troubleshooting](#Troubleshooting)
-6. [To Do](#To-Do)
-7. [Developers](#Developers)
+6. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -38,20 +37,20 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.5.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.6.zip
 unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the setup script
 ```
-./dbus-mqtt-devices-0.6.5/bin/setup.sh
+./dbus-mqtt-devices-0.6.6/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure the correct version starts automatically on reboot
 ```
 # cat /data/rc.local
-/data/drivers/dbus-mqtt-devices-0.6.5/bin/setup-dependencies.sh
-ln -s /data/drivers/dbus-mqtt-devices-0.6.5/bin/service /service/dbus-mqtt-devices
+/data/drivers/dbus-mqtt-devices-0.6.6/bin/setup-dependencies.sh
+ln -s /data/drivers/dbus-mqtt-devices-0.6.6/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
@@ -59,7 +58,7 @@ ln -s /data/drivers/dbus-mqtt-devices-0.6.5/bin/service /service/dbus-mqtt-devic
 reboot
 ```
 
-## VenusOS Updates
+## Updating after VenusOS updates
 
 The driver will automatically update it's own module dependencies on every reboot, so there should be no need to do anything to the installation after a VenusOS upgrade. 
 If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
@@ -135,7 +134,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 	the device services are cleared by this action.
 
 
-## Design Notes
+## Design notes
 -	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
 	already registered device has no adverse affect. 
 - 	The device can have multiple sensors of the same type (e.g. two 
@@ -207,20 +206,14 @@ is a useful way to monitor the driver.
 more /data/rc.local 
 ```
 
-5) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the queues while debugging and if you are doing anything with MQTT.
+5) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT. 
+There is a keepalive script in the samples directory if you need it.
 
-6) In the unlikely event that the installation fails, and you ccgx device will not boot, follow these instructions to recover it.
+6) In the unlikely event that the installation fails, and your ccgx device will not boot, follow these instructions to recover it.
 https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-problem.html
 
-7) If you are still having a problem feel free to open an issue on the Github project here: https://github.com/freakent/dbus-mqtt-devices/issues
+7) If you are still having a problem feel free to start an Discussion on the Github project here: https://github.com/freakent/dbus-mqtt-devices/discussions
 I get email alerts from Github which I don't seem to get from the Victron community forum.
-
-## To Do
-1) Split services config file into separate service files
-2) Remove dependency on YAML
-3) Use of command line args
-4) Add support for more dbus-mqtt services
-5) Automatically comment out old lines in /data/rc.local when new version installed
 
 
 ## Developers
