@@ -16,7 +16,8 @@ body:
       label: Version
       description: What version of dbus-mqtt-devices are you running?
       options:
-        - 0.6.5 (current)
+        - 0.6.6 (current)
+        - 0.6.5 
         - 0.6.4 
         - 0.6.3 
         - 0.7.5 (beta/experimental)
