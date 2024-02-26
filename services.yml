@@ -11,6 +11,11 @@ temperature:
     default: 2
     min: 0
     max: 2
+  Status:
+    description: "0=Ok; 1=Disconnected; 2=Short circuited; 3=Reverse polarity; 4=Unknown"
+    default: 0
+    min: 0
+    max: 4
   Temperature:
     description: "C"
   Pressure:
@@ -26,18 +31,26 @@ tank:
   CustomName:
     default: "My Tank Sensor"
     persist: true
+  Status:
+    description: "0=Ok; 1=Disconnected; 2=Short circuited; 3=Unknown"
+    default: 0
+    min: 0
+    max: 3
   FluidType:
-    description: "0=Fuel; 1=Fresh water; 2=Waste water; 3=Live well; 4=Oil; 5=Black water (sewage)"
+    description: |
+      0=Fuel; 1=Fresh water; 2=Waste water; 3=Live well; 4=Oil; 5=Black water (sewage)
+      6=Gasoline; 7=Diesel; 8=Liquid  Petroleum Gas (LPG); 9=Liquid Natural Gas (LNG)
+      10=Hydraulic oil; 11=Raw water
     persist: true
     default: 1
     min: 0
-    max: 5         
+    max: 11        
   Capacity:
     description: "m3"
     persist: true
     default: 0.1
-    min: 0
-    max: 9999         
+    #min: 0
+    #max: 9999         
   Level:            
     description: "0 to 100%" 
   Remaining:

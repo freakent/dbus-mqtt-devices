@@ -5,7 +5,7 @@ import json
 import datetime
 import time
 
-clientid = "keepaliove"
+clientid = "keepalive"
 mqtt_host = os.environ.get("MQTT_HOST", "venus.local")
 mqtt_port = int(os.environ.get("MQTT_PORT", "1883"))
 portalId = None
@@ -22,8 +22,10 @@ def on_message(client, userdata, msg):
     #print(msg.topic+" "+str(msg.payload))
     payload = json.loads(msg.payload)
 
-    if len(re.findall("^N/\w*/system/\w*/Serial", msg.topic)) != 0:
+    # if len(re.findall("^N\/\w*\/system\/\w*\/Serial", msg.topic)) != 0:
+    if len(re.findall(r"^N\/\w*\/system\/\w*\/Serial", msg.topic)) != 0:
         portalId = payload["value"]
+        print("portalId", portalId)
 
     if msg.topic == "N/{}/full_publish_completed".format(portalId):
         print("all messages received")
