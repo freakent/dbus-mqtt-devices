@@ -201,6 +201,11 @@ tail -f /var/log/dbus-mqtt-devices/current
 ```
 is a useful way to monitor the driver.
 
+If you need human readable timestamps you have to pipe the output through tai64nlocal, for example
+```
+tail -f /var/log/dbus-mqtt-devices/current | tai64nlocal
+```
+
 4) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 more /data/rc.local 
