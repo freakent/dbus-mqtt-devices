@@ -37,9 +37,6 @@ class MQTTDeviceProxy(object):
                 errs.append("Attribute values contains no data")
 
         return errs
-             
-
-        
 
     def transform(self, input):
         topic_path = input["topicPath"]
