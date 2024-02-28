@@ -17,6 +17,7 @@ import re
 import yaml
 
 from device import MQTTDevice
+from device_proxy import MQTTDeviceProxy
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
@@ -49,6 +50,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         logging.info('[Connected] Result code {}'.format(rc))
         if rc == 0:
             self._subscribe_to_device_topic()
+            self._subscribe_to_proxy_topic()
     
     def _on_message(self, client, userdata, msg):
         MqttGObjectBridge._on_message(self, client, userdata, msg)
@@ -66,6 +68,17 @@ class MQTTDeviceManager(MqttGObjectBridge):
                     logging.warning("Unrecognised device Connected status %s for client %s", status["clientId"])
             else:
                 logging.warning("Status message from client %s failed validation and has been rejected", status["clientId"])
+
+        elif MQTT.topic_matches_sub("device/+/Proxy", msg.topic):
+            proxy = MQTTDeviceProxy(self)
+            payload = json.load(msg.payload)
+            errs =  proxy.validate(msg.payload)
+            if len(errs) == 0:
+                logging.info("Processing device proxy message %s", payload)
+                proxy.publish(payload)
+            else:
+                logging.warning("Invalid Proxy payload is rejected: %s", payload)
+                logging.warning("The following errors were found in Proxy payload: %s", errs)
 
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
@@ -134,6 +147,10 @@ class MQTTDeviceManager(MqttGObjectBridge):
         mqtt = self._client
         mqtt.subscribe("device/+/Status")
 
+    def _subscribe_to_proxy_topic(self):
+        mqtt = self._client
+        mqtt.subscribe("device/+/Proxy")
+
     def _process_device(self, status):
         mqtt = self._client
         clientId = status["clientId"] # the device's client id
@@ -147,7 +164,8 @@ class MQTTDeviceManager(MqttGObjectBridge):
         #deprecated - end
 
         topic = "device/{}/DBus".format(clientId)
-        res = mqtt.publish(topic, json.dumps( { "portalId": self.portalId, "deviceInstance": device.device_instances() } ) )
+        res = mqtt.publish(topic, json.dumps( 
+            { "portalId": self.portalId, "topicPath": device.topic_paths(), "deviceInstance": device.device_instances() } ) )
 
         logging.info('publish %s to %s, status is %s', { "portalId": self.portalId, "deviceInstance": device.device_instances() }, topic, res.rc)
 
