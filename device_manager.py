@@ -71,16 +71,9 @@ class MQTTDeviceManager(MqttGObjectBridge):
                 logging.warning("Status message from client %s failed validation and has been rejected", status["clientId"])
 
         elif MQTT.topic_matches_sub("device/+/Proxy", msg.topic):
-            proxy = MQTTDeviceProxy(self)
-            payload = json.load(msg.payload)
-            errs =  proxy.validate(msg.payload)
-            if len(errs) == 0:
-                logging.info("Processing device proxy message %s", payload)
-                proxy.publish(payload)
-            else:
-                logging.warning("Invalid Proxy payload is rejected: %s", payload)
-                logging.warning("The following errors were found in Proxy payload: %s", errs)
-
+            proxy = MQTTDeviceProxy(client)
+            payload = json.loads(msg.payload)
+            proxy.process_message(payload)
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
 

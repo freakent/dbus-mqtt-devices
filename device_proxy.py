@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import json
 import paho.mqtt.client as MQTT
 
 from version import VERSION 
@@ -19,7 +20,7 @@ class MQTTDeviceProxy(object):
         if "topicPath" not in input:
             errs.append("No topicPath attribute found in JSON payload")
         else:
-            if not self.mqtt.topic_matches_sub("W/+/+/+", input["topicPath"]):
+            if not MQTT.topic_matches_sub("W/+/+/+", input["topicPath"]):
                 errs.append("Attribute topic_path must match W/<portal id>/<service>/<device instance>")
         
         if "values" not in input:
@@ -47,7 +48,14 @@ class MQTTDeviceProxy(object):
             output.append(  { "key": topic_path + '/' + k, "value": v} )
         return output
     
-    def publish(self, input): 
-        for message in self.transform(input):
-            print(message["key"], message["value"])
-            self.mqtt.publish( message["key"], {"value": message["value"]}) 
+    def process_message(self, input): 
+        errs =  self.validate(input)
+        if len(errs) == 0:
+            logging.info("Processing device proxy message %s", input)
+            for message in self.transform(input):
+                self.mqtt.publish( message["key"], json.dumps({"value": message["value"]}))
+        else:
+            logging.warning("*** Invalid Proxy payload is rejected: %s", input)
+            logging.warning("*** The following errors were found in Proxy payload: %s", errs)
+
+
