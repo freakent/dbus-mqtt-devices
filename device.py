@@ -43,7 +43,7 @@ class MQTTDevice(object):
 
     def device_instances(self):
         return dict( map( lambda s : (s[0], s[1].device_instance), self._services.items() ))
-
+    
     def dbus_conn(self):
         return self.device_mgr.dbus_conn
         
