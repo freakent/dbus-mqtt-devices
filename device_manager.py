@@ -18,7 +18,7 @@ import yaml
 
 from device import MQTTDevice
 from device_proxy import MQTTDeviceProxy
-from helpers import build_dbus_payload
+from helpers import build_dbus_payload, device_instances
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
@@ -154,7 +154,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
             self._devices[clientId] = device = MQTTDevice(device_mgr=self, device_status=status)
         #deprecated - start
         topic = "device/{}/DeviceInstance".format(clientId)
-        res = mqtt.publish(topic, json.dumps(device.device_instances()))
+        res = mqtt.publish(topic, json.dumps(device_instances(device._services)))
         #deprecated - end
 
         topic = "device/{}/DBus".format(clientId)
