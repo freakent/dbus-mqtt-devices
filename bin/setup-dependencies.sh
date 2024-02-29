@@ -6,7 +6,7 @@ readonly=$(awk '$2 == "/" { print $4 }' /proc/mounts | grep -q 'ro' && echo "yes
 if [ "$readonly" = "yes" ]; then
     echo "$PREFIX Temporarily enable writing to root partion"
     mount -o remount,rw /
-    set remount = "yes"
+    remount="yes"
 fi
 
 echo "$PREFIX Checking to see if Python's Pip is installed"
