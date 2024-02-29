@@ -49,8 +49,11 @@ class MQTTDeviceProxy(object):
         errs =  self.validate(input)
         if len(errs) == 0:
             logging.info("Processing device proxy message %s", input)
+            msg_count = 0
             for message in self.transform(input):
                 self.mqtt.publish( message["key"], json.dumps({"value": message["value"]}))
+                msg_count = msg_count +1
+            logging.info("%s proxy message sent %s", msg_count)
         else:
             logging.warning("*** Invalid Proxy payload is rejected: %s", input)
             logging.warning("*** The following errors were found in Proxy payload: %s", errs)
