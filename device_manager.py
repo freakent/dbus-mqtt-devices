@@ -73,7 +73,8 @@ class MQTTDeviceManager(MqttGObjectBridge):
         elif MQTT.topic_matches_sub("device/+/Proxy", msg.topic):
             proxy = MQTTDeviceProxy(client)
             payload = json.loads(msg.payload)
-            proxy.process_message(payload)
+            client_id = msg.topic.split("/")[1]
+            proxy.process_message(client_id, payload)
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
 
