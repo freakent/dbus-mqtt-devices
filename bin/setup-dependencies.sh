@@ -1,5 +1,6 @@
 #!/bin/sh
 BASE=$(dirname $(dirname $(realpath "$0")))
+mount -o remount,rw /
 
 echo "dbus-mqtt-devices: Checking to see if Python's Pip is installed"
 python -m pip --version
@@ -15,3 +16,4 @@ fi
 
 echo "dbus-mqtt-devices: Pip install module dependencies"
 python -m pip install -r $BASE/requirements.txt
+mount -o remount,ro /
