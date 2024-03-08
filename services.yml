@@ -303,12 +303,6 @@ evcharger:
   Model:
     description: "Model, e.g. AC22E or AC22NS (for No Screen)"
     default: "AC22NS"
-  Position:
-    persist: true
-    default: 0
-    min: 0
-    max: 1
-    description: "0=OUTPUT; 1=INPUT"
   Connected:
     description: "Connected"
   Position: # 0=AC input 1;1=AC output;2=AC input 2
