@@ -325,6 +325,7 @@ evcharger:
   StartStop: # Start/stop charging (manual mode)
     description: "Start Stop"
     default: 0
+    persist: true
   Status:
     description: "0=disconnected, 1=connected, 2=charging, 3=charged,4=waiting for sun, 5=waiting for RFID, 6=waiting for start, 7=low SOC, 8=ground test error, 9=welded contacts error, 10=CP input test error (shorted), 11=residual current detected, 12=undervoltage detected, 13=overvoltage detected, 14=overheating detected, 15-19=reserved, 20=charging limit"
     default: 1
