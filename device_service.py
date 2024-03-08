@@ -117,13 +117,13 @@ class MQTTDeviceService(object):
         return format.format(value)
 
     def _handle_changed_setting(self, setting, oldvalue, newvalue):
-        logging.info("setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
+        logging.info("Setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
         return True
 
     def _handle_changed_value(self, path, value):
-        logging.info("value changed, path: %s, value: %s", path, value)
+        logging.info("Value changed, path: %s, value: %s", path, value)
         setting = re.sub("^\\/", "", path) # A regex to replace initial / 
-        logging.debug("settings: %s, %s", path, json.dumps(self._settings))
+        logging.info("Settings: %s, %s", path, json.dumps(self._settings))
         if self._settings[setting]:
             self._settings[setting] = value
         return True
