@@ -1,3 +1,6 @@
+# When defining services do not include Connected, Mgmt/ProcessName, Mgmt/ProcessVersion, Mgmt/Connection, DeviceInstance, DeviceName, 
+# ProductName or FirmwareVersion these are all handled automatically by the driver
+
 # https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
   ProductId:
@@ -303,8 +306,6 @@ evcharger:
   Model:
     description: "Model, e.g. AC22E or AC22NS (for No Screen)"
     default: "AC22NS"
-  Connected:
-    description: "Connected"
   Position: # 0=AC input 1;1=AC output;2=AC input 2
     persist: true
     default: 0
