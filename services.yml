@@ -290,6 +290,7 @@ evcharger:
     persist: true
   ChargingTime:
     description: "Total charging time (seconds)"
+    default: 0
     format: "{} s"
   Current:
     description: "Charging current actual (A)"

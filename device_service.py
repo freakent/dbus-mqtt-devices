@@ -14,6 +14,8 @@ restarts.
 import logging
 import os
 import sys
+import re
+import json
 import dbus
 from device_service_config import MQTTDeviceServiceConfig
 from version import VERSION 
@@ -120,7 +122,8 @@ class MQTTDeviceService(object):
 
     def _handle_changed_value(self, path, value):
         logging.info("value changed, path: %s, value: %s", path, value)
-        setting = path.replace('/', '') # A regex to replace initial / might be safer
+        setting = re.sub("^\\/", "", path) # A regex to replace initial / 
+        logging.debug("settings: %s, %s", path, json.dumps(self._settings))
         if self._settings[setting]:
             self._settings[setting] = value
         return True
