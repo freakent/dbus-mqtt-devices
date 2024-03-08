@@ -99,8 +99,10 @@ class MQTTDeviceService(object):
             else:
                 changecallback = None
                 value = v.get('default')
-
-            dbus_service.add_path("/"+k, value=value, description=v.get('description'), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
+            
+            if v.get('description', None) == None:
+                logging.warn("Description for " + k + "is missing, please update services.yml")
+            dbus_service.add_path("/"+k, value=value, description=v.get('description', 'No description provided'), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
                 
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)

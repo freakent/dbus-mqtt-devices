@@ -80,9 +80,6 @@ class MQTTDeviceServiceConfig(object):
         else:
             p["value"] = None 
 
-        if values.get('description', None) == None:
-            logging.warn("Description for " + key + "is missing, please update services.yml")
-
-        p["description"] = values.get("description", "No description provided")
+        p["description"] = values.get("description", None)
         p["onchangecallback"] = callback
         return p
