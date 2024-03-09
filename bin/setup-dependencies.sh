@@ -1,19 +1,30 @@
 #!/bin/sh
 BASE=$(dirname $(dirname $(realpath "$0")))
-mount -o remount,rw /
+PREFIX="dbus-mqtt-devices:"
 
-echo "dbus-mqtt-devices: Checking to see if Python's Pip is installed"
+readonly=$(awk '$2 == "/" { print $4 }' /proc/mounts | grep -q 'ro' && echo "yes" || echo "no")
+if [ "$readonly" = "yes" ]; then
+    echo "$PREFIX Temporarily enable writing to root partion"
+    mount -o remount,rw /
+    remount="yes"
+fi
+
+echo "$PREFIX Checking to see if Python's Pip is installed"
 python -m pip --version
 piperr=$?
 if [ "$piperr" -ne 0 ]; then
     opkg update && opkg install python3-pip
 fi
 
-#echo "dbus-mqtt-devices: Checking to see if python3-misc library is installed"
+#echo "$PREFIX Checking to see if python3-misc library is installed"
 #if [ -z "`opkg list-installed | grep python3-misc`" ]; then
 #    opkg update && opkg install python3-misc
 #fi
 
-echo "dbus-mqtt-devices: Pip install module dependencies"
+echo "$PREFIX Pip install module dependencies"
 python -m pip install -r $BASE/requirements.txt
-mount -o remount,ro /
+
+if [ "$remount" = "yes" ]; then
+    echo "$PREFIX Setting root partion to readonly"
+    mount -o remount,ro /
+fi
