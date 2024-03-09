@@ -47,7 +47,7 @@ class MQTTDeviceServiceConfig(object):
         #    'TemperatureType': ["/Settings/MqttDevices/{}/TemperatureType".format(self.serviceName()), 2, 0, 2],
         if self._config != None:
             # filtering out any attributes in the service definition that are not settings ("persist" is deprecated in favour of "setting")  
-            persist = dict(filter(lambda e: not (e[1].get('persist', False) or (e[1].get('setting', False)), self._config.items()))
+            persist = dict( filter(lambda e: e[1].get('persist', False) == True or e[1].get('setting', False) == True, self._config.items()  ) )
             settings = {k: self._config_to_setting(k, v) for k, v in persist.items()}
             return settings
         else:
@@ -76,7 +76,7 @@ class MQTTDeviceServiceConfig(object):
         p = {}
         p["path"] = "/" + key
         p["writable"] = True
-        if values.get("persist", False) == True:
+        if values.get("persist", False) == True or values.get("setting", False) == True:
             p["value"] = settings[key]
         else:
             p["value"] = None 

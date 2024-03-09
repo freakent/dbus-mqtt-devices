@@ -95,7 +95,7 @@ class MQTTDeviceService(object):
             else:
                 textformatcallback = None
 
-            if v.get('persist') == True:
+            if v.get('persist', False) == True or v.get('setting', False) == True:
                 changecallback = self._handle_changed_value
                 value = self._settings[k]
             else:
