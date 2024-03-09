@@ -121,11 +121,12 @@ class MQTTDeviceService(object):
         return True
 
     def _handle_changed_value(self, path, value):
-        logging.info("Value changed, path: %s, value: %s", path, value)
-        setting = re.sub("^\\/", "", path) # A regex to replace initial / 
-        logging.info("Settings: %s, %s", path, json.dumps(self._settings))
-        if self._settings[setting]:
-            self._settings[setting] = value
+        setting = re.sub("^\\/", "", path) # A regex to replace initial / for looking up settings
+        logging.info("Value changed, path: %s, value: %s, setting: %s", path, value, setting)
+        logging.debug("Settings: %s, %s", setting, str(self._settings._settings))
+        if setting in self._settings._settings: # need to access the dict inside settings_device directly to see if it exists
+                logging.debug("value changed and updating setting %s", setting)
+                self._settings[setting] = value
         return True
 
     def serviceName(self):
