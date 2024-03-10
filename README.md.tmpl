@@ -136,22 +136,41 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     _please note_: on disconnect the contents of the "services" are actually irrelevant as all 
 	the device services are cleared by this action.
 
+### Design notes
+-	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
+	already registered device has no adverse affect. 
+- 	The device can have multiple sensors of the same type (e.g. two 
+	temperature sensors), each publishing to different dbus-mqtt topics as 
+	different device services and unique Device Instance values.
+- 	Each device service will appear separately on the Venus GX device, and 
+	each can have a customised name that will show on the GX display and in 
+	VRM.
+- 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
+	protocol and the driver have been designed to be easily extended for 
+	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml) config file).
+-   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
+    Adafruit AHT20 temperature and humidity module using this driver and 
+    mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
+-   Simple client examples (gps-simulator and tank-simulator) can be found in the samples directory. 
+    These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
+	
+
 ## The MQTT Proxy (optional)
 
-The design of VenusOS MQTT api requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
-a lot of extra boiler plate code to format each data value payload and publish each value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
+The design of VenusOS MQTT api (either flashmq-mqtt or dbus-mqtt) requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
+a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
 DBUS MQTT api especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. 
 
-**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics in the traditional way.** 
+**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics with using the proxy.** 
 
-To use the proxy, format your payload as follows:
+To use the proxy, format your payload as follows and publish to topic `device/<clientId>/Proxy`:
 ```
 {
    "topicPath": "W/<portalid>/<service>/<deviceid>", # deviceid is the Id returned by registration process
    "values": {
-       "<attribute 1>" : 23,
-       "<attribute 2": 900,
-       "<attribute n>": 56
+       "<attribute 1>" : <value 1>,
+       "<attribute 2": <value 2>,
+       "<attribute n>": <value n>
     }
 }
 ```
@@ -168,7 +187,7 @@ For example, to publish data for a temperature device you would format your payl
 }
 ```
 
-When you publish that payload to a topic `device/<clientId>/Proxy`, The proxy will perform some basic validation and perform a publish on behalf of the client for 
+When you publish that payload to topic `device/<clientId>/Proxy`, the Proxy will perform some basic validation and perform a publish on behalf of the client for 
 each attribute and value pair in the payload. The actual topic written to is a concatenation of the topic path and the attribute name. 
 
 ### Topic Path
@@ -187,24 +206,7 @@ The following registration message would be published by the driver to `device/v
 ```
 The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`. 
 
-## Design notes
--	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
-	already registered device has no adverse affect. 
-- 	The device can have multiple sensors of the same type (e.g. two 
-	temperature sensors), each publishing to different dbus-mqtt topics as 
-	different device services and unique Device Instance values.
-- 	Each device service will appear separately on the Venus GX device, and 
-	each can have a customised name that will show on the GX display and in 
-	VRM.
-- 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
-	protocol and the driver have been designed to be easily extended for 
-	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml) config file).
--   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
-    Adafruit AHT20 temperature and humidity module using this driver and 
-    mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
--   Simple client examples (gps-simulator and tank-simulator) can be found in the samples directory. 
-    These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
-	
+
 ## Troubleshooting
 ### during installation
 If you receive an error during setup that includes the lines 
