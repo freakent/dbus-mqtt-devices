@@ -19,10 +19,9 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
-4. [The MQTT Proxy (optional)](#The MQTT Proxy (optional)) 
-5. [Design notes](#Design-notes)
-6. [Troubleshooting](#Troubleshooting)
-7. [Developers](#Developers)
+4. [The MQTT Proxy (optional)](#The-MQTT-Proxy) 
+5. [Troubleshooting](#Troubleshooting)
+6. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -155,7 +154,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
 	
 
-## The MQTT Proxy (optional)
+## The MQTT Proxy
 
 The design of VenusOS MQTT api (either flashmq-mqtt or dbus-mqtt) requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
 a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
