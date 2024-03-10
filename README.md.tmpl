@@ -19,7 +19,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
-4. [The MQTT Proxy (optional)](#MThe QTT Proxy (optional)) 
+4. [The MQTT Proxy (optional)](#The MQTT Proxy (optional)) 
 5. [Design notes](#Design-notes)
 6. [Troubleshooting](#Troubleshooting)
 7. [Developers](#Developers)
@@ -27,7 +27,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Install and Setup 
 
-** Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX can cause random reboots.  
+**Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX can cause random reboots.**
 
 To get the driver up and running, follow the steps below to download the latest release from github and then run the setup script.
 
@@ -142,9 +142,9 @@ The design of VenusOS MQTT api requires the client device to publish separate MQ
 a lot of extra boiler plate code to format each data value payload and publish each value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
 DBUS MQTT api especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. 
 
-** The use of the Proxy is entirely optional, the device can continue to use the driver for dbus registration and publish values to the "W" topics in the traditional way. 
+**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics in the traditional way.** 
 
-To use the proxy, format you payload as follows:
+To use the proxy, format your payload as follows:
 ```
 {
    "topicPath": "W/<portalid>/<service>/<deviceid>", # deviceid is the Id returned by registration process
@@ -168,15 +168,15 @@ For example, to publish data for a temperature device you would format your payl
 }
 ```
 
-and publish that payload to a topic "device/<clientId>/Proxy". The proxy will then perform some basic validation and perform a publish for each attribute and value pair in the payload. 
-The actual topic written to is a concatenation of the topic path and the attribute name. 
+When you publish that payload to a topic `device/<clientId>/Proxy`, The proxy will perform some basic validation and perform a publish on behalf of the client for 
+each attribute and value pair in the payload. The actual topic written to is a concatenation of the topic path and the attribute name. 
 
 ### Topic Path
-To help simplify client code further, a "topic path" collection is returned in ths `device/<device>/DBus` 
+To help simplify client code further, a "topic path" collection is returned in the `device/<device>/DBus` 
 message, removing the need for the client to have to build this topic path string.
 for example:
 
-if a device known as "venusnr" were to publish the following payload to `device/venusnr/Status`
+if a device known as "venusnr", with a temperature service known as "temp01" were to publish the following payload to `device/venusnr/Status`
 ```
 {"clientId": "venusnr", "connected": 1, "version": "v1.0.0", "services": {"temp01": "temperature"}}
 ```
@@ -185,7 +185,7 @@ The following registration message would be published by the driver to `device/v
 ```
 {"portalId": "<portalId>", "deviceInstance": {"temp01": 7}, "topicPath": {"temp01": {"N': "N/portId>/temperature/7", "R": "R/<portalid>/temperature/7", "W": "W/<portalId>/temperature/7"}}}
 ```
-The expectation is that the client can then select the correct topic path by using an expression such as `payload.topicPath[<service id>]["W"]` 
+The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`. 
 
 ## Design notes
 -	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
