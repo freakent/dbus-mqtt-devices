@@ -8,6 +8,7 @@ The following Victron dbus services are currently supported:
 - pvinverter (com.victronenergy.pvinverter._device_)
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
+- evcharger (com.victronenergy.evchgarger._device_)
 
 ## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
 If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the "Thank You" link below. 
@@ -18,7 +19,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
-3. [How this driver works - The Registration Protocol](#Registration-Protocol)
+3. [How this driver works - The Registration Protocol](##how-this-driver-works---the-registration-protocol)
 4. [The MQTT Proxy (optional)](#The-MQTT-Proxy) 
 5. [Troubleshooting](#Troubleshooting)
 6. [Developers](#Developers)
