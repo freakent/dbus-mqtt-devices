@@ -19,7 +19,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
-3. [How this driver works - The Registration Protocol](##how-this-driver-works---the-registration-protocol)
+3. [How this driver works - The Registration Protocol](#how-this-driver-works---the-registration-protocol)
 4. [The MQTT Proxy (optional)](#The-MQTT-Proxy) 
 5. [Troubleshooting](#Troubleshooting)
 6. [Developers](#Developers)
