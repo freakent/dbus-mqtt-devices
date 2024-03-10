@@ -1,4 +1,4 @@
-# dbus-mqtt-devices 0.6.6
+# dbus-mqtt-devices 0.8.0-rc1
 
 This VenusOS Driver for GX devices works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -19,12 +19,15 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#Registration-Protocol)
-4. [Design notes](#Design-notes)
-5. [Troubleshooting](#Troubleshooting)
-6. [Developers](#Developers)
+4. [The MQTT Proxy (optional)](#MThe QTT Proxy (optional)) 
+5. [Design notes](#Design-notes)
+6. [Troubleshooting](#Troubleshooting)
+7. [Developers](#Developers)
 
 
 ## Install and Setup 
+
+** Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX can cause random reboots.  
 
 To get the driver up and running, follow the steps below to download the latest release from github and then run the setup script.
 
@@ -37,20 +40,20 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.6.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.8.0-rc1.zip
 unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the setup script
 ```
-./dbus-mqtt-devices-0.6.6/bin/setup.sh
+./dbus-mqtt-devices-0.8.0-rc1/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure the correct version starts automatically on reboot
 ```
 # cat /data/rc.local
-/data/drivers/dbus-mqtt-devices-0.6.6/bin/setup-dependencies.sh
-ln -s /data/drivers/dbus-mqtt-devices-0.6.6/bin/service /service/dbus-mqtt-devices
+/data/drivers/dbus-mqtt-devices-0.8.0-rc1/bin/setup-dependencies.sh
+ln -s /data/drivers/dbus-mqtt-devices-0.8.0-rc1/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
@@ -133,6 +136,56 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     _please note_: on disconnect the contents of the "services" are actually irrelevant as all 
 	the device services are cleared by this action.
 
+## The MQTT Proxy (optional)
+
+The design of VenusOS MQTT api requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
+a lot of extra boiler plate code to format each data value payload and publish each value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
+DBUS MQTT api especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. 
+
+** The use of the Proxy is entirely optional, the device can continue to use the driver for dbus registration and publish values to the "W" topics in the traditional way. 
+
+To use the proxy, format you payload as follows:
+```
+{
+   "topicPath": "W/<portalid>/<service>/<deviceid>", # deviceid is the Id returned by registration process
+   "values": {
+       "<attribute 1>" : 23,
+       "<attribute 2": 900,
+       "<attribute n>": 56
+    }
+}
+```
+
+For example, to publish data for a temperature device you would format your payload like this:
+```
+{
+   "topicPath": "W/<portalid>>/temperature/1", # Note the W for a write topic
+   "values": {
+       "Temperature" : 23,
+       "Pressure": 900,
+       "Humidity": 56
+    }
+}
+```
+
+and publish that payload to a topic "device/<clientId>/Proxy". The proxy will then perform some basic validation and perform a publish for each attribute and value pair in the payload. 
+The actual topic written to is a concatenation of the topic path and the attribute name. 
+
+### Topic Path
+To help simplify client code further, a "topic path" collection is returned in ths `device/<device>/DBus` 
+message, removing the need for the client to have to build this topic path string.
+for example:
+
+if a device known as "venusnr" were to publish the following payload to `device/venusnr/Status`
+```
+{"clientId": "venusnr", "connected": 1, "version": "v1.0.0", "services": {"temp01": "temperature"}}
+```
+
+The following registration message would be published by the driver to `device/venusnr/DBus`
+```
+{"portalId": "<portalId>", "deviceInstance": {"temp01": 7}, "topicPath": {"temp01": {"N': "N/portId>/temperature/7", "R": "R/<portalid>/temperature/7", "W": "W/<portalId>/temperature/7"}}}
+```
+The expectation is that the client can then select the correct topic path by using an expression such as `payload.topicPath[<service id>]["W"]` 
 
 ## Design notes
 -	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
@@ -201,6 +254,11 @@ tail -f /var/log/dbus-mqtt-devices/current
 ```
 is a useful way to monitor the driver.
 
+If you need human readable timestamps you have to pipe the output through tai64nlocal, for example
+```
+tail -f /var/log/dbus-mqtt-devices/current | tai64nlocal
+```
+
 4) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 more /data/rc.local 
@@ -222,7 +280,7 @@ if you are wanting to run the pytests on macos you need to install a few depende
 #### using homebrew
 ```
 $ brew install dbus pygobject3 gtk+3
-$ pip3 install pytest paho-mqtt PyGObject
+$ pip3 install pytest python-dbus paho-mqtt PyGObject
 $ pytest --ignore=ext
 
 ```
