@@ -63,7 +63,7 @@ reboot
 
 ## Updating after VenusOS updates
 
-The driver will automatically update it's own module dependencies on every reboot, so there should be no need to do anything to the installation after a VenusOS upgrade. 
+The driver will automatically check and update (if required) it's own module dependencies on every reboot. There should be no need to do anything to the installation after a VenusOS upgrade. 
 If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
 
 
@@ -109,14 +109,16 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     For example:
 
 		Topic: "device/<client id>/DBus"
-		Payload: {"portalId": "<vrm portal id>", deviceInstance":"t1": 5, "t2":12}
+		Payload: {"portalId": "<vrm portal id>", deviceInstance":{"t1": 5, "t2":12}, "topicPath": {...} }
 
-	_Please note_: the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
+	_Please note_: 
+	1) the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
+	2) for topicPath details see the [MQTT Proxy](#the-mqtt-proxy) section below.
 
 
 4)	Custom code on the device then uses the device instance to periodically publish messages to the 
 	appropriate dbus-mqtt topics for the service(s) they are providing. 
-	Note the "W" at the start of the topc. See the dbus-mqtt documentation for an explanation.
+	Note the "W" at the start of the topic. See the Victron dbus-mqtt documentation for an explanation.
 	
     For example:
 	
