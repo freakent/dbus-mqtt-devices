@@ -1,10 +1,12 @@
 # When defining services do not include Connected, Mgmt/ProcessName, Mgmt/ProcessVersion, Mgmt/Connection, DeviceInstance, DeviceName, 
 # ProductName or FirmwareVersion these are all handled automatically by the driver
 
+# For product id see https://gist.github.com/seidler2547/52f3e91cbcbf2fa257ae79371bb78588
+
 # https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
   ProductId:
-    default: 65535 # 0xFFFF
+    default: 41314 # Generic Temperature Input
   CustomName:
     default: "My Temperature Sensor"
     persist: true
@@ -30,7 +32,7 @@ temperature:
 # https://github.com/victronenergy/venus/wiki/dbus#tank-levels
 tank:             
   ProductId:
-    default: 65535 # 0xFFFF
+    default: 41313 # Generic Tank Input
   CustomName:
     default: "My Tank Sensor"
     persist: true
