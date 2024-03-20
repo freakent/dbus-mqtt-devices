@@ -199,12 +199,16 @@ for example:
 
 if a device known as "venusnr", with a temperature service known as "temp01" were to publish the following payload to `device/venusnr/Status`
 ```
-{"clientId": "venusnr", "connected": 1, "version": "v1.0.0", "services": {"temp01": "temperature"}}
+{"clientId": "venusnr", "connected": 1, "version": "v1.0.0", "services": {"temp01": "temperature"} }
 ```
 
 The following registration message would be published by the driver to `device/venusnr/DBus`
 ```
-{"portalId": "<portalId>", "deviceInstance": {"temp01": 7}, "topicPath": {"temp01": {"N': "N/portId>/temperature/7", "R": "R/<portalid>/temperature/7", "W": "W/<portalId>/temperature/7"}}}
+{ 
+  "portalId": "<portalId>",
+  "deviceInstance": {"temp01": 7}, 
+  "topicPath": {"temp01": {"N': "N/portId>/temperature/7", "R": "R/<portalid>/temperature/7", "W": "W/<portalId>/temperature/7"} }
+}
 ```
 The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`. 
 
