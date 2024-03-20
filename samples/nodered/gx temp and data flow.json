@@ -1,0 +1,692 @@
+[
+    {
+        "id": "abd42376597e174b",
+        "type": "tab",
+        "label": "dbus-mqtt-devices",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "945fac5d3eb884e9",
+        "type": "inject",
+        "z": "abd42376597e174b",
+        "name": "Register device",
+        "props": [],
+        "repeat": "86400",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "x": 320,
+        "y": 500,
+        "wires": [
+            [
+                "e9b27c1b39ed9f37"
+            ]
+        ]
+    },
+    {
+        "id": "079bb3d44bab7c34",
+        "type": "mqtt in",
+        "z": "abd42376597e174b",
+        "name": "",
+        "topic": "device/venusnr/DBus",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "5488bed9a7a149ee",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 280,
+        "y": 360,
+        "wires": [
+            [
+                "d270b6bf2ec0273d"
+            ]
+        ]
+    },
+    {
+        "id": "2155af2ea96eabe9",
+        "type": "debug",
+        "z": "abd42376597e174b",
+        "name": "debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "$join([msg.payload.portalId, $string(msg.payload.deviceInstance.temp01) ],  ', ')",
+        "statusType": "jsonata",
+        "x": 850,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "538ff6422f6a1019",
+        "type": "mqtt out",
+        "z": "abd42376597e174b",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 710,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "d270b6bf2ec0273d",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "save VRM ids",
+        "rules": [
+            {
+                "t": "set",
+                "p": "portalId",
+                "pt": "global",
+                "to": "payload.portalId",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "temp01Id",
+                "pt": "flow",
+                "to": "payload.deviceInstance.temp01",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tank01Id",
+                "pt": "flow",
+                "to": "payload.deviceInstance.tank01",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 660,
+        "y": 360,
+        "wires": [
+            [
+                "2155af2ea96eabe9"
+            ]
+        ]
+    },
+    {
+        "id": "924a8f28f70c16f9",
+        "type": "inject",
+        "z": "abd42376597e174b",
+        "name": "timer",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "120",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 600,
+        "wires": [
+            [
+                "cd9d5d062b94f3d6"
+            ]
+        ]
+    },
+    {
+        "id": "cd9d5d062b94f3d6",
+        "type": "function",
+        "z": "abd42376597e174b",
+        "name": "Check Status",
+        "func": "\nif (global.get('portalId') && flow.get('temp01Id') && flow.get('tank01Id')) {\n    node.status({fill: 'green', shape: 'dot', text:'venusnr registerd'})\n    return [null, msg, null]\n} else {\n    node.status({fill: 'red', shape: 'ring', text:'venusnr not registerd'})\n    node.warn(`variables not set ${global.get('portalId')} ${flow.get('temp01Id')} ${flow.get('tank01Id')}`)\n    return [msg, null, null]\n}\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nnode.warn(\"stop detected, disconnecting device\")\nreturn [null, null, { payload: new Date().toJSON()}]",
+        "libs": [],
+        "x": 280,
+        "y": 600,
+        "wires": [
+            [
+                "e9b27c1b39ed9f37",
+                "41fea06db51f2bef"
+            ],
+            [
+                "17b241c195fcf1cc",
+                "19821308a0d1bc04"
+            ],
+            [
+                "6a0f3426d2f60519"
+            ]
+        ],
+        "inputLabels": [
+            "in"
+        ],
+        "outputLabels": [
+            "Register",
+            "Ready",
+            "Unregister"
+        ]
+    },
+    {
+        "id": "b4e25ae2d6d150e3",
+        "type": "mqtt out",
+        "z": "abd42376597e174b",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 1130,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "941296a88d149c87",
+        "type": "debug",
+        "z": "abd42376597e174b",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload.value",
+        "statusType": "msg",
+        "x": 1140,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "34ca2e62bf4a3a88",
+        "type": "mqtt out",
+        "z": "abd42376597e174b",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 590,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "68ed944804962c79",
+        "type": "inject",
+        "z": "abd42376597e174b",
+        "name": "Disconnect",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 940,
+        "wires": [
+            [
+                "6a0f3426d2f60519"
+            ]
+        ]
+    },
+    {
+        "id": "83d84d5643d6d8e2",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "Prepare Msgs",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{ \"value\": msg.temperature }",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "$join(\t   [\t       \"W\",\t       $string($globalContext('portalId')),\t       \"temperature\",\t       $string($flowContext('temp01Id')),\t       \"Temperature\"\t   ],\t   \"/\"\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 920,
+        "y": 680,
+        "wires": [
+            [
+                "941296a88d149c87",
+                "b4e25ae2d6d150e3"
+            ]
+        ]
+    },
+    {
+        "id": "17b241c195fcf1cc",
+        "type": "exec",
+        "z": "abd42376597e174b",
+        "command": "cat /sys/class/thermal/thermal_zone0/temp",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "GX Temp",
+        "x": 520,
+        "y": 680,
+        "wires": [
+            [
+                "efe0632fbc35703b"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "efe0632fbc35703b",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "Convert temp",
+        "rules": [
+            {
+                "t": "set",
+                "p": "temperature",
+                "pt": "msg",
+                "to": "$number($trim(msg.payload))/1000",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 720,
+        "y": 680,
+        "wires": [
+            [
+                "83d84d5643d6d8e2"
+            ]
+        ]
+    },
+    {
+        "id": "a91c6b21253ce5be",
+        "type": "mqtt out",
+        "z": "abd42376597e174b",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 1450,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "abca0fea9ddcaf94",
+        "type": "debug",
+        "z": "abd42376597e174b",
+        "name": "debug 10",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload.value",
+        "statusType": "msg",
+        "x": 1460,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "e78925cb28fe75ec",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "Prepare Msgs",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[\t    {\"value\": $round(msg.payload.available/msg.payload.size*100,2), 'key': 'Level' },\t    {\"value\": msg.payload.available, 'key': 'Remaining' },\t    {\"value\": msg.payload.size, 'key': 'Capacity' }\t    \t]",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "topic_path",
+                "pt": "msg",
+                "to": "$join(\t   [\t       \"W\",\t       $string($globalContext('portalId')),\t       \"tank\",\t       $string($flowContext('tank01Id'))\t   ],\t   \"/\"\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 920,
+        "y": 820,
+        "wires": [
+            [
+                "b52e134bad71fa24"
+            ]
+        ]
+    },
+    {
+        "id": "5965f0ce1625827b",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "format msg",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "$join([topic_path, payload.key], '/')",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"value\": payload.value}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1250,
+        "y": 820,
+        "wires": [
+            [
+                "abca0fea9ddcaf94",
+                "a91c6b21253ce5be"
+            ]
+        ]
+    },
+    {
+        "id": "b52e134bad71fa24",
+        "type": "split",
+        "z": "abd42376597e174b",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1090,
+        "y": 820,
+        "wires": [
+            [
+                "5965f0ce1625827b"
+            ]
+        ]
+    },
+    {
+        "id": "e9b27c1b39ed9f37",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t   \"clientId\":\"venusnr\",\t   \"connected\":1,\t   \"version\":\"v1.0.0\",\t   \"services\":{\"temp01\":\"temperature\",\"tank01\":\"tank\"}\t}",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "device/venusnr/Status",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 540,
+        "y": 500,
+        "wires": [
+            [
+                "538ff6422f6a1019",
+                "2e3da649a4e80ec9"
+            ]
+        ]
+    },
+    {
+        "id": "6a0f3426d2f60519",
+        "type": "change",
+        "z": "abd42376597e174b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t   \"clientId\": \"venusnr\",\t   \"connected\": 0,\t   \"version\": \"v1.0.0\",\t   \"services\": {\t       \"temp01\": \"temperature\",\t       \"tank01\": \"tank\"     \t   } \t}",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "device/venusnr/Status",
+                "tot": "str"
+            },
+            {
+                "t": "delete",
+                "p": "portalId",
+                "pt": "global"
+            },
+            {
+                "t": "delete",
+                "p": "temp01Id",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "tankI01d",
+                "pt": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 940,
+        "wires": [
+            [
+                "34ca2e62bf4a3a88",
+                "d6f949cda786e74e"
+            ]
+        ]
+    },
+    {
+        "id": "19821308a0d1bc04",
+        "type": "exec",
+        "z": "abd42376597e174b",
+        "command": "df -m | grep /data | awk '{print \"{ \\\"size\\\":\",$2/1,\", \\\"used\\\":\",$3/1, \", \\\"available\\\":\",$4/1, \"}\"}'",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "GX Data",
+        "x": 520,
+        "y": 800,
+        "wires": [
+            [
+                "d403aa642912cab4"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d403aa642912cab4",
+        "type": "json",
+        "z": "abd42376597e174b",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 710,
+        "y": 820,
+        "wires": [
+            [
+                "e78925cb28fe75ec"
+            ]
+        ]
+    },
+    {
+        "id": "41fea06db51f2bef",
+        "type": "delay",
+        "z": "abd42376597e174b",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 520,
+        "y": 600,
+        "wires": [
+            [
+                "cd9d5d062b94f3d6"
+            ]
+        ]
+    },
+    {
+        "id": "d6f949cda786e74e",
+        "type": "debug",
+        "z": "abd42376597e174b",
+        "name": "Disconnect",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "139023c68916d864",
+        "type": "comment",
+        "z": "abd42376597e174b",
+        "name": "Check Status",
+        "info": "Check status is a function node with three outputs.\n\n1) Message will be emiited from the 1st ouput if the device is not registerd and a device status message needs to be sent.\n\n2) Output 2 is triggered when the devide is regsitered and sensor readings can be sent to the dbus \n\n3) Output 3 is used when the function is about to be shutdown so the the device can be cleanly disconnected from the dbus with a status=0 message",
+        "x": 270,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "2e3da649a4e80ec9",
+        "type": "debug",
+        "z": "abd42376597e174b",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "5488bed9a7a149ee",
+        "type": "mqtt-broker",
+        "name": "Local MQTT Broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "device/venusnr/Status",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "{ \"clientId\": \"venusnr\", \"connected\": 0}",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
