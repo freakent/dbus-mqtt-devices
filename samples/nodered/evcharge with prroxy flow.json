@@ -1,0 +1,555 @@
+[
+    {
+        "id": "f7ac7ad6b9686caa",
+        "type": "tab",
+        "label": "evcharger",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2945afbb9e76b9d8",
+        "type": "group",
+        "z": "f7ac7ad6b9686caa",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "25f73c7bca3e58e2",
+            "2c2ac8d98bb644a7",
+            "dd5c60b8d3966dba",
+            "4364ba1f2983e37f",
+            "dd56a6ab5909dcca",
+            "9bd7ce929eef5917",
+            "f94c11a745a63e1a"
+        ],
+        "x": 54,
+        "y": 299,
+        "w": 1012,
+        "h": 182
+    },
+    {
+        "id": "ec9d7cba2996f16f",
+        "type": "group",
+        "z": "f7ac7ad6b9686caa",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "23c7ec5a5ae6fe39",
+            "03c4f9c323608364",
+            "2c5f6d0df4fd5e8b",
+            "1f5dc3dbcdb0fd47",
+            "2299186a14f88468"
+        ],
+        "x": 54,
+        "y": 519,
+        "w": 592,
+        "h": 222
+    },
+    {
+        "id": "970f690fb8ec6c23",
+        "type": "group",
+        "z": "f7ac7ad6b9686caa",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "e2805b8b5acda263",
+            "fc61466ec3e3e15b",
+            "40330ae03753c5c3",
+            "5c76127b9e448f6f",
+            "c3928396b97a76ab",
+            "a8bc0b8ba1a28517",
+            "0a24d48b86f6e268"
+        ],
+        "x": 54,
+        "y": 19,
+        "w": 692,
+        "h": 242
+    },
+    {
+        "id": "e2805b8b5acda263",
+        "type": "mqtt in",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "",
+        "topic": "device/evtest/DBus",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "5488bed9a7a149ee",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "a8bc0b8ba1a28517"
+            ]
+        ]
+    },
+    {
+        "id": "fc61466ec3e3e15b",
+        "type": "mqtt out",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "",
+        "topic": "device/evtest4/Status",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 620,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "40330ae03753c5c3",
+        "type": "debug",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "Registration",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "$flowContext('topicPath')",
+        "statusType": "jsonata",
+        "x": 610,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "5c76127b9e448f6f",
+        "type": "inject",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "Register",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "c3928396b97a76ab"
+            ]
+        ]
+    },
+    {
+        "id": "c3928396b97a76ab",
+        "type": "change",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"clientId\":\"evtest\",\"connected\":1,\"version\":\"v1.0 ALPHA\",\"services\":{\"evc1\":\"evcharger\"}}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 220,
+        "wires": [
+            [
+                "fc61466ec3e3e15b",
+                "40330ae03753c5c3"
+            ]
+        ]
+    },
+    {
+        "id": "a8bc0b8ba1a28517",
+        "type": "change",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "Save Registration",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topicPath",
+                "pt": "flow",
+                "to": "payload.topicPath.evc1.W",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "40330ae03753c5c3"
+            ]
+        ]
+    },
+    {
+        "id": "2c2ac8d98bb644a7",
+        "type": "inject",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "Send data",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "600",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 400,
+        "wires": [
+            [
+                "25f73c7bca3e58e2"
+            ]
+        ]
+    },
+    {
+        "id": "25f73c7bca3e58e2",
+        "type": "switch",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "Check Registration",
+        "property": "topicPath",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "empty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 400,
+        "wires": [
+            [
+                "9bd7ce929eef5917",
+                "c3928396b97a76ab"
+            ],
+            [
+                "dd5c60b8d3966dba"
+            ]
+        ]
+    },
+    {
+        "id": "dd5c60b8d3966dba",
+        "type": "function",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "dummy data",
+        "func": "let data = {\n    \"Ac/Energy/Forward\": Math.floor(Math.random() * 100),\n    \"Ac/L1/Power\": Math.floor(Math.random() * 100),\n    \"Ac/L2/Power\": Math.floor(Math.random() * 100),\n    \"Ac/L3/Power\": Math.floor(Math.random() * 100),\n    \"Ac/Power\": Math.floor(Math.random() * 100),\n    \"ChargingTime\": Math.floor(Math.random() * 100),\n    \"Current\": Math.floor(Math.random() * 10)\n}\n\nmsg.payload = data\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 440,
+        "wires": [
+            [
+                "4364ba1f2983e37f"
+            ]
+        ]
+    },
+    {
+        "id": "4364ba1f2983e37f",
+        "type": "change",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "Set proxy payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{ \t\"topicPath\": $flowContext(\"topicPath\"),\t\"values\": msg.payload\t}\t",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "device/evtest/Proxy",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 810,
+        "y": 440,
+        "wires": [
+            [
+                "dd56a6ab5909dcca"
+            ]
+        ]
+    },
+    {
+        "id": "dd56a6ab5909dcca",
+        "type": "mqtt out",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 990,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "2c5f6d0df4fd5e8b",
+        "type": "inject",
+        "z": "f7ac7ad6b9686caa",
+        "g": "ec9d7cba2996f16f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 620,
+        "wires": [
+            [
+                "03c4f9c323608364"
+            ]
+        ]
+    },
+    {
+        "id": "03c4f9c323608364",
+        "type": "change",
+        "z": "f7ac7ad6b9686caa",
+        "g": "ec9d7cba2996f16f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{ \"clientId\": \"evtest\", \"version\": \"v1.0\", \"connected\": 0}",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "device/evtest/Status",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 620,
+        "wires": [
+            [
+                "1f5dc3dbcdb0fd47",
+                "23c7ec5a5ae6fe39"
+            ]
+        ]
+    },
+    {
+        "id": "23c7ec5a5ae6fe39",
+        "type": "debug",
+        "z": "f7ac7ad6b9686caa",
+        "g": "ec9d7cba2996f16f",
+        "name": "debug 48",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "1f5dc3dbcdb0fd47",
+        "type": "mqtt out",
+        "z": "f7ac7ad6b9686caa",
+        "g": "ec9d7cba2996f16f",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5488bed9a7a149ee",
+        "x": 530,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "9bd7ce929eef5917",
+        "type": "debug",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "debug 49",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "$string(\"Device not registerd, no topicPath found in flow context\")",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "0a24d48b86f6e268",
+        "type": "comment",
+        "z": "f7ac7ad6b9686caa",
+        "g": "970f690fb8ec6c23",
+        "name": "Registration",
+        "info": "",
+        "x": 150,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "f94c11a745a63e1a",
+        "type": "comment",
+        "z": "f7ac7ad6b9686caa",
+        "g": "2945afbb9e76b9d8",
+        "name": "Publish Data",
+        "info": "",
+        "x": 150,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "2299186a14f88468",
+        "type": "comment",
+        "z": "f7ac7ad6b9686caa",
+        "g": "ec9d7cba2996f16f",
+        "name": "Unregister",
+        "info": "",
+        "x": 160,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "5488bed9a7a149ee",
+        "type": "mqtt-broker",
+        "name": "Local MQTT Broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "device/venusnr/Status",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "{ \"clientId\": \"venusnr\", \"connected\": 0}",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

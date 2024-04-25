@@ -14,6 +14,8 @@ restarts.
 import logging
 import os
 import sys
+import re
+import json
 import dbus
 from device_service_config import MQTTDeviceServiceConfig
 from version import VERSION 
@@ -39,7 +41,7 @@ class MQTTDeviceService(object):
 
         self._set_up_local_settings()
         
-        self._set_up_device_instance()
+        self.device_instance = self._set_up_device_instance()
 
         self._set_up_dbus_paths()
             
@@ -71,7 +73,7 @@ class MQTTDeviceService(object):
         requested_device_instance = "{}:1".format(self.serviceType) # Append the ID requested by the MQTT client
         r = self._settings.addSetting(settings_device_path, requested_device_instance, "", "")
         _s, _di = r.get_value().split(':') # Return the allocated ID provided from dbus SettingDevices
-        self.device_instance = int(_di)
+        return int(_di)
 
     def _set_up_dbus_paths(self):
         self._dbus_service = dbus_service = VeDbusService(self.serviceDbusPath(), bus=self._dbus_conn)
@@ -82,7 +84,7 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/DeviceInstance', int(self.device_instance))
         dbus_service.add_path('/DeviceName', "{}:{}".format(self.device.clientId, self.serviceId))
         #dbus_service.add_path('/ProductId', 0xFFFF) # ???
-        dbus_service.add_path('/ProductName', "{} sensor via MQTT".format(self.serviceType.capitalize()))
+        dbus_service.add_path('/ProductName', "dbus-mqtt-devices-{}:{}".format(VERSION(), self.serviceType.capitalize()))
         dbus_service.add_path('/FirmwareVersion', self.device.version)
         dbus_service.add_path('/Connected', 1)
         
@@ -93,14 +95,17 @@ class MQTTDeviceService(object):
             else:
                 textformatcallback = None
 
-            if v.get('persist') == True:
+            if v.get('persist', False) == True or v.get('setting', False) == True:
                 changecallback = self._handle_changed_value
                 value = self._settings[k]
             else:
                 changecallback = None
                 value = v.get('default')
-
-            dbus_service.add_path("/"+k, value=value, description=v.get('description'), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
+            
+            #if v.get('description', None) == None:
+            #    logging.warn("Description for " + k + " is missing, please update services.yml")
+                
+            dbus_service.add_path("/"+k, value=value, description=v.get('description', None), writeable=True, gettextcallback=textformatcallback, onchangecallback=changecallback)
                 
         #dbus_service.add_path('/TemperatureType', value=self._settings['TemperatureType'], writeable=True, onchangecallback=self._handle_changed_value)
         #dbus_service.add_path('/Temperature', value=None, description="Temperature C", writeable=True)
@@ -112,14 +117,16 @@ class MQTTDeviceService(object):
         return format.format(value)
 
     def _handle_changed_setting(self, setting, oldvalue, newvalue):
-        logging.info("setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
+        logging.info("Setting changed, setting: %s, old: %s, new: %s", setting, oldvalue, newvalue)
         return True
 
     def _handle_changed_value(self, path, value):
-        logging.info("value changed, path: %s, value: %s", path, value)
-        setting = path.replace('/', '') # A regex to replace initial / might be safer
-        if self._settings[setting]:
-            self._settings[setting] = value
+        setting = re.sub("^\\/", "", path) # A regex to replace initial / for looking up settings
+        logging.info("Value changed, path: %s, value: %s, setting: %s", path, value, setting)
+        logging.debug("Settings: %s, %s", setting, str(self._settings._settings))
+        if setting in self._settings._settings: # need to access the dict inside settings_device directly to see if it exists
+                logging.debug("value changed and updating setting %s", setting)
+                self._settings[setting] = value
         return True
 
     def serviceName(self):

@@ -1,7 +1,12 @@
+# When defining services do not include Connected, Mgmt/ProcessName, Mgmt/ProcessVersion, Mgmt/Connection, DeviceInstance, DeviceName, 
+# ProductName or FirmwareVersion these are all handled automatically by the driver
+
+# For product id see https://gist.github.com/seidler2547/52f3e91cbcbf2fa257ae79371bb78588
+
 # https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
   ProductId:
-    default: 65535 # 0xFFFF
+    default: 41314 # Generic Temperature Input
   CustomName:
     default: "My Temperature Sensor"
     persist: true
@@ -27,7 +32,7 @@ temperature:
 # https://github.com/victronenergy/venus/wiki/dbus#tank-levels
 tank:             
   ProductId:
-    default: 65535 # 0xFFFF
+    default: 41313 # Generic Tank Input
   CustomName:
     default: "My Tank Sensor"
     persist: true
@@ -257,3 +262,75 @@ gps:
     description: "m"
   NrOfSatellites:
     description: "Count"
+
+
+# https://github.com/victronenergy/venus/wiki/dbus#evcharger
+evcharger:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My EV Charger"
+    persist: true
+  Ac/Energy/Forward:
+    description: "Ac Engergy Forward wh"
+    format: "{:.2f}W"
+  Ac/L1/Power:
+    description: "L1 Power used (W)"
+    format: "{} W"
+  Ac/L2/Power:
+    description: "L3 Power used (W)"
+    format: "{} W"
+  Ac/L3/Power:
+    description: "L3 Power used (W)"
+    format: "{} W"
+  Ac/Power:
+    description: "AC Power (W)"
+    format: "{} W"
+  AutoStart:
+    description: "0=Charger autostart disabled,  1=Charger autostart enabled"
+    default: 0
+    persist: true
+  ChargingTime:
+    description: "Total charging time (seconds)"
+    default: 0
+    format: "{} s"
+  Current:
+    description: "Charging current actual (A)"
+    default: 0
+  EnableDisplay:
+    description: "Control via display; 0=control disabled, 1=control enabled"
+    default: 1
+    persist: true
+  MaxCurrent:
+    description: "Max current (A)"
+    default: 0
+    persist: true 
+  Mode:
+    description: "0=Manual, 1=Auto"
+    default: 0
+    min: 0
+    max: 2
+    persist: true
+  Model:
+    description: "Model, e.g. AC22E or AC22NS (for No Screen)"
+    default: "AC22NS"
+  Position: # 0=AC input 1;1=AC output;2=AC input 2
+    persist: true
+    default: 0
+    min: 0
+    max: 2
+  Role:
+    description: "Role"
+  SetCurrent: # Set charge current (manual mode)
+    description: "Charging current (A)"
+    persist: true
+    default: 0
+  StartStop: # Start/stop charging (manual mode)
+    description: "Start Stop"
+    default: 0
+    persist: true
+  Status:
+    description: "0=disconnected, 1=connected, 2=charging, 3=charged,4=waiting for sun, 5=waiting for RFID, 6=waiting for start, 7=low SOC, 8=ground test error, 9=welded contacts error, 10=CP input test error (shorted), 11=residual current detected, 12=undervoltage detected, 13=overvoltage detected, 14=overheating detected, 15-19=reserved, 20=charging limit"
+    default: 1
+    min: 0
+    max: 20

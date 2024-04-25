@@ -1,4 +1,4 @@
-# dbus-mqtt-devices 0.6.6
+# dbus-mqtt-devices 0.8.0-rc2
 
 This VenusOS Driver for GX devices works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -8,6 +8,7 @@ The following Victron dbus services are currently supported:
 - pvinverter (com.victronenergy.pvinverter._device_)
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
+- evcharger (com.victronenergy.evchgarger._device_)
 
 **Please note: it is not recommended to install this driver on lower spec GX devices such as CCGX.**
 
@@ -20,13 +21,15 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 ## Contents
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
-3. [How this driver works - The Registration Protocol](#Registration-Protocol)
-4. [Design notes](#Design-notes)
+3. [How this driver works - The Registration Protocol](#how-this-driver-works---the-registration-protocol)
+4. [The MQTT Proxy (optional)](#The-MQTT-Proxy) 
 5. [Troubleshooting](#Troubleshooting)
 6. [Developers](#Developers)
 
 
 ## Install and Setup 
+
+**Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX can cause random reboots.**
 
 To get the driver up and running, follow the steps below to download the latest release from github and then run the setup script.
 
@@ -39,20 +42,20 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.6.6.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.8.0-rc2.zip
 unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the setup script
 ```
-./dbus-mqtt-devices-0.6.6/bin/setup.sh
+./dbus-mqtt-devices-0.8.0-rc2/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure the correct version starts automatically on reboot
 ```
 # cat /data/rc.local
-/data/drivers/dbus-mqtt-devices-0.6.6/bin/setup-dependencies.sh
-ln -s /data/drivers/dbus-mqtt-devices-0.6.6/bin/service /service/dbus-mqtt-devices
+/data/drivers/dbus-mqtt-devices-0.8.0-rc2/bin/setup-dependencies.sh
+ln -s /data/drivers/dbus-mqtt-devices-0.8.0-rc2/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
@@ -62,7 +65,7 @@ reboot
 
 ## Updating after VenusOS updates
 
-The driver will automatically update it's own module dependencies on every reboot, so there should be no need to do anything to the installation after a VenusOS upgrade. 
+The driver will automatically check and update (if required) it's own module dependencies on every reboot. There should be no need to do anything to the installation after a VenusOS upgrade. 
 If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
 
 
@@ -108,14 +111,16 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     For example:
 
 		Topic: "device/<client id>/DBus"
-		Payload: {"portalId": "<vrm portal id>", deviceInstance":"t1": 5, "t2":12}
+		Payload: {"portalId": "<vrm portal id>", deviceInstance":{"t1": 5, "t2":12}, "topicPath": {...} }
 
-	_Please note_: the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
+	_Please note_: 
+	1) the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
+	2) for topicPath details see the [MQTT Proxy](#the-mqtt-proxy) section below.
 
 
 4)	Custom code on the device then uses the device instance to periodically publish messages to the 
 	appropriate dbus-mqtt topics for the service(s) they are providing. 
-	Note the "W" at the start of the topc. See the dbus-mqtt documentation for an explanation.
+	Note the "W" at the start of the topic. See the Victron dbus-mqtt documentation for an explanation.
 	
     For example:
 	
@@ -135,8 +140,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
     _please note_: on disconnect the contents of the "services" are actually irrelevant as all 
 	the device services are cleared by this action.
 
-
-## Design notes
+### Design notes
 -	Client devices MUST always self register (by sending a Status message with connected = 1) everytime they connect to MQTT. Re-registering an 
 	already registered device has no adverse affect. 
 - 	The device can have multiple sensors of the same type (e.g. two 
@@ -154,6 +158,63 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 -   Simple client examples (gps-simulator and tank-simulator) can be found in the samples directory. 
     These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
 	
+
+## The MQTT Proxy
+
+The design of VenusOS MQTT api (either flashmq-mqtt or dbus-mqtt) requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
+a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
+DBUS MQTT api especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. 
+
+**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics with using the proxy.** 
+
+To use the proxy, format your payload as follows and publish to topic `device/<clientId>/Proxy`:
+```
+{
+   "topicPath": "W/<portalid>/<service>/<deviceid>", # deviceid is the Id returned by registration process
+   "values": {
+       "<attribute 1>" : <value 1>,
+       "<attribute 2": <value 2>,
+       "<attribute n>": <value n>
+    }
+}
+```
+
+For example, to publish data for a temperature device you would format your payload like this:
+```
+{
+   "topicPath": "W/<portalid>>/temperature/1", # Note the W for a write topic
+   "values": {
+       "Temperature" : 23,
+       "Pressure": 900,
+       "Humidity": 56
+    }
+}
+```
+
+When you publish that payload to topic `device/<clientId>/Proxy`, the Proxy will perform some basic validation and perform a publish on behalf of the client for 
+each attribute and value pair in the payload. The actual topic written to is a concatenation of the topic path and the attribute name. 
+
+### Topic Path
+To help simplify client code further, a "topic path" collection is returned in the `device/<device>/DBus` 
+message, removing the need for the client to have to build this topic path string.
+for example:
+
+if a device known as "venusnr", with a temperature service known as "temp01" were to publish the following payload to `device/venusnr/Status`
+```
+{"clientId": "venusnr", "connected": 1, "version": "v1.0.0", "services": {"temp01": "temperature"} }
+```
+
+The following registration message would be published by the driver to `device/venusnr/DBus`
+```
+{ 
+  "portalId": "<portalId>",
+  "deviceInstance": {"temp01": 7}, 
+  "topicPath": {"temp01": {"N': "N/portId>/temperature/7", "R": "R/<portalid>/temperature/7", "W": "W/<portalId>/temperature/7"} }
+}
+```
+The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`. 
+
+
 ## Troubleshooting
 ### during installation
 If you receive an error during setup that includes the lines 
@@ -203,6 +264,11 @@ tail -f /var/log/dbus-mqtt-devices/current
 ```
 is a useful way to monitor the driver.
 
+If you need human readable timestamps you have to pipe the output through tai64nlocal, for example
+```
+tail -f /var/log/dbus-mqtt-devices/current | tai64nlocal
+```
+
 4) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 more /data/rc.local 
@@ -224,7 +290,7 @@ if you are wanting to run the pytests on macos you need to install a few depende
 #### using homebrew
 ```
 $ brew install dbus pygobject3 gtk+3
-$ pip3 install pytest paho-mqtt PyGObject
+$ pip3 install pytest python-dbus paho-mqtt PyGObject
 $ pytest --ignore=ext
 
 ```
