@@ -163,7 +163,7 @@ The design of VenusOS MQTT api (either flashmq-mqtt or dbus-mqtt) requires the c
 a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
 DBUS MQTT api especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. 
 
-**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics with using the proxy.** 
+**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics without using the proxy.** 
 
 To use the proxy, format your payload as follows and publish to topic `device/<clientId>/Proxy`:
 ```
