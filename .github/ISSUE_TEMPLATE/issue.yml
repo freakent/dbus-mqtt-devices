@@ -16,7 +16,8 @@ body:
       label: Version
       description: What version of dbus-mqtt-devices are you running?
       options:
-        - 0.6.6 (current)
+        - 0.8.0 (current)
+        - 0.6.6 
         - 0.6.5 
         - 0.6.4 
         - 0.6.3 
@@ -24,15 +25,11 @@ body:
         - Other
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: venusos
     attributes:
-      label: What version of VenusOS are you running on your GX device
-      options:
-        - 3.21 (current release)
-        - 3.20
-        - 3.30-x (beta release)
-        - Other
+      label: VenusOS version
+      description: What version of VenusOS are you running on your GX device, please also indicate if you are using a beta version of VenusOS. 
     validations:
       required: true
   - type: dropdown
@@ -49,7 +46,7 @@ body:
     id: discussion
     attributes:
       label: Is there a Discussion thread for this issue? Please paste a link.
-      description: If there isn't a Discussion thread please create one before raising an issue.
+      description: Please start a discussion about your problem before raising an issue.
       placeholder: "https://github.com/freakent/dbus-mqtt-devices/discussions/[number]"
     validations:
       required: false
