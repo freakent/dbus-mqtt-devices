@@ -10,6 +10,8 @@ The following Victron dbus services are currently supported:
 - gps (com.victronenergy.gps._device_)
 - evcharger (com.victronenergy.evchgarger._device_)
 
+(See https://github.com/victronenergy/venus/wiki/dbus for detailed explanation of each attribute)
+
 ## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
 If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the "Thank You" link below. 
 
