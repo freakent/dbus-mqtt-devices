@@ -240,6 +240,9 @@ grid:
   Ac/L3/Voltage:
     description: "V AC"
     format: "{} V"
+  Ac/Frequency: # From the ModBus-TCP register list - https://www.victronenergy.com/support-and-downloads/technical-information
+    description: "Hz"
+    format: "{} Hz"
 
 # https://github.com/victronenergy/venus/wiki/dbus#gps
 gps:
