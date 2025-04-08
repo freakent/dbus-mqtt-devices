@@ -10,7 +10,7 @@ check_online() {
         if [ $? -eq 0 ]; then  # If wget succeeds (exit status 0)
             break  # Exit loop
         else
-            attempts=$((atempts + 1))
+            attempts=$((attempts + 1))
             echo "`date` $PREFIX GX Device does not appear to be online, retrying in 1 minute..."
             sleep 60  # Wait for 1 minute before retrying
         fi
@@ -54,7 +54,7 @@ ensure_opkg_installed() {
 
 readonly=$(awk '$2 == "/" { print $4 }' /proc/mounts | grep -q 'ro' && echo "yes" || echo "no")
 if [ "$readonly" = "yes" ]; then
-    echo "$PREFIX Temporarily enable writing to root partion"
+    echo "$PREFIX Temporarily enable writing to root partition"
     mount -o remount,rw /
     remount="yes"
 fi
@@ -76,6 +76,6 @@ python -m pip install dataclasses # need to force dataclasses to be installed be
 python -m pip install -r $BASE/requirements.txt
 
 if [ "$remount" = "yes" ]; then
-    echo "$PREFIX Setting root partion back to readonly"
+    echo "$PREFIX Setting root partition back to readonly"
     mount -o remount,ro /
 fi
