@@ -21,7 +21,8 @@ from device_proxy import MQTTDeviceProxy
 from helpers import build_dbus_payload, device_instances
 
 AppDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
+# sys.path.insert(1, os.path.join(AppDir, 'ext', 'dbus-mqtt'))
+sys.path.insert(1, os.path.join(AppDir, 'lib', 'dbus-mqtt'))
 from mqtt_gobject_bridge import MqttGObjectBridge
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
 from vedbus import VeDbusItemImport
