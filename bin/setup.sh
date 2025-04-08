@@ -10,6 +10,7 @@ cd $BASE
 echo "dbus-mqtt-devices: Set up Victron module libraries"
 rm -fr $BASE/ext/dbus-mqtt $BASE/ext/velib_python
 # ln -s /opt/victronenergy/dbus-mqtt $BASE/ext
+mkdir -p $BASE/ext
 ln -s /opt/victronenergy/dbus-digitalinputs/ext/velib_python $BASE/ext/velib_python
 
 echo "dbus-mqtt-devices: Set up device service to autorun on restart"
