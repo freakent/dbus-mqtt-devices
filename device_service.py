@@ -76,7 +76,7 @@ class MQTTDeviceService(object):
         return int(_di)
 
     def _set_up_dbus_paths(self):
-        self._dbus_service = dbus_service = VeDbusService(self.serviceDbusPath(), bus=self._dbus_conn)
+        self._dbus_service = dbus_service = VeDbusService(self.serviceDbusPath(), bus=self._dbus_conn, register=False)
         # Add objects required by ve-api
         dbus_service.add_path('/Mgmt/ProcessName', 'dbus-mqtt-devices')
         dbus_service.add_path('/Mgmt/ProcessVersion', VERSION())
@@ -87,6 +87,7 @@ class MQTTDeviceService(object):
         dbus_service.add_path('/ProductName', "dbus-mqtt-devices-{}:{}".format(VERSION(), self.serviceType.capitalize()))
         dbus_service.add_path('/FirmwareVersion', self.device.version)
         dbus_service.add_path('/Connected', 1)
+        dbus_service.register()
         
         for k, v in self._config.dbus_paths():
             if v.get('format'):
