@@ -25,10 +25,10 @@ class MqttGObjectBridge(object):
 		
 		if not hasattr(mqtt, "CallbackAPIVersion"):
             # paho-mqtt 1.x
-			self.client = mqtt.Client(client_id)
+			self._client = mqtt.Client(client_id)
 		else:
             # paho-mqtt 2.x
-			self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id)
+			self._client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id)
 		
 		self._client.on_connect = self._on_connect
 		self._client.on_message = self._on_message
