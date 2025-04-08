@@ -1,4 +1,4 @@
-# dbus-mqtt-devices 0.8.0
+# dbus-mqtt-devices 0.9.0-rc1
 
 This VenusOS Driver for GX devices works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -42,20 +42,20 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.8.0.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.9.0-rc1.zip
 unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the setup script
 ```
-./dbus-mqtt-devices-0.8.0/bin/setup.sh
+./dbus-mqtt-devices-0.9.0-rc1/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure the correct version starts automatically on reboot
 ```
 # cat /data/rc.local
-/data/drivers/dbus-mqtt-devices-0.8.0/bin/setup-dependencies.sh
-ln -s /data/drivers/dbus-mqtt-devices-0.8.0/bin/service /service/dbus-mqtt-devices
+/data/drivers/dbus-mqtt-devices-0.9.0-rc1/bin/setup-dependencies.sh
+ln -s /data/drivers/dbus-mqtt-devices-0.9.0-rc1/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
@@ -114,7 +114,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 		Payload: {"portalId": "<vrm portal id>", deviceInstance":{"t1": 5, "t2":12}, "topicPath": {...} }
 
 	_Please note_: 
-	1) the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. (By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.)
+	1) the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
 	2) for topicPath details see the [MQTT Proxy](#the-mqtt-proxy) section below.
 
 
