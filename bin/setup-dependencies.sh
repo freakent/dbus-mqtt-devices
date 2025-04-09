@@ -21,6 +21,23 @@ check_online() {
     fi
 }
 
+
+python_version_ge() {
+    local major=$(echo "$1" | cut -d. -f1)
+    local minor=$(echo "$1" | cut -d. -f2)
+
+    python_version=$(python --version 2>&1 | cut -d' ' -f2)
+    local python_major=$(echo "$python_version" | cut -d. -f1)
+    local python_minor=$(echo "$python_version" | cut -d. -f2)
+
+    if [ "$python_major" -gt "$major" ] || { [ "$pythom_major" -eq "$major" ] && [ "$python_minor" -ge "$minor" ]; }; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
 ensure_opkg_installed() {
     local pkg_name=$1
     if [ "$opkg_updated" != "yes" ]; then
@@ -59,7 +76,12 @@ if [ "$readonly" = "yes" ]; then
     remount="yes"
 fi
 
-ensure_opkg_installed python3-tomllib
+if [ python_version_ge "3.11"]; then
+    echo "$PREFIX Python version is 3.11 or greater, need to ensure tomllib is installed"
+    ensure_opkg_installed python3-tomllib
+else
+    echo "$PREFIX Python version is less than 3.11, not installing tomllib"
+fi
 
 echo "$PREFIX Checking to see if Python's Pip is installed"
 python -m pip --version
