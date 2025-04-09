@@ -2,6 +2,8 @@
 BASE=$(dirname $(dirname $(realpath "$0")))
 PREFIX="dbus-mqtt-devices:"
 
+echo "$PREFIX: Setup-dependencies started"
+
 check_online() {
     local url="https://vrm.victronenergy.com"
     local attempts=0
@@ -101,3 +103,5 @@ if [ "$remount" = "yes" ]; then
     echo "$PREFIX Setting root partition back to readonly"
     mount -o remount,ro /
 fi
+
+echo "$PREFIX Setup-dependencies complete"
