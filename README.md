@@ -238,7 +238,21 @@ ls -l /data/rc.local
 ...
 chmod +x /data/rc.local
 ```
-3) If the service is running, then next thing to check is the log with the command:
+3) Check whether there were any errors whilst setting up dependencies during system startup by checking the boot log file with the command:
+
+```
+$ more /var/log/boot
+```
+It should contain something like this:
+```
+Wed Apr  9 08:13:53 2025: dbus-mqtt-devices:: Setup-dependencies started
+Wed Apr  9 08:13:53 2025: dbus-mqtt-devices: Temporarily enable writing to root partition
+...
+Wed Apr  9 08:15:56 2025: dbus-mqtt-devices: Setting root partition back to readonly
+Wed Apr  9 08:15:58 2025: dbus-mqtt-devices: Setup-dependencies complete
+
+```
+4) If the service is running, then the next thing to check is the dbus-mqtt-devices log file with the command:
 ```
 $ more /var/log/dbus-mqtt-devices/current
 ```
@@ -269,18 +283,18 @@ If you need human readable timestamps you have to pipe the output through tai64n
 tail -f /var/log/dbus-mqtt-devices/current | tai64nlocal
 ```
 
-4) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
+5) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 more /data/rc.local 
 ```
 
-5) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT. 
+6) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT. 
 There is a keepalive script in the samples directory if you need it.
 
-6) In the unlikely event that the installation fails, and your ccgx device will not boot, follow these instructions to recover it.
+7) In the unlikely event that the installation fails, and your ccgx device will not boot, follow these instructions to recover it.
 https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-problem.html
 
-7) If you are still having a problem feel free to start an Discussion on the Github project here: https://github.com/freakent/dbus-mqtt-devices/discussions
+8) If you are still having a problem feel free to start an Discussion on the Github project here: https://github.com/freakent/dbus-mqtt-devices/discussions
 I get email alerts from Github which I don't seem to get from the Victron community forum.
 
 
