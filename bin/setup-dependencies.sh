@@ -30,7 +30,7 @@ python_version_ge() {
     local python_major=$(echo "$python_version" | cut -d. -f1)
     local python_minor=$(echo "$python_version" | cut -d. -f2)
 
-    if [ "$python_major" -gt "$major" ] || { [ "$pythom_major" -eq "$major" ] && [ "$python_minor" -ge "$minor" ]; }; then
+    if [ "$python_major" -gt "$major" ] || { [ "$python_major" -eq "$major" ] && [ "$python_minor" -ge "$minor" ]; }; then
         return 0
     else
         return 1
@@ -76,7 +76,7 @@ if [ "$readonly" = "yes" ]; then
     remount="yes"
 fi
 
-if [ python_version_ge "3.11"]; then
+if python_version_ge "3.11"; then
     echo "$PREFIX Python version is 3.11 or greater, need to ensure tomllib is installed"
     ensure_opkg_installed python3-tomllib
 else
