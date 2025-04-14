@@ -69,7 +69,8 @@ class MQTTDeviceManager(MqttGObjectBridge):
                 else:
                     logging.warning("Unrecognised device Connected status %s for client %s", status["clientId"])
             else:
-                logging.warning("Status message from client %s failed validation and has been rejected", status["clientId"]|"<unknown>")
+
+                logging.warning("Status message received from topic %s failed validation and has been rejected", msg.topic)
 
         elif MQTT.topic_matches_sub("device/+/Proxy", msg.topic):
             proxy = MQTTDeviceProxy(client)
