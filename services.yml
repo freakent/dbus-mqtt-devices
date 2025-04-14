@@ -27,6 +27,8 @@ temperature:
     description: "hPa"
   Humidity:
     description: "%"
+  BatteryVoltage:   # Sensor battery voltage
+    description: "V"
 
 
 # https://github.com/victronenergy/venus/wiki/dbus#tank-levels
