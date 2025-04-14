@@ -29,6 +29,13 @@ temperature:
     description: "%"
   BatteryVoltage:   # Sensor battery voltage
     description: "V"
+  TxPower:         # Sensor Tx power
+    description: "dBm"
+  Alarms/LowBattery:
+    description: "0=OK; 1=Warning; 2=Alarm"
+    default: 0
+    min: 0
+    max: 2
 
 
 # https://github.com/victronenergy/venus/wiki/dbus#tank-levels
