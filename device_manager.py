@@ -122,7 +122,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
                             logging.warning("status.service type %s is not supported, please check services.yml", services.get(service_id))
 
         except:
-            logging.error("status message is invalid: %s", sys.exc_info()[0])
+            logging.error("status message is invalid: %s", status)
             isValid = False       
 
         return isValid
