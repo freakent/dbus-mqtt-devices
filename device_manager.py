@@ -41,6 +41,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
         self.service_types = self._read_service_types()
         self.debug = debug
         self._devices = {}
+        self._lwt = {}
         MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
 
     # RC is the Connection Result 0: Connection successful 1: Connection refused - incorrect protocol version 
@@ -77,6 +78,17 @@ class MQTTDeviceManager(MqttGObjectBridge):
             payload = json.loads(msg.payload)
             client_id = msg.topic.split("/")[1]
             proxy.process_message(client_id, payload)
+
+        elif msg.topic in self._lwt:
+            lwt_value = self._lwt[msg.topic].get("lwt_value")
+            clientId = self._lwt[msg.topic].get("clientId")
+            if msg.payload == lwt_value:
+                # this is a last will message, remove the device
+                status = {"clientId": clientId, "connected": 0}
+                self._remove_device(status)
+                self._lwt[msg.topic] = None
+                del self._lwt[msg.topic]
+                logging.info("Received LWT message for %s, device has been disconnected", clientId)
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
 
@@ -153,6 +165,10 @@ class MQTTDeviceManager(MqttGObjectBridge):
         mqtt = self._client
         mqtt.subscribe("device/+/Proxy")
 
+    def _subscribe_to_lwt_topic(self, clientId, lwt_topic):
+        mqtt = self._client
+        mqtt.subscribe(lwt_topic)
+
     def _process_device(self, status):
         mqtt = self._client
         clientId = status["clientId"] # the device's client id
@@ -164,6 +180,12 @@ class MQTTDeviceManager(MqttGObjectBridge):
         topic = "device/{}/DeviceInstance".format(clientId)
         res = mqtt.publish(topic, json.dumps(device_instances(device.services)))
         #deprecated - end
+
+        if device.lwt_topic is not None:   
+            # subscribe to the last will topic
+            self._lwt[device.lwt_topic] = { "clientId": clientId, "lwt_value": device.lwt_value }
+            self._subscribe_to_lwt_topic(clientId, device.lwt_topic)
+
 
         topic = "device/{}/DBus".format(clientId)
         #res = mqtt.publish(topic, json.dumps( { "portalId": self.portalId, "deviceInstance": device.device_instances() } ) )
