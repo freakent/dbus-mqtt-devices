@@ -82,13 +82,19 @@ class MQTTDeviceManager(MqttGObjectBridge):
         elif msg.topic in self._lwt:
             lwt_value = self._lwt[msg.topic].get("lwt_value")
             clientId = self._lwt[msg.topic].get("clientId")
-            if msg.payload == lwt_value:
+            lwt_payload = msg.payload.decode("utf-8")
+            if lwt_payload == lwt_value:
+                logging.debug("Message payload and LWT Value match so removing device %s, device has been disconnected", lwt_payload, lwt_value, clientId)
                 # this is a last will message, remove the device
                 status = {"clientId": clientId, "connected": 0}
                 self._remove_device(status)
                 self._lwt[msg.topic] = None
                 del self._lwt[msg.topic]
+                self._client.unsubscribe(msg.topic)
                 logging.info("Received LWT message for %s, device has been disconnected", clientId)
+            else:
+                logging.debug("Message payload and LWT Value do not match for device %s", lwt_payload, lwt_value, clientId)
+
         else:
             logging.warning('Received message on topic %s, but no action is defined', msg.topic)
 
