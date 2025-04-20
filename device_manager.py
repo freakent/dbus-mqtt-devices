@@ -68,7 +68,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
                 elif status['connected'] == 0:
                     self._remove_device(status)
                 else:
-                    logging.warning("Unrecognised device Connected status %s for client %s", status["clientId"])
+                    logging.warning("Unrecognised device Connected status %s for client %s", status.get("connected", "unknown"), status.get("clientId"))
             else:
 
                 logging.warning("Status message received from topic %s failed validation and has been rejected", msg.topic)
