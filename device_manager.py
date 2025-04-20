@@ -182,16 +182,11 @@ class MQTTDeviceManager(MqttGObjectBridge):
         if device is None:
             # create a new device
             self._devices[clientId] = device = MQTTDevice(device_mgr=self, device_status=status)
-        #deprecated - start
-        topic = "device/{}/DeviceInstance".format(clientId)
-        res = mqtt.publish(topic, json.dumps(device_instances(device.services)))
-        #deprecated - end
 
         if status.get("lwt_topic") is not None:   
             # subscribe to the last will topic
             self._lwt[status.get("lwt_topic")] = { "clientId": clientId, "lwt_value": status.get("lwt_value", "false") }
             self._subscribe_to_lwt_topic(clientId, status.get("lwt_topic"))
-
 
         topic = "device/{}/DBus".format(clientId)
         #res = mqtt.publish(topic, json.dumps( { "portalId": self.portalId, "deviceInstance": device.device_instances() } ) )
