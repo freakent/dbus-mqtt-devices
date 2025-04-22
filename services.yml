@@ -343,3 +343,58 @@ evcharger:
     default: 1
     min: 0
     max: 20
+
+# https://github.com/victronenergy/venus/wiki/dbus#battery
+battery:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "MQTT BMS"
+    persist: true
+  Capacity:
+    format: "{} Ah"
+  InstalledCapacity:
+    format: "{} Ah"
+  Dc/0/Voltage:
+    format: "{} V"
+    description: "V DC"
+  Dc/0/Current:
+    format: "{} A"
+    description: "A"
+  Dc/0/Power:
+    format: "{} W"
+    description: "W"
+  Dc/0/Temperature:
+    format: "{} °C"
+    description: "T1"
+  Soc:
+    format: "{} %"
+    description: "State of charge"
+  Balancing:
+    description: "0 = off, 1 = on"
+  Io/AllowToCharge:
+    description: "0 = off, 1 = on"
+  Io/AllowToDischarge:
+    description: "0 = off, 1 = on"
+  ConsumedAmphours:
+    format: "{} Ah"
+    description: "Ah"
+  System/MinCellVoltage:
+    format: "{} V"
+    description: "V DC"
+  System/MaxCellVoltage:
+    format: "{} V"
+    description: "V DC"
+  System/NrOfCellsPerBattery:
+    format: "{}"
+    description: "Cells per battery"
+  System/NrOfBatteries:
+    format: "{}"
+    description: "Number of batteries"
+  System/BatteriesParallel:
+    format: "{}"
+    description: "None"
+  System/BatteriesSeries:
+    format: "{}"
+    description: "None"
+
