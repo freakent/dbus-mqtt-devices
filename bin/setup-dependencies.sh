@@ -2,7 +2,7 @@
 BASE=$(dirname $(dirname $(realpath "$0")))
 PREFIX="dbus-mqtt-devices:"
 
-echo "$PREFIX: Setup-dependencies started"
+echo "$PREFIX Setup-dependencies started"
 
 check_online() {
     local url="https://vrm.victronenergy.com"
