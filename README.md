@@ -9,6 +9,7 @@ The following Victron dbus services are currently supported:
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
 - evcharger (com.victronenergy.evchgarger._device_)
+- Battery (for JK BMS) (com.victronenergy.battery._device_)
 
 (See https://github.com/victronenergy/venus/wiki/dbus for detailed explanation of each attribute)
 
@@ -29,7 +30,7 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 
 ## Install and Setup 
 
-**Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX can cause random reboots.**
+**Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX has been known to can cause random reboots.**
 
 To get the driver up and running, follow the steps below to download the latest release from github and then run the setup script.
 
@@ -69,7 +70,7 @@ The driver will automatically check and update (if required) it's own module dep
 If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
 
 
-## How this driver works - The Registration Protocol
+## How to use this driver - The Registration Protocol
 This driver uses a pair of MQTT topics under the "device/*" MQTT namespace to establish the 
 device registration using the following protocol. 
 
@@ -114,7 +115,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 		Payload: {"portalId": "<vrm portal id>", deviceInstance":{"t1": 5, "t2":12}, "topicPath": {...} }
 
 	_Please note_: 
-	1) the original `device/<client id>/DeviceInstance` topic has been deprecated in favour of `device/<client id>/DBus`. Publishing to the DeviceInstance topic will be removed in a future release. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
+	1) the original `device/<client id>/DeviceInstance` topic has now been removed in favour of `device/<client id>/DBus`. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
 	2) for topicPath details see the [MQTT Proxy](#the-mqtt-proxy) section below.
 
 
@@ -129,7 +130,7 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 
 
 5) 	When a device disconnects it should notify the driver by publishing a 
-	status message with a connected value of 0. With MQTT the preferred
+	status message with a connected value of 0. With MQTT, the preferred
 	method of achieving this is through publishing an MQTT "last will" message.  
     
     For example:
@@ -163,7 +164,8 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 
 The design of VenusOS MQTT api (either flashmq-mqtt or dbus-mqtt) requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
 a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
-DBUS MQTT api especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. 
+DBUS MQTT api, especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. Use of the 
+dbus-mqtt-devices proxy will help simplify client side code.
 
 **The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics without using the proxy.** 
 
@@ -196,7 +198,7 @@ each attribute and value pair in the payload. The actual topic written to is a c
 
 ### Topic Path
 To help simplify client code further, a "topic path" collection is returned in the `device/<device>/DBus` 
-message, removing the need for the client to have to build this topic path string.
+message obtained during device registration, removing the need for the client to have to build this topic path string.
 for example:
 
 if a device known as "venusnr", with a temperature service known as "temp01" were to publish the following payload to `device/venusnr/Status`
