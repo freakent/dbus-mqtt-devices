@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Updated by Freakent April 2025 to work with paho-mqtt 1.x and 2.x
 import errno
 import logging
 import os
