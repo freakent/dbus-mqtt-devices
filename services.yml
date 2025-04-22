@@ -180,18 +180,6 @@ grid:
     default: 0
     min: 0
     max: 2
-    #  AllowedRoles:
-    #    default: '["grid", "pvinverter", "genset", "acload"]'
-    #  Role:
-    #    description: "grid, pvinverter, genset, acload"    
-    #    persist: true
-    #    default: "grid"
-    #  PhaseConfig:
-    #    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
-    #    persist: true
-    #    default: 0
-    #    min: 0
-    #    max: 4
   Ac/Energy/Forward: # Total bought energy over all phases
     description: "kWh"
     format: "{} kWh"
@@ -201,7 +189,7 @@ grid:
   Ac/Power: # Total power of all phases, preferably real power
     description: "W"
     format: "{} W"
-  Ac/Current:
+  Ac/Current: # Deprecated
     description: "A AC"
     format: "{} A"
   Ac/L1/Current:
@@ -249,6 +237,9 @@ grid:
   Ac/L3/Voltage:
     description: "V AC"
     format: "{} V"
+  Ac/Frequency: # From the ModBus-TCP register list - https://www.victronenergy.com/support-and-downloads/technical-information
+    description: "Hz"
+    format: "{} Hz"
 
 # https://github.com/victronenergy/venus/wiki/dbus#gps
 gps:
