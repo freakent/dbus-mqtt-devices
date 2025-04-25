@@ -9,6 +9,10 @@ The following Victron dbus services are currently supported:
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
 - evcharger (com.victronenergy.evchgarger._device_)
+- dcdc (com.victronenergy.dcdc._device_)
+- dcload (com.victronenergy.dcload._device_)
+- dcsystem (com.victronenergy.dcsystem._device_)
+- acload (com.victronenergy.acload._device_)
 
 (See https://github.com/victronenergy/venus/wiki/dbus for detailed explanation of each attribute)
 
