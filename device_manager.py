@@ -52,7 +52,8 @@ class MQTTDeviceManager(MqttGObjectBridge):
         if rc == 0:
             self._subscribe_to_device_topic()
             self._subscribe_to_proxy_topic()
-    
+            self._send_discovery()
+
     def _on_message(self, client, userdata, msg):
         MqttGObjectBridge._on_message(self, client, userdata, msg)
 
@@ -145,6 +146,10 @@ class MQTTDeviceManager(MqttGObjectBridge):
     def _subscribe_to_proxy_topic(self):
         mqtt = self._client
         mqtt.subscribe("device/+/Proxy")
+
+    def _send_discovery(self):
+        mqtt = self._client
+        mqtt.publish("device_discovery", "")
 
     def _process_device(self, status):
         mqtt = self._client
