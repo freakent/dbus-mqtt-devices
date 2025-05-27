@@ -389,3 +389,57 @@ battery:
     format: "{}"
     description: "None"
 
+# https://github.com/victronenergy/venus/wiki/dbus#vebus-systems-multis-quattros-inverters
+vebus:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My VEBUS System"
+    persist: true
+  State:
+    description: "0=Off; 1=Low power mode; 2=Fault; 3=Bulk; 4=Absorption; 5=Float; 6=Storage; 7=Equalize; 8=Passthru; 9=Inverting; 10=Power Assist; 11=Power Supply Mode; 244=Sustain; 252=External control"
+    default: 0
+    min: 0
+    max: 252
+  Ac/ActiveIn/L1/V:
+    description: "L1 AC voltage"
+    format: "{} V"
+  Ac/ActiveIn/L1/I: 
+    description: "L1 AC current"
+    format: "{} A"
+  Ac/ActiveIn/L1/P: 
+    description: "L1 AC power"
+    format: "{} W"
+  Ac/ActiveIn/L1/F:
+    description: "L1 AC frequency"
+    format: "{} Hz"
+  Ac/ActiveIn/P: # Total power of all phases, preferably real power
+    description: "Total AC power"
+    format: "{} W"  
+  Ac/Out/L1/V:
+    description: "L1 AC voltage"
+    format: "{} V"
+  Ac/Out/L1/I: 
+    description: "L1 AC current"
+    format: "{} A"
+  Ac/Out/L1/P: 
+    description: "L1 AC power"
+    format: "{} W"
+  Ac/Out/L1/F:
+    description: "L1 AC frequency"
+    format: "{} Hz"
+  Ac/Out/P: # Total power of all phases, preferably real power
+    description: "Total AC power"
+    format: "{} W"  
+  Dc/0/Voltage:
+    description: "Battery voltage"
+    format: "{} V"
+  Dc/0/Current:
+    description: "Battery current"
+    format: "{} A"
+  Dc/0/Power:
+    description: "Battery power"
+    format: "{} W"
+  Dc/0/Temperature:
+    description: "Battery temperature"
+    format: "{} °C"
