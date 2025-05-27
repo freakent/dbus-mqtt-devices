@@ -392,7 +392,7 @@ battery:
 # https://github.com/victronenergy/venus/wiki/dbus#vebus-systems-multis-quattros-inverters
 vebus:
   ProductId:
-    default: 65535 # 0xFFFF
+    default: 9760 # Multiplus 48/3000/35-50
   CustomName:
     default: "My VEBUS System"
     persist: true
@@ -401,36 +401,114 @@ vebus:
     default: 0
     min: 0
     max: 252
+  Mode:
+    description: "Position of the switch. 1=Charger Only;2=Inverter Only;3=On;4=Off"
+    default: 4
+    min: 1
+    max: 4
+  ModeIsAdjustable:
+    description: "0. Switch position cannot be controlled remotely (typically because a VE.Bus BMS is present). 1. Switch position can be controlled remotely"
+    min: 0
+    max: 1
+    default: 1
+  Ac/ActiveIn/ActiveInput:
+    description: "Active input: 0 = ACin-1, 1 = ACin-2, 240 is none (inverting)."
+  Ac/ActiveIn/Connected:
+    description: "0 not connected, 1 connected"
+    min: 0
+    max: 1
+  Ac/NumberOfAcInputs:
+    description: "0 for none"
+    default: 1
+  Ac/NumberOfPhases:
+    description: "number of phases"
+    default: 1
+  Ac/In/1/CurrentLimit:
+    description: "Input current limit in W"
+    persist: true
+    default: 50
+  Ac/In/1/CurrentLimitIsAdjustable:
+    description: "1 is adjustable, 0 is not adjustable"
+    default: 1
+    persist: true
   Ac/ActiveIn/L1/V:
     description: "L1 AC voltage"
     format: "{} V"
-  Ac/ActiveIn/L1/I: 
+  Ac/ActiveIn/L1/I:
     description: "L1 AC current"
     format: "{} A"
-  Ac/ActiveIn/L1/P: 
+  Ac/ActiveIn/L1/P:
     description: "L1 AC power"
     format: "{} W"
   Ac/ActiveIn/L1/F:
     description: "L1 AC frequency"
     format: "{} Hz"
+  Ac/ActiveIn/L2/V:
+    description: "L2 AC voltage"
+    format: "{} V"
+  Ac/ActiveIn/L2/I:
+    description: "L2 AC current"
+    format: "{} A"
+  Ac/ActiveIn/L2/P:
+    description: "L2 AC power"
+    format: "{} W"
+  Ac/ActiveIn/L2/F:
+    description: "L2 AC frequency"
+    format: "{} Hz"
+  Ac/ActiveIn/L3/V:
+    description: "L3 AC voltage"
+    format: "{} V"
+  Ac/ActiveIn/L3/I:
+    description: "L3 AC current"
+    format: "{} A"
+  Ac/ActiveIn/L3/P:
+    description: "L3 AC power"
+    format: "{} W"
+  Ac/ActiveIn/L3/F:
+    description: "L3 AC frequency"
+    format: "{} Hz"
   Ac/ActiveIn/P: # Total power of all phases, preferably real power
     description: "Total AC power"
-    format: "{} W"  
+    format: "{} W"
   Ac/Out/L1/V:
     description: "L1 AC voltage"
     format: "{} V"
-  Ac/Out/L1/I: 
+  Ac/Out/L1/I:
     description: "L1 AC current"
     format: "{} A"
-  Ac/Out/L1/P: 
+  Ac/Out/L1/P:
     description: "L1 AC power"
     format: "{} W"
   Ac/Out/L1/F:
     description: "L1 AC frequency"
     format: "{} Hz"
+  Ac/Out/L2/V:
+    description: "L2 AC voltage"
+    format: "{} V"
+  Ac/Out/L2/I:
+    description: "L2 AC current"
+    format: "{} A"
+  Ac/Out/L2/P:
+    description: "L2 AC power"
+    format: "{} W"
+  Ac/Out/L2/F:
+    description: "L2 AC frequency"
+    format: "{} Hz"
+  Ac/Out/L3/V:
+    description: "L3 AC voltage"
+    format: "{} V"
+  Ac/Out/L3/I:
+    description: "L3 AC current"
+    format: "{} A"
+  Ac/Out/L3/P:
+    description: "L3 AC power"
+    format: "{} W"
+  Ac/Out/L3/F:
+    description: "L3 AC frequency"
+    format: "{} Hz"
   Ac/Out/P: # Total power of all phases, preferably real power
     description: "Total AC power"
-    format: "{} W"  
+    format: "{} W"
   Dc/0/Voltage:
     description: "Battery voltage"
     format: "{} V"
@@ -442,4 +520,5 @@ vebus:
     format: "{} W"
   Dc/0/Temperature:
     description: "Battery temperature"
-    format: "{} °C"
+  Soc:
+    description: "State of charge from internal battery monitor"
