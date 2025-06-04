@@ -421,7 +421,7 @@ vebus:
     description: "0 for none"
     default: 1
   Ac/NumberOfPhases:
-    description: "number of phases"
+    description: "number of phases, 1 or 3"
     default: 1
   Ac/In/1/CurrentLimit:
     description: "Input current limit in W"
