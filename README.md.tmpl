@@ -229,7 +229,15 @@ However some devices with built-in MQTT support (such as Shelly devices) do not 
 status message to a device specific topic. From dbus-mqtt-devices v0.9.0 onwards you can you include "lwt_topic" and "lwt_value" attributes 
 in your device connection payload. For example:
 ```
-    { "clientId": "fe001", "connected": 1, "lwt_topic": "shellies/myshelly/online", "lwt_value":"false",  "version": "v1.0 ALPHA", "services": {"t1": "temperature"} }
+    { 
+        "clientId": "fe001", 
+        "connected": 1, 
+        "lwt_topic": "shellies/myshelly/online", "lwt_value": "false",  
+        "version": "v1.0 ALPHA", 
+        "services": {
+            "t1": "temperature"
+        }
+    }
 ```
 Once registered, dbus-mqtt-devices will subscribe to the supplied "lwt_topic". If the contents matches the "lwt_value" then dbus_mqtt_devices will automatically 
 disconnect the device from the dbus. On device start-up, the device will obviously need to re-send a registration payload to start sending data again. 
