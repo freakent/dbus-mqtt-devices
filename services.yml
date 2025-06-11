@@ -174,12 +174,10 @@ grid:
   ErrorCode: # https://www.victronenergy.com/live/mppt-error-codes
     description: "0=No Error"
     default: 0
-  DeviceType: # ?
-    description: ""
+  DeviceType: 
+    description: "grid, genset or acload "
     persist: true
-    default: 0
-    min: 0
-    max: 2
+    default: grid
   Ac/Energy/Forward: # Total bought energy over all phases
     description: "kWh"
     format: "{} kWh"
@@ -423,6 +421,14 @@ vebus:
   Ac/NumberOfPhases:
     description: "number of phases, 1 or 3"
     default: 1
+  Ac/ActiveIn/CurrentLimit:    # DEPRECATED in favour of /Ac/In/[1 and 2] paths but needed for Classic UI
+    description: "Input current limit in W"
+    persist: true
+    default: 50
+  Ac/ActiveIn/CurrentLimitIsAdjustable: # DEPRECATED in favour of /Ac/In/[1 and 2] paths but needed for Classic UI
+    description: "1 is adjustable, 0 is not adjustable"
+    default: 1
+    persist: true
   Ac/In/1/CurrentLimit:
     description: "Input current limit in W"
     persist: true
