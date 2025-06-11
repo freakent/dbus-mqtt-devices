@@ -1,4 +1,6 @@
-# dbus-mqtt-devices 0.9.0-rc4
+# dbus-mqtt-devices 0.9.0
+
+## If you have upgraded to Venus OS 3.60, please upgrade to dbus-mqtt-devices V0.9.0 or above asap! ##
 
 This VenusOS Driver for GX devices works in concert with the [Victron dbus-mqtt gateway](https://github.com/victronenergy/dbus-mqtt), now known as dbus-flashmq. It has been designed to allow Wi-Fi enabled edge devices (such as ESP32, some Arduino microcontrollers or Raspberry Pis) to self register to the dbus over MQTT. This avoids the need for additional dedicated custom drivers to be developed and deployed.
 
@@ -9,7 +11,8 @@ The following Victron dbus services are currently supported:
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
 - evcharger (com.victronenergy.evchgarger._device_)
-- Battery (for JK BMS) (com.victronenergy.battery._device_)
+- battery (for JK BMS) (com.victronenergy.battery._device_)
+- vebus (com.victronenergy.vebus._device_)
 
 (See https://github.com/victronenergy/venus/wiki/dbus for detailed explanation of each attribute)
 
@@ -24,8 +27,9 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#how-this-driver-works---the-registration-protocol)
 4. [The MQTT Proxy (optional)](#The-MQTT-Proxy) 
-5. [Troubleshooting](#Troubleshooting)
-6. [Developers](#Developers)
+5. [Last Will Topic](#Last-Will-Topic)
+6. [Troubleshooting](#Troubleshooting)
+7. [Developers](#Developers)
 
 
 ## Install and Setup 
@@ -43,20 +47,20 @@ If you have not yet enabled root (superuser) access via SSH, follow the instruct
 ```
 mkdir -p /data/drivers
 cd /data/drivers
-wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.9.0-rc4.zip
+wget -O dbus-mqtt-devices.zip https://github.com/freakent/dbus-mqtt-devices/archive/refs/tags/v0.9.0.zip
 unzip dbus-mqtt-devices.zip
 ```
 
 3. Run the setup script
 ```
-./dbus-mqtt-devices-0.9.0-rc4/bin/setup.sh
+./dbus-mqtt-devices-0.9.0/bin/setup.sh
 ```
 
 4. Check the contents of /data/rc.local to ensure the correct version starts automatically on reboot
 ```
 # cat /data/rc.local
-/data/drivers/dbus-mqtt-devices-0.9.0-rc4/bin/setup-dependencies.sh
-ln -s /data/drivers/dbus-mqtt-devices-0.9.0-rc4/bin/service /service/dbus-mqtt-devices
+/data/drivers/dbus-mqtt-devices-0.9.0/bin/setup-dependencies.sh
+ln -s /data/drivers/dbus-mqtt-devices-0.9.0/bin/service /service/dbus-mqtt-devices
 ```
 
 5. Reboot device (recommended)
@@ -216,6 +220,21 @@ The following registration message would be published by the driver to `device/v
 ```
 The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`. 
 
+## Last Will Topic
+If a device shuts down or disconnects from MQTT it should send a disconnect message to signal to the dbus that is has become disconnected. The preferred 
+mechanism for doing thi is via a "last will" message, see step 5 of [How this driver works - The Registration Protocol](#how-this-driver-works---the-registration-protocol)
+for more details.
+
+However some devices with built-in MQTT support (such as Shelly devices) do not allow the user to set their own the last will message. Instead Shelly devices publish their own
+status message to a device specific topic. From dbus-mqtt-devices v0.9.0 onwards you can you include "lwt_topic" and "lwt_value" attributes 
+in your device connection payload. For example:
+```
+    { "clientId": "fe001", "connected": 1, "lwt_topic": "shellies/myshelly/online", "lwt_value":"false",  "version": "v1.0 ALPHA", "services": {"t1": "temperature"} }
+```
+Once registered, dbus-mqtt-devices will subscribe to the supplied "lwt_topic". If the contents matches the "lwt_value" then dbus_mqtt_devices will automatically 
+disconnect the device from the dbus. On device start-up, the device will obviously need to re-send a registration payload to start sending data again. 
+
+This feature should allow devices like Shelly to be managed and disconnected more easily with Venus OS.
 
 ## Troubleshooting
 ### during installation
@@ -228,19 +247,34 @@ Try running the following before running the setup.sh script again.
 opkg install python3-modules
 ```
 ### at runtime
-1) First thing to check is that the dbus-mqtt-devices service is running, from the ssh command line use
+1) First thing to check is that you are not sending numeric values as strings.
+publishing a payload like this can cause unexpeted problems:
+```
+{
+    "value": "100" <- WRONG
+}
+...
+Make sure numeric values are not surrounded by quotes in your json.
+```
+{ 
+    "value": 100 <- CORRECT
+}
+```
+Similarly, if your payload is created in Javascript (node-red), be careful with values like "Null", "infinitiy" and "NaN".
+
+2) Check the dbus-mqtt-devices service is running, from the ssh command line use
 ```
 svstat /service/dbus-mqtt-devices
 ```
 More info on deamontools that VenusOs uses here: https://cr.yp.to/daemontools.html
 
-2) If the service is not running then ensure that your rc.local script has execute permissions.
+3) If the service is not running then ensure that your rc.local script has execute permissions.
 ```
 ls -l /data/rc.local
 ...
 chmod +x /data/rc.local
 ```
-3) Check whether there were any errors whilst setting up dependencies during system startup by checking the boot log file with the command:
+4) Check whether there were any errors whilst setting up dependencies during system startup by checking the boot log file with the command:
 
 ```
 $ more /var/log/boot
@@ -254,7 +288,7 @@ Wed Apr  9 08:15:56 2025: dbus-mqtt-devices: Setting root partition back to read
 Wed Apr  9 08:15:58 2025: dbus-mqtt-devices: Setup-dependencies complete
 
 ```
-4) If the service is running, then the next thing to check is the dbus-mqtt-devices log file with the command:
+5) If the service is running, then the next thing to check is the dbus-mqtt-devices log file with the command:
 ```
 $ more /var/log/dbus-mqtt-devices/current
 ```
@@ -285,19 +319,19 @@ If you need human readable timestamps you have to pipe the output through tai64n
 tail -f /var/log/dbus-mqtt-devices/current | tai64nlocal
 ```
 
-5) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
+6) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
 more /data/rc.local 
 ```
 
-6) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT. 
+7) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT. 
 There is a keepalive script in the samples directory if you need it.
 
-7) In the unlikely event that the installation fails, and your ccgx device will not boot, follow these instructions to recover it.
+8) In the unlikely event that the installation fails, and your ccgx device will not boot, follow these instructions to recover it.
 https://community.victronenergy.com/questions/48309/ccgx-firmware-upgrade-problem.html
 
-8) If you are still having a problem feel free to start an Discussion on the Github project here: https://github.com/freakent/dbus-mqtt-devices/discussions
-I get email alerts from Github which I don't seem to get from the Victron community forum.
+9) If you are still having a problem feel free to start an Discussion on the Github project here: https://github.com/freakent/dbus-mqtt-devices/discussions
+Please start a discussion instead of an issue.
 
 
 ## Developers
