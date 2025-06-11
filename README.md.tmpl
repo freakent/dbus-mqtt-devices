@@ -10,7 +10,7 @@ The following Victron dbus services are currently supported:
 - pvinverter (com.victronenergy.pvinverter._device_)
 - grid (com.victronenergy.grid._device_)
 - gps (com.victronenergy.gps._device_)
-- evcharger (com.victronenergy.evchgarger._device_)
+- evcharger (com.victronenergy.evcharger._device_)
 - battery (for JK BMS) (com.victronenergy.battery._device_)
 - vebus (com.victronenergy.vebus._device_)
 
@@ -256,7 +256,7 @@ opkg install python3-modules
 ```
 ### at runtime
 1) First thing to check is that you are not sending numeric values as strings.
-publishing a payload like this can cause unexpeted problems:
+publishing a payload like this can cause unexpected problems:
 ```
 {
     "value": "100" <- WRONG
@@ -268,7 +268,7 @@ Make sure numeric values are not surrounded by quotes in your json.
     "value": 100 <- CORRECT
 }
 ```
-Similarly, if your payload is created in Javascript (node-red), be careful with values like "Null", "infinitiy" and "NaN".
+Similarly, if your payload is created in Javascript (node-red), be careful with values like "Null", "infinity" and "NaN".
 
 2) Check the dbus-mqtt-devices service is running, from the ssh command line use
 ```
