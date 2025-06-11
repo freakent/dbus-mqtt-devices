@@ -261,7 +261,7 @@ publishing a payload like this can cause unexpeted problems:
 {
     "value": "100" <- WRONG
 }
-...
+```
 Make sure numeric values are not surrounded by quotes in your json.
 ```
 { 
