@@ -270,7 +270,7 @@ evcharger:
     default: "My EV Charger"
     persist: true
   Ac/Energy/Forward:
-    description: "Ac Engergy Forward wh"
+    description: "Ac Energy Forward wh"
     format: "{:.2f}W"
   Ac/L1/Power:
     description: "L1 Power used (W)"
@@ -528,3 +528,39 @@ vebus:
     description: "Battery temperature"
   Soc:
     description: "State of charge from internal battery monitor"
+  Alarms/HighDcCurrent:
+    description: "High DC current"
+  Alarms/HighDcVoltage:
+    description: "High DC voltage"
+  Alarms/LowBattery:
+    description: "Low battery voltage"
+  Alarms/PhaseRotation:
+    description: "0=OK, 1=Warning when AC input phase rotation direction is wrong "
+  Alarms/Ripple:
+    description: "High DC ripple"
+  Alarms/TemperatureSensor:
+    description: "Battery temperature sensor alarm"
+  Alarms/L1/HighTemperature:
+    description: "inverter/charger high temperature alarm"
+  Alarms/L1/LowBattery:
+    description: "L1 low battery voltage alarm"
+  Alarms/L1/Overload:
+    description: "L1 inverter overload alarm"
+  Alarms/L1/Ripple:
+    description: "L1 high DC ripple alarm"
+  Alarms/L2/HighTemperature:
+    description: "inverter/charger high temperature alarm"
+  Alarms/L2/LowBattery:
+    description: "L2 low battery voltage alarm"
+  Alarms/L2/Overload:
+    description: "L2 inverter overload alarm"
+  Alarms/L2/Ripple:
+    description: "L2 high DC ripple alarm"
+  Alarms/L3/HighTemperature:
+    description: "inverter/charger high temperature alarm"
+  Alarms/L3/LowBattery:
+    description: "L3 low battery voltage alarm"
+  Alarms/L3/Overload:
+    description: "L3 inverter overload alarm"
+  Alarms/L3/Ripple:
+    description: "L3 high DC ripple alarm"
