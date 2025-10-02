@@ -4,7 +4,7 @@ DEVICE MANAGER ---> Device ---> Device Service
                                       v
                              Device Service Config
 
-The Device Manager subscribes to the MQTT device/+/Status topics and handles 
+The Device Manager subscribes to the MQTT device/+/Status topics and handles
 registration and de-registration of devices.
 """
 import logging
@@ -44,24 +44,25 @@ class MQTTDeviceManager(MqttGObjectBridge):
         self._lwt = {}
         MqttGObjectBridge.__init__(self, mqtt_server, CLIENTID, ca_cert, user, passwd, debug)
 
-    # RC is the Connection Result 0: Connection successful 1: Connection refused - incorrect protocol version 
-    # 2: Connection refused - invalid client identifier 3: Connection refused - server unavailable 
-    # 4: Connection refused - bad username or password 5: Connection refused - not authorised 
+    # RC is the Connection Result 0: Connection successful 1: Connection refused - incorrect protocol version
+    # 2: Connection refused - invalid client identifier 3: Connection refused - server unavailable
+    # 4: Connection refused - bad username or password 5: Connection refused - not authorised
     # 6-255: Currently unused.
-    def _on_connect(self, client, userdata, flags, rc): 
+    def _on_connect(self, client, userdata, flags, rc):
         MqttGObjectBridge._on_connect(self, client, userdata, dict, rc)
         logging.info('[Connected] Result code {}'.format(rc))
         if rc == 0:
             self._subscribe_to_device_topic()
             self._subscribe_to_proxy_topic()
-    
+            self._send_discovery()
+
     def _on_message(self, client, userdata, msg):
         MqttGObjectBridge._on_message(self, client, userdata, msg)
 
         if MQTT.topic_matches_sub("device/+/Status", msg.topic):
             status = json.loads(msg.payload)
             logging.info("Received device status message %s", status)
-            
+
             if self._status_is_valid(status):
                 if status['connected'] == 1:
                     self._process_device(status)
@@ -103,9 +104,9 @@ class MQTTDeviceManager(MqttGObjectBridge):
         isValid = True
 
         try:
-            # Check the connected attribute, expect 1 = connected, 0 = disconnected 
-            connected = status.get('connected') 
-            if connected is None or connected == "": 
+            # Check the connected attribute, expect 1 = connected, 0 = disconnected
+            connected = status.get('connected')
+            if connected is None or connected == "":
                 isValid = False
                 logging.warning("status.connected can not be blank")
             else:
@@ -131,7 +132,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
                     logging.warning("status.services must contain a dictionary of values if connected = 1")
                 else:
                     for service_id in services.keys(): # Check each service in the dictionary
-                        if re.search(validFormat, service_id) == None : 
+                        if re.search(validFormat, service_id) == None :
                             isValid = False
                             logging.warning("status.services contains a service %s with an invalid identifier, only alpha numeric characters and _ (underscores) are allowed", service_id)
 
@@ -141,7 +142,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
 
         except:
             logging.error("status message is invalid: %s", status)
-            isValid = False       
+            isValid = False
 
         return isValid
 
@@ -152,14 +153,14 @@ class MQTTDeviceManager(MqttGObjectBridge):
 
 
     def _read_service_types(self):
-        try:                                                    
-            base = os.path.dirname(os.path.realpath(__file__))  
+        try:
+            base = os.path.dirname(os.path.realpath(__file__))
             with open(os.path.join(base, 'services.yml'), 'r') as services_file:
-                configs = yaml.safe_load(services_file)                         
+                configs = yaml.safe_load(services_file)
                 return configs.keys()
-        except IOError as e:                                                                            
+        except IOError as e:
             logging.error("I/O error(%s): %s", e.errno, e.strerror)
-        except: #handle other exceptions such as attribute errors                                       
+        except: #handle other exceptions such as attribute errors
             logging.error("Unexpected error: %s", sys.exc_info()[0])
 
 
@@ -175,6 +176,10 @@ class MQTTDeviceManager(MqttGObjectBridge):
         mqtt = self._client
         mqtt.subscribe(lwt_topic)
 
+    def _send_discovery(self):
+        mqtt = self._client
+        mqtt.publish("device_discovery", "")
+
     def _process_device(self, status):
         mqtt = self._client
         clientId = status["clientId"] # the device's client id
@@ -183,7 +188,7 @@ class MQTTDeviceManager(MqttGObjectBridge):
             # create a new device
             self._devices[clientId] = device = MQTTDevice(device_mgr=self, device_status=status)
 
-        if status.get("lwt_topic") is not None:   
+        if status.get("lwt_topic") is not None:
             # subscribe to the last will topic
             self._lwt[status.get("lwt_topic")] = { "clientId": clientId, "lwt_value": status.get("lwt_value", "false") }
             self._subscribe_to_lwt_topic(clientId, status.get("lwt_topic"))

@@ -13,11 +13,15 @@ The following Victron dbus services are currently supported:
 - evcharger (com.victronenergy.evcharger._device_)
 - battery (for JK BMS) (com.victronenergy.battery._device_)
 - vebus (com.victronenergy.vebus._device_)
+- dcdc (com.victronenergy.dcdc._device_)
+- dcload (com.victronenergy.dcload._device_)
+- dcsystem (com.victronenergy.dcsystem._device_)
+- acload (com.victronenergy.acload._device_)
 
 (See https://github.com/victronenergy/venus/wiki/dbus for detailed explanation of each attribute)
 
 ## [How To Say Thanks](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
-If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the "Thank You" link below. 
+If you find this driver useful and you want to say thanks, feel free to buy me a coffee using the "Thank You" link below.
 
 [![Say Thanks](https://raw.githubusercontent.com/freakent/node-red-contrib-sunevents/main/docs/thankyou.jpg "Say Thanks")
 ](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4Y63PPPD4CGG&source=url)
@@ -26,13 +30,13 @@ If you find this driver useful and you want to say thanks, feel free to buy me a
 1. [Install and Setup](#Install-and-Setup)
 2. [Updating after VenusOS updates](#Updating-after-VenusOS-updates)
 3. [How this driver works - The Registration Protocol](#how-this-driver-works---the-registration-protocol)
-4. [The MQTT Proxy (optional)](#The-MQTT-Proxy) 
+4. [The MQTT Proxy (optional)](#The-MQTT-Proxy)
 5. [Last Will Topic](#Last-Will-Topic)
 6. [Troubleshooting](#Troubleshooting)
 7. [Developers](#Developers)
 
 
-## Install and Setup 
+## Install and Setup
 
 **Please Note: this driver is not supported on CCGX due to it's limited system resources. Installation on CCGX has been known to can cause random reboots.**
 
@@ -70,13 +74,13 @@ reboot
 
 ## Updating after VenusOS updates
 
-The driver will automatically check and update (if required) it's own module dependencies on every reboot. There should be no need to do anything to the installation after a VenusOS upgrade. 
+The driver will automatically check and update (if required) it's own module dependencies on every reboot. There should be no need to do anything to the installation after a VenusOS upgrade.
 If you do experience issues after a VenusOS upgrade, please follow the usual troubleshooting tips described later.
 
 
 ## How to use this driver - The Registration Protocol
-This driver uses a pair of MQTT topics under the "device/*" MQTT namespace to establish the 
-device registration using the following protocol. 
+This driver uses a pair of MQTT topics under the "device/*" MQTT namespace to establish the
+device registration using the following protocol.
 
 Please note: `<client id>` is a unique, short name you can use to identify the device (you MUST avoid using special characters ,.-/: in the client id). It is recommended (but not essential) that you use the same client ID during MQTT initialisation and connection.
 
@@ -84,94 +88,94 @@ Please note: `<client id>` is a unique, short name you can use to identify the d
 
     1) subscribes to a topic `"device/<client id>/DBus"`.
 
-	2) publishes a status message on the MQTT topic `"device/<client id>/Status"`. 
-		
+	2) publishes a status message on the MQTT topic `"device/<client id>/Status"`.
+
         The Status payload is a json object containing :
-    	
+
         `{ "clientId": <client id>, "connected": <either 1 or 0>, "version": "<text string>", "services": [<a dictionary of services that this device wants to use>] }`
-   	
+
         example 1:
-		
+
         `{ "clientId": "fe001", "connected": 1, "version": "v1.0 ALPHA", "services": {"t1": "temperature"} }`
 		In example 1, the device is registering that it is equipped with one temperature sensor which we are calling "t1". The label t1 is just an arbitrary identifier that distinguishes one service from another within a device. "temperature" is the exact name of the service used in Victron's dbus. The version field can contain any string you like and is displayed within the GX console and on VRM.
 
         example 2:
-		
+
         `{ "clientId": "fe002", "connected": 1, "version": "v2.3", "services": {"t1": "temperature", "t2": "temperature", "tk1": "tank" } }`
-		In example 2, the device is registering that it is equipped with two temperature sensors and a tank level sensor. The labels t1, t2, tk2 are the unique arbitrary identifiers that distinguish one service from another within a device. 
+		In example 2, the device is registering that it is equipped with two temperature sensors and a tank level sensor. The labels t1, t2, tk2 are the unique arbitrary identifiers that distinguish one service from another within a device.
 
 2)	The driver will then use this information to :
-    - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance](https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance) dbus service), 
+    - obtain a numeric device instance (for VRM) for each device service (using the [ClassAndVrmInstance](https://github.com/victronenergy/localsettings#using-addsetting-to-allocate-a-vrm-device-instance) dbus service),
     - set up [local settings](https://github.com/victronenergy/localsettings) for persistent storage of some attributes
-    - register the device on the dbus, 
+    - register the device on the dbus,
     - set up the appropriate dbus paths for the service type (i.e. temperature sensor can provide Temperature, Pressure and Humidity)
-    
 
-3)	Once successfully registered, the driver publishes a message on the device/\<client id\>/DBus topic. 
-	This must be the same topic the device subscribed to in step 1.1. The 
-	DBus message contains the all important numeric device instances (one for each 
+
+3)	Once successfully registered, the driver publishes a message on the device/\<client id\>/DBus topic.
+	This must be the same topic the device subscribed to in step 1.1. The
+	DBus message contains the all important numeric device instances (one for each
 	service) that the device should use when publishing messages for dbus-mqtt
-	to process. It also contains the portal id needed to construct a dbus-mqtt topic (see 4). 
-    
+	to process. It also contains the portal id needed to construct a dbus-mqtt topic (see 4).
+
     For example:
 
 		Topic: "device/<client id>/DBus"
 		Payload: {"portalId": "<vrm portal id>", deviceInstance":{"t1": 5, "t2":12}, "topicPath": {...} }
 
-	_Please note_: 
+	_Please note_:
 	1) the original `device/<client id>/DeviceInstance` topic has now been removed in favour of `device/<client id>/DBus`. By combining the `<portal id>` and `<device instance>` in the same message payload, client code will be simpler and it leaves scope for future expansion.
 	2) for topicPath details see the [MQTT Proxy](#the-mqtt-proxy) section below.
 
 
-4)	Custom code on the device then uses the device instance to periodically publish messages to the 
-	appropriate dbus-mqtt topics for the service(s) they are providing. 
+4)	Custom code on the device then uses the device instance to periodically publish messages to the
+	appropriate dbus-mqtt topics for the service(s) they are providing.
 	Note the "W" at the start of the topic. See the Victron dbus-mqtt documentation for an explanation.
-	
+
     For example:
-	
+
     	Topic: "W/<portal id>/temperature/<device instance>/Temperature"
 		Payload: { "value": 24.91 }
 
 
-5) 	When a device disconnects it should notify the driver by publishing a 
+5) 	When a device disconnects it should notify the driver by publishing a
 	status message with a connected value of 0. With MQTT, the preferred
-	method of achieving this is through publishing an MQTT "last will" message.  
-    
+	method of achieving this is through publishing an MQTT "last will" message.
+
     For example:
 
 		{ "clientId": "fe001", "version": "v1.0", "connected": 0, "services": {"t1": "temperature", "t2": "temperature"}}
-	
-    
-    _please note_: on disconnect the contents of the "services" are actually irrelevant as all 
+
+
+    _please note_: on disconnect the contents of the "services" are actually irrelevant as all
 	the device services are cleared by this action.
 
 ### Design notes
--	Client devices MUST always self register (by sending a Status message with connected = 1) every time they connect to MQTT. Re-registering an 
-	already registered device has no adverse affect. 
-- 	The device can have multiple sensors of the same type (e.g. two 
-	temperature sensors), each publishing to different dbus-mqtt topics as 
+-	Client devices MUST always self register (by sending a Status message with connected = 1) every time they connect to MQTT. Re-registering an
+	already registered device has no adverse affect.
+- 	The device can have multiple sensors of the same type (e.g. two
+	temperature sensors), each publishing to different dbus-mqtt topics as
 	different device services and unique Device Instance values.
-- 	Each device service will appear separately on the Venus GX device, and 
-	each can have a customised name that will show on the GX display and in 
+- 	Each device service will appear separately on the Venus GX device, and
+	each can have a customised name that will show on the GX display and in
 	VRM.
-- 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the 
-	protocol and the driver have been designed to be easily extended for 
+- 	This driver currently supports a subset of the Victron services exposed through dbus-mqtt but the
+	protocol and the driver have been designed to be easily extended for
 	other services supported by dbus-mqtt (see [services.yml](https://github.com/freakent/dbus-mqtt-devices/blob/main/services.yml) config file).
--   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an 
-    Adafruit AHT20 temperature and humidity module using this driver and 
+-   A working Arduino Sketch (for Arduino Nano 33 IOT) that publishes temperature readings from an
+    Adafruit AHT20 temperature and humidity module using this driver and
     mqtt-dbus is available at https://github.com/freakent/mqtt_wifi_sis
--   Simple client examples (gps-simulator and tank-simulator) can be found in the samples directory. 
+-   Simple client examples (gps-simulator and tank-simulator) can be found in the samples directory.
     These are NOT designed to be run on the GX, but you can run them from any other computer connected to the same network as the Venus OS device.
-	
+
 
 ## The MQTT Proxy
 
 The design of VenusOS MQTT api (either flashmq-mqtt or dbus-mqtt) requires the client device to publish separate MQTT messages for each data value to be published on the DBUS. In many cases this can require
-a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the 
-DBUS MQTT api, especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. Use of the 
+a lot of extra boiler plate code to format each data value payload and publish each individual value to the appropriate "W" topic. The goal of this driver is to simplify use of the
+DBUS MQTT api, especially for edge sensing client devices. Reducing the amount of boiler plate code running on the client device will help simplify device code and simplify development. Use of the
 dbus-mqtt-devices proxy will help simplify client side code.
 
-**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics without using the proxy.** 
+**The use of the Proxy is entirely optional, the client device can continue to use the driver for dbus registration and publish values to the "W" topics without using the proxy.**
 
 To use the proxy, format your payload as follows and publish to topic `device/<clientId>/Proxy`:
 ```
@@ -197,11 +201,11 @@ For example, to publish data for a temperature device you would format your payl
 }
 ```
 
-When you publish that payload to topic `device/<clientId>/Proxy`, the Proxy will perform some basic validation and perform a publish on behalf of the client for 
-each attribute and value pair in the payload. The actual topic written to is a concatenation of the topic path and the attribute name. 
+When you publish that payload to topic `device/<clientId>/Proxy`, the Proxy will perform some basic validation and perform a publish on behalf of the client for
+each attribute and value pair in the payload. The actual topic written to is a concatenation of the topic path and the attribute name.
 
 ### Topic Path
-To help simplify client code further, a "topic path" collection is returned in the `device/<device>/DBus` 
+To help simplify client code further, a "topic path" collection is returned in the `device/<device>/DBus`
 message obtained during device registration, removing the need for the client to have to build this topic path string.
 for example:
 
@@ -212,41 +216,41 @@ if a device known as "venusnr", with a temperature service known as "temp01" wer
 
 The following registration message would be published by the driver to `device/venusnr/DBus`
 ```
-{ 
+{
   "portalId": "<portalId>",
-  "deviceInstance": {"temp01": 7}, 
+  "deviceInstance": {"temp01": 7},
   "topicPath": {"temp01": {"N': "N/portId>/temperature/7", "R": "R/<portalid>/temperature/7", "W": "W/<portalId>/temperature/7"} }
 }
 ```
-The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`. 
+The expectation is that the client can then simply select the correct topic path by using an expression such as `payload.topicPath["temp01"]["W"]`.
 
 ## Last Will Topic
-If a device shuts down or disconnects from MQTT it should send a disconnect message to signal to the dbus that is has become disconnected. The preferred 
+If a device shuts down or disconnects from MQTT it should send a disconnect message to signal to the dbus that is has become disconnected. The preferred
 mechanism for doing thi is via a "last will" message, see step 5 of [How this driver works - The Registration Protocol](#how-this-driver-works---the-registration-protocol)
 for more details.
 
 However some devices with built-in MQTT support (such as Shelly devices) do not allow the user to set their own the last will message. Instead Shelly devices publish their own
-status message to a device specific topic. From dbus-mqtt-devices v0.9.0 onwards you can you include "lwt_topic" and "lwt_value" attributes 
+status message to a device specific topic. From dbus-mqtt-devices v0.9.0 onwards you can you include "lwt_topic" and "lwt_value" attributes
 in your device connection payload. For example:
 ```
-    { 
-        "clientId": "fe001", 
-        "connected": 1, 
-        "lwt_topic": "shellies/myshelly/online", "lwt_value": "false",  
-        "version": "v1.0 ALPHA", 
+    {
+        "clientId": "fe001",
+        "connected": 1,
+        "lwt_topic": "shellies/myshelly/online", "lwt_value": "false",
+        "version": "v1.0 ALPHA",
         "services": {
             "t1": "temperature"
         }
     }
 ```
-Once registered, dbus-mqtt-devices will subscribe to the supplied "lwt_topic". If the contents matches the "lwt_value" then dbus_mqtt_devices will automatically 
-disconnect the device from the dbus. On device start-up, the device will obviously need to re-send a registration payload to start sending data again. 
+Once registered, dbus-mqtt-devices will subscribe to the supplied "lwt_topic". If the contents matches the "lwt_value" then dbus_mqtt_devices will automatically
+disconnect the device from the dbus. On device start-up, the device will obviously need to re-send a registration payload to start sending data again.
 
 This feature should allow devices like Shelly to be managed and disconnected more easily with Venus OS.
 
 ## Troubleshooting
 ### during installation
-If you receive an error during setup that includes the lines 
+If you receive an error during setup that includes the lines
 ```
 ModuleNotFoundError: No module named 'dataclasses'
 ```
@@ -264,7 +268,7 @@ publishing a payload like this can cause unexpected problems:
 ```
 Make sure numeric values are not surrounded by quotes in your json.
 ```
-{ 
+{
     "value": 100 <- CORRECT
 }
 ```
@@ -318,7 +322,7 @@ It should contain something like this:
 
 If you can have ssh open in another window, then
 ```
-tail -f /var/log/dbus-mqtt-devices/current 
+tail -f /var/log/dbus-mqtt-devices/current
 ```
 is a useful way to monitor the driver.
 
@@ -329,10 +333,10 @@ tail -f /var/log/dbus-mqtt-devices/current | tai64nlocal
 
 6) If you have re-installed more than once, make sure there is only one line in your rc.local for dbus-mqtt-devices.
 ```
-more /data/rc.local 
+more /data/rc.local
 ```
 
-7) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT. 
+7) I highly recommend using *MQTT-Explorer* (http://mqtt-explorer.com/) to monitor the N/* topics while debugging and if you are doing anything with MQTT.
 There is a keepalive script in the samples directory if you need it.
 
 8) In the unlikely event that the installation fails, and your ccgx device will not boot, follow these instructions to recover it.

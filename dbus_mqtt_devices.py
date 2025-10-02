@@ -28,7 +28,6 @@ from dbus.mainloop.glib import DBusGMainLoop
 AppDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(1, os.path.join(AppDir, 'ext', 'velib_python'))
 
-from logger import setup_logging
 from ve_utils import get_vrm_portal_id, exit_on_error, wrap_dbus_value, unwrap_dbus_value
 
 from device_manager import MQTTDeviceManager
@@ -56,8 +55,13 @@ def main():
 	args = parser.parse_args()
 
 	print("dbus_mqtt_devices v{}".format(VERSION()))
-	logger = setup_logging(args.debug)
-	logger.info("-------- dbus_mqtt_devices, v{} is starting up --------".format(VERSION()))
+
+	log_level = logging.INFO
+	if args.debug:
+		log_level = logging.DEBUG
+
+	logging.basicConfig(level=log_level)
+	logging.info("-------- dbus_mqtt_devices, v{} is starting up --------".format(VERSION()))
 
 	mainloop = GLib.MainLoop()
 	# Have a mainloop, so we can send/receive asynchronous calls to and from dbus

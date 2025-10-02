@@ -3,6 +3,96 @@
 
 # For product id see https://gist.github.com/seidler2547/52f3e91cbcbf2fa257ae79371bb78588
 
+#https://github.com/victronenergy/venus/wiki/dbus#dcdc-converters
+dcdc:
+  ProductId:
+    default: 65535
+  CustomName:
+    default: "My DC-DC Converter"
+    persist: true
+  Dc/0/Current:
+    description: "A DC out"
+    format: "{} A"
+  Dc/0/Power:
+    description: "W out"
+    format: "{} W"
+  Dc/0/Voltage:
+    description: "V DC out"
+    format: "{} V"
+  Dc/In/I:
+    description: "A DC in"
+    format: "{} A"
+  Dc/In/P:
+    description: "W out"
+    format: "{} W"
+  Dc/In/V:
+    description: "V DC in"
+    format: "{} V"
+  DeviceOffReason: # Reason why device is off; See solar charger section
+    description: "Bitmask indicating the reason(s) that the MPPT is in Off State"
+    default: 0
+  ErrorCode: # https://www.victronenergy.com/live/mppt-error-codes
+    description: "0=No Error"
+    default: 0 # not showing in in console???
+  Mode:
+    description: "1=On; 4=Off"
+    default: 1
+  Settings/DeviceFunction:
+    description: "0=Charger(=Alternator), 1=PSU(=dcdc)"
+    default: 1
+  Settings/OutputBattery:
+    description: "0=main battery, 1=aux battery" # (will always be 1 for .dcdc, available when /Settings/DeviceFunction is 0)"
+    default: 1
+  Settings/State:
+    description: "0=Off, 2=Fault, 3=Bulk, 4=Absorption, 5=Float, 6=Storage, 7=Equalize, 11=PSU"
+    default: 11
+
+#https://github.com/victronenergy/venus/wiki/dbus#dcload
+dcload:
+  ProductId:
+    default: 65535
+  CustomName:
+    default: "My DC load"
+    persist: true
+  Dc/0/Voltage:
+    description: "V"
+    format: "{} V"
+  Dc/0/Current:
+    description: "A"
+    format: "{} A"
+  Dc/0/Power:
+    description: "W"
+    format: "{} W"
+  Dc/0/Temperature:
+    description: "°C"
+    format: "{} °C"
+  Dc/1/Voltage:
+    description: "secondary V"
+    format: "{} V"
+
+#https://github.com/victronenergy/venus/wiki/dbus#dcsystem
+dcsystem:
+  ProductId:
+    default: 65535
+  CustomName:
+    default: "My DC System"
+    persist: true
+  Dc/0/Voltage:
+    description: "V"
+    format: "{} V"
+  Dc/0/Current:
+    description: "A"
+    format: "{} A"
+  Dc/0/Power:
+    description: "W"
+    format: "{} W"
+  Dc/0/Temperature:
+    description: "°C"
+    format: "{} °C"
+  Dc/1/Voltage:
+    description: "secondary V"
+    format: "{} V"
+
 # https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
   ProductId:
@@ -238,6 +328,80 @@ grid:
   Ac/Frequency: # From the ModBus-TCP register list - https://www.victronenergy.com/support-and-downloads/technical-information
     description: "Hz"
     format: "{} Hz"
+
+#https://github.com/victronenergy/venus/wiki/dbus#grid-and-acload-and-genset-meter
+acload:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My AC Load Meter"
+    persist: true
+  ErrorCode: # https://www.victronenergy.com/live/mppt-error-codes
+    description: "0=No Error"
+    default: 0
+  DeviceType: # ?
+    description: ""
+    persist: true
+    default: 0
+    min: 0
+    max: 2
+  Ac/Energy/Forward: # Total bought energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Energy/Reverse: # Total sold energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Power: # Total power of all phases, preferably real power
+    description: "W"
+    format: "{} W"
+  Ac/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L1/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L2/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L2/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L2/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L3/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L3/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L3/Voltage:
+    description: "V AC"
+    format: "{} V"
 
 # https://github.com/victronenergy/venus/wiki/dbus#gps
 gps:
