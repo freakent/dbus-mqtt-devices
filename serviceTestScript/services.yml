@@ -1,0 +1,590 @@
+# When defining services do not include Connected, Mgmt/ProcessName, Mgmt/ProcessVersion, Mgmt/Connection, DeviceInstance, DeviceName, 
+# ProductName or FirmwareVersion these are all handled automatically by the driver
+
+# For product id see https://gist.github.com/seidler2547/52f3e91cbcbf2fa257ae79371bb78588
+
+# https://github.com/victronenergy/venus/wiki/dbus#temperatures
+temperature:
+  ProductId:
+    default: 41314 # Generic Temperature Input
+  CustomName:
+    default: "My Temperature Sensor"
+    persist: true
+  TemperatureType:
+    description: "Battery, Fridge or Generic"
+    persist: true
+    default: 2
+    min: 0
+    max: 2
+  Status:
+    description: "0=Ok; 1=Disconnected; 2=Short circuited; 3=Reverse polarity; 4=Unknown"
+    default: 0
+    min: 0
+    max: 4
+  Temperature:
+    description: "C"
+  Pressure:
+    description: "hPa"
+  Humidity:
+    description: "%"
+  BatteryVoltage:   # Sensor battery voltage
+    description: "V"
+  TxPower:         # Sensor Tx power
+    description: "dBm"
+  Alarms/LowBattery:
+    description: "0=OK; 1=Warning; 2=Alarm"
+    default: 0
+    min: 0
+    max: 2
+
+
+# https://github.com/victronenergy/venus/wiki/dbus#tank-levels
+tank:             
+  ProductId:
+    default: 41313 # Generic Tank Input
+  CustomName:
+    default: "My Tank Sensor"
+    persist: true
+  Status:
+    description: "0=Ok; 1=Disconnected; 2=Short circuited; 3=Unknown"
+    default: 0
+    min: 0
+    max: 3
+  FluidType:
+    description: |
+      0=Fuel; 1=Fresh water; 2=Waste water; 3=Live well; 4=Oil; 5=Black water (sewage)
+      6=Gasoline; 7=Diesel; 8=Liquid  Petroleum Gas (LPG); 9=Liquid Natural Gas (LNG)
+      10=Hydraulic oil; 11=Raw water
+    persist: true
+    default: 1
+    min: 0
+    max: 11        
+  Capacity:
+    description: "m3"
+    persist: true
+    default: 0.1
+    #min: 0
+    #max: 9999         
+  Level:            
+    description: "0 to 100%" 
+  Remaining:
+    description: "m3"
+
+
+# https://github.com/victronenergy/venus/wiki/dbus#pv-inverters
+pvinverter:
+  ProductId:
+    default: 45069 # 0xB00D, 0xB00D, 45069 = ET340, 45068 = ET112, ESS Demo mode uses 45058
+  CustomName:
+    default: "My PV Inverter"
+    persist: true
+  ErrorCode: # https://www.victronenergy.com/live/mppt-error-codes
+    description: "0=No Error"
+    default: 0 # not showing in in console???
+  Position:
+    description: "0=AC input 1; 1=AC output; 2=AC input 2"
+    persist: true
+    default: 0
+    min: 0
+    max: 2
+  StatusCode: # not used by ESS demo mode pvinverter
+    description: "0=Startup 0; 1=Startup 1; 2=Startup 2; 3=Startup 3; 4=Startup 4; 5=Startup 5; 6=Startup 6; 7=Running; 8=Standby; 9=Boot loading; 10=Error"
+    default: 7
+    min: 0
+    max: 10
+  AllowedRoles:
+    default: ["grid", "pvinverter", "genset", "acload"]
+  Role:
+    description: "grid, pvinverter, genset, acload"    
+    persist: true
+    default: "pvinverter"
+    #  PhaseConfig:
+    #    description: "0=3P.n; 1=3P.l; 2=2P; 3=1P; 4=3P"
+    #    persist: true
+    #    default: 0
+    #    min: 0
+    #    max: 4
+    #  DeviceType: 
+    #    description: "???"
+    #    persist: true
+    #    default: 71 # valued used by pvinverter in ESS demo mode
+    #  Serial:
+    #    description: "device serial number"
+    #    persist: true
+    #    default: ""
+  Ac/MaxPower: # Max rated power (in Watts) of the inverter
+    description: "W"
+    persist: true
+    default: 0
+    format: "{} W"
+  Ac/Energy/Forward: # Total produced energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Current: 
+    format: "{} A"
+    description: "A"
+  Ac/Power: # Total power of all phases, preferably real power
+    format: "{} W"
+    description: "W"
+  Ac/L1/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L1/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L1/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Voltage:
+    format: "{} V"
+    description: "V AC"
+  Ac/L2/Current:
+    format: "{} A"
+    description: "A"
+  Ac/L2/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L2/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Voltage:
+    format: "{} V"
+    description: "V AC"
+  Ac/L3/Current:
+    format: "{} A"
+    description: "A AC"
+  Ac/L3/Power:
+    format: "{} W"
+    description: "W"
+  Ac/L3/Energy/Forward:
+    format: "{} kWh"
+    description: "kWh"
+
+
+# https://github.com/victronenergy/venus/wiki/dbus#grid-and-genset-meter
+grid:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My Grid Meter"
+    persist: true
+  ErrorCode: # https://www.victronenergy.com/live/mppt-error-codes
+    description: "0=No Error"
+    default: 0
+  DeviceType: 
+    description: "grid, genset or acload "
+    persist: true
+    default: grid
+  Ac/Energy/Forward: # Total bought energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Energy/Reverse: # Total sold energy over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/Power: # Total power of all phases, preferably real power
+    description: "W"
+    format: "{} W"
+  Ac/Current: # Deprecated
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L1/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L2/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L2/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L2/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L3/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L3/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Energy/Reverse:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L3/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/Frequency: # From the ModBus-TCP register list - https://www.victronenergy.com/support-and-downloads/technical-information
+    description: "Hz"
+    format: "{} Hz"
+
+# https://github.com/victronenergy/venus/wiki/dbus#gps
+gps:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My GPS Sensor"
+    persist: true
+  Position/Longitude:
+    description: "Decimal degrees"
+  Position/Latitude:
+    description: "Decimal degrees"
+  Course:
+    description: "Degrees"
+  Speed:
+    description: "m/s"
+  Fix:
+    description: "0 = no fix, 1 = GPS Fix"
+  Altitude:
+    description: "m"
+  NrOfSatellites:
+    description: "Count"
+
+
+# https://github.com/victronenergy/venus/wiki/dbus#evcharger
+evcharger:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My EV Charger"
+    persist: true
+  Ac/Energy/Forward:
+    description: "Ac Energy Forward wh"
+    format: "{:.2f}W"
+  Ac/L1/Power:
+    description: "L1 Power used (W)"
+    format: "{} W"
+  Ac/L2/Power:
+    description: "L3 Power used (W)"
+    format: "{} W"
+  Ac/L3/Power:
+    description: "L3 Power used (W)"
+    format: "{} W"
+  Ac/Power:
+    description: "AC Power (W)"
+    format: "{} W"
+  AutoStart:
+    description: "0=Charger autostart disabled,  1=Charger autostart enabled"
+    default: 0
+    persist: true
+  ChargingTime:
+    description: "Total charging time (seconds)"
+    default: 0
+    format: "{} s"
+  Current:
+    description: "Charging current actual (A)"
+    default: 0
+  EnableDisplay:
+    description: "Control via display; 0=control disabled, 1=control enabled"
+    default: 1
+    persist: true
+  MaxCurrent:
+    description: "Max current (A)"
+    default: 0
+    persist: true 
+  Mode:
+    description: "0=Manual, 1=Auto"
+    default: 0
+    min: 0
+    max: 2
+    persist: true
+  Model:
+    description: "Model, e.g. AC22E or AC22NS (for No Screen)"
+    default: "AC22NS"
+  Position: # 0=AC input 1;1=AC output;2=AC input 2
+    persist: true
+    default: 0
+    min: 0
+    max: 2
+  Role:
+    description: "Role"
+  SetCurrent: # Set charge current (manual mode)
+    description: "Charging current (A)"
+    persist: true
+    default: 0
+  StartStop: # Start/stop charging (manual mode)
+    description: "Start Stop"
+    default: 0
+    persist: true
+  Status:
+    description: "0=disconnected, 1=connected, 2=charging, 3=charged,4=waiting for sun, 5=waiting for RFID, 6=waiting for start, 7=low SOC, 8=ground test error, 9=welded contacts error, 10=CP input test error (shorted), 11=residual current detected, 12=undervoltage detected, 13=overvoltage detected, 14=overheating detected, 15-19=reserved, 20=charging limit"
+    default: 1
+    min: 0
+    max: 20
+
+# https://github.com/victronenergy/venus/wiki/dbus#battery
+battery:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "MQTT BMS"
+    persist: true
+  Capacity:
+    format: "{} Ah"
+  InstalledCapacity:
+    format: "{} Ah"
+  Dc/0/Voltage:
+    format: "{} V"
+    description: "V DC"
+  Dc/0/Current:
+    format: "{} A"
+    description: "A"
+  Dc/0/Power:
+    format: "{} W"
+    description: "W"
+  Dc/0/Temperature:
+    format: "{} °C"
+    description: "T1"
+  Soc:
+    format: "{} %"
+    description: "State of charge"
+  Balancing:
+    description: "0 = off, 1 = on"
+  Io/AllowToCharge:
+    description: "0 = off, 1 = on"
+  Io/AllowToDischarge:
+    description: "0 = off, 1 = on"
+  ConsumedAmphours:
+    format: "{} Ah"
+    description: "Ah"
+  System/MinCellVoltage:
+    format: "{} V"
+    description: "V DC"
+  System/MaxCellVoltage:
+    format: "{} V"
+    description: "V DC"
+  System/NrOfCellsPerBattery:
+    format: "{}"
+    description: "Cells per battery"
+  System/NrOfBatteries:
+    format: "{}"
+    description: "Number of batteries"
+  System/BatteriesParallel:
+    format: "{}"
+    description: "None"
+  System/BatteriesSeries:
+    format: "{}"
+    description: "None"
+
+# https://github.com/victronenergy/venus/wiki/dbus#vebus-systems-multis-quattros-inverters
+vebus:
+  ProductId:
+    default: 9760 # Multiplus 48/3000/35-50
+  CustomName:
+    default: "My VEBUS System"
+    persist: true
+  State:
+    description: "0=Off; 1=Low power mode; 2=Fault; 3=Bulk; 4=Absorption; 5=Float; 6=Storage; 7=Equalize; 8=Passthru; 9=Inverting; 10=Power Assist; 11=Power Supply Mode; 244=Sustain; 252=External control"
+    default: 0
+    min: 0
+    max: 252
+  Mode:
+    description: "Position of the switch. 1=Charger Only;2=Inverter Only;3=On;4=Off"
+    default: 4
+    min: 1
+    max: 4
+  ModeIsAdjustable:
+    description: "0. Switch position cannot be controlled remotely (typically because a VE.Bus BMS is present). 1. Switch position can be controlled remotely"
+    min: 0
+    max: 1
+    default: 1
+  Ac/ActiveIn/ActiveInput:
+    description: "Active input: 0 = ACin-1, 1 = ACin-2, 240 is none (inverting)."
+  Ac/ActiveIn/Connected:
+    description: "0 not connected, 1 connected"
+    min: 0
+    max: 1
+  Ac/NumberOfAcInputs:
+    description: "0 for none"
+    default: 1
+  Ac/NumberOfPhases:
+    description: "number of phases, 1 or 3"
+    default: 1
+  Ac/ActiveIn/CurrentLimit:    # DEPRECATED in favour of /Ac/In/[1 and 2] paths but needed for Classic UI
+    description: "Input current limit in W"
+    persist: true
+    default: 50
+  Ac/ActiveIn/CurrentLimitIsAdjustable: # DEPRECATED in favour of /Ac/In/[1 and 2] paths but needed for Classic UI
+    description: "1 is adjustable, 0 is not adjustable"
+    default: 1
+    persist: true
+  Ac/In/1/CurrentLimit:
+    description: "Input current limit in W"
+    persist: true
+    default: 50
+  Ac/In/1/CurrentLimitIsAdjustable:
+    description: "1 is adjustable, 0 is not adjustable"
+    default: 1
+    persist: true
+  Ac/ActiveIn/L1/V:
+    description: "L1 AC voltage"
+    format: "{} V"
+  Ac/ActiveIn/L1/I:
+    description: "L1 AC current"
+    format: "{} A"
+  Ac/ActiveIn/L1/P:
+    description: "L1 AC power"
+    format: "{} W"
+  Ac/ActiveIn/L1/F:
+    description: "L1 AC frequency"
+    format: "{} Hz"
+  Ac/ActiveIn/L2/V:
+    description: "L2 AC voltage"
+    format: "{} V"
+  Ac/ActiveIn/L2/I:
+    description: "L2 AC current"
+    format: "{} A"
+  Ac/ActiveIn/L2/P:
+    description: "L2 AC power"
+    format: "{} W"
+  Ac/ActiveIn/L2/F:
+    description: "L2 AC frequency"
+    format: "{} Hz"
+  Ac/ActiveIn/L3/V:
+    description: "L3 AC voltage"
+    format: "{} V"
+  Ac/ActiveIn/L3/I:
+    description: "L3 AC current"
+    format: "{} A"
+  Ac/ActiveIn/L3/P:
+    description: "L3 AC power"
+    format: "{} W"
+  Ac/ActiveIn/L3/F:
+    description: "L3 AC frequency"
+    format: "{} Hz"
+  Ac/ActiveIn/P: # Total power of all phases, preferably real power
+    description: "Total AC power"
+    format: "{} W"
+  Ac/Out/L1/V:
+    description: "L1 AC voltage"
+    format: "{} V"
+  Ac/Out/L1/I:
+    description: "L1 AC current"
+    format: "{} A"
+  Ac/Out/L1/P:
+    description: "L1 AC power"
+    format: "{} W"
+  Ac/Out/L1/F:
+    description: "L1 AC frequency"
+    format: "{} Hz"
+  Ac/Out/L2/V:
+    description: "L2 AC voltage"
+    format: "{} V"
+  Ac/Out/L2/I:
+    description: "L2 AC current"
+    format: "{} A"
+  Ac/Out/L2/P:
+    description: "L2 AC power"
+    format: "{} W"
+  Ac/Out/L2/F:
+    description: "L2 AC frequency"
+    format: "{} Hz"
+  Ac/Out/L3/V:
+    description: "L3 AC voltage"
+    format: "{} V"
+  Ac/Out/L3/I:
+    description: "L3 AC current"
+    format: "{} A"
+  Ac/Out/L3/P:
+    description: "L3 AC power"
+    format: "{} W"
+  Ac/Out/L3/F:
+    description: "L3 AC frequency"
+    format: "{} Hz"
+  Ac/Out/P: # Total power of all phases, preferably real power
+    description: "Total AC power"
+    format: "{} W"
+  Dc/0/Voltage:
+    description: "Battery voltage"
+    format: "{} V"
+  Dc/0/Current:
+    description: "Battery current"
+    format: "{} A"
+  Dc/0/Power:
+    description: "Battery power"
+    format: "{} W"
+  Dc/0/Temperature:
+    description: "Battery temperature"
+  Soc:
+    description: "State of charge from internal battery monitor"
+  Alarms/HighDcCurrent:
+    description: "High DC current"
+  Alarms/HighDcVoltage:
+    description: "High DC voltage"
+  Alarms/LowBattery:
+    description: "Low battery voltage"
+  Alarms/PhaseRotation:
+    description: "0=OK, 1=Warning when AC input phase rotation direction is wrong "
+  Alarms/Ripple:
+    description: "High DC ripple"
+  Alarms/TemperatureSensor:
+    description: "Battery temperature sensor alarm"
+  Alarms/L1/HighTemperature:
+    description: "inverter/charger high temperature alarm"
+  Alarms/L1/LowBattery:
+    description: "L1 low battery voltage alarm"
+  Alarms/L1/Overload:
+    description: "L1 inverter overload alarm"
+  Alarms/L1/Ripple:
+    description: "L1 high DC ripple alarm"
+  Alarms/L2/HighTemperature:
+    description: "inverter/charger high temperature alarm"
+  Alarms/L2/LowBattery:
+    description: "L2 low battery voltage alarm"
+  Alarms/L2/Overload:
+    description: "L2 inverter overload alarm"
+  Alarms/L2/Ripple:
+    description: "L2 high DC ripple alarm"
+  Alarms/L3/HighTemperature:
+    description: "inverter/charger high temperature alarm"
+  Alarms/L3/LowBattery:
+    description: "L3 low battery voltage alarm"
+  Alarms/L3/Overload:
+    description: "L3 inverter overload alarm"
+  Alarms/L3/Ripple:
+    description: "L3 high DC ripple alarm"
+
+# https://github.com/victronenergy/venus/wiki/dbus#heatpump
+heatpump:
+  ProductId:
+    default: 45068 # ET112
+  CustomName:
+    default: "MQTT Heatpump"
+    persist: true
+  State:
+    description: "State of heat pump (enum to be decided later)"
+  Temperature:
+    description: "Current water temperature (optional if no temperature reading available)"
+    #format: "{} °C"
+  TargetTemperature:
+    description: "Target water temperature (optional if not available)"
+    #format: "{} °C"
+  Ac/Power:
+    description: "Power currently consumed"
+    format: "{} W"
+  Ac/Energy/Forward:
+    description: "Total energy consumed"
+    format: "{} kWh"
+  Position:
+    description: ""

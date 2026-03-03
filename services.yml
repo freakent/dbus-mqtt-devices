@@ -564,3 +564,27 @@ vebus:
     description: "L3 inverter overload alarm"
   Alarms/L3/Ripple:
     description: "L3 high DC ripple alarm"
+
+# https://github.com/victronenergy/venus/wiki/dbus#heatpump
+heatpump:
+  ProductId:
+    default: 45068 # ET112
+  CustomName:
+    default: "MQTT Heatpump"
+    persist: true
+  State:
+    description: "State of heat pump (enum to be decided later)"
+  Temperature:
+    description: "Current water temperature (optional if no temperature reading available)"
+    #format: "{} °C"
+  TargetTemperature:
+    description: "Target water temperature (optional if not available)"
+    #format: "{} °C"
+  Ac/Power:
+    description: "Power currently consumed"
+    format: "{} W"
+  Ac/Energy/Forward:
+    description: "Total energy consumed"
+    format: "{} kWh"
+  Position:
+    description: ""
