@@ -3,6 +3,31 @@
 
 # For product id see https://gist.github.com/seidler2547/52f3e91cbcbf2fa257ae79371bb78588
 
+# https://github.com/victronenergy/venus/wiki/dbus#alternator-and-dcsource
+alternator:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My Alternator"
+    persist: true
+  Dc/0/Voltage:
+    description: "V DC"
+  Dc/0/Current:
+    description: "A, positive when alternator is charging"
+  Dc/0/Temperature:
+    description: "Degrees centigrade, alternator temperature reading, or temperature sensor on SmarShunt/BMV (not available for OrionXS)"
+  Dc/1/Voltage:
+    description: "SmartShunt/BMV secondary battery voltage (if configured)"
+  Engine/Speed:
+    description: "Engine RPM"
+  FieldDrive:
+    description: "Current limit in %"
+  Speed:
+    description: "Alternator RPM"
+  State:
+    description: "0=Off, 2=Fault, 3=Bulk, 4=Absorption, 5=Float, 6=Storage, 7=Equalize, 252=External control"
+
+
 # https://github.com/victronenergy/venus/wiki/dbus#temperatures
 temperature:
   ProductId:
