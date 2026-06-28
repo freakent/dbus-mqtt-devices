@@ -20,6 +20,11 @@ class MQTTDevice(object):
         self.device_mgr = device_mgr
         self.clientId = device_status.get("clientId")
         self.version = device_status.get("version")
+        # Opt-in: when true, a disconnect (connected=0 or LWT) keeps the device
+        # registered with /Connected=0 instead of removing it from the dbus. Default
+        # false preserves the legacy remove-on-disconnect behaviour. (Distinct from the
+        # path-level `persist` in services.yml, which saves a setting value.)
+        self.persist_on_disconnect = bool(device_status.get("persist_on_disconnect", False))
         self._status = device_status
         logging.info("**** Registering device: %s, services: %s ****", self.clientId, self._status['services'])
 
@@ -39,6 +44,13 @@ class MQTTDevice(object):
                 self.services[serviceId].__del__()
                 logging.info("Removed Service %s from client %s", serviceId, self.clientId)
             del self.services
+
+
+    def set_connected(self, connected):
+        # Flip every service's dbus /Connected path without tearing the service down.
+        if hasattr(self, 'services'):
+            for serviceId in self.services:
+                self.services[serviceId].set_connected(connected)
 
 
     def dbus_conn(self):

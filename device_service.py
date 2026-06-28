@@ -59,6 +59,15 @@ class MQTTDeviceService(object):
         logging.info("Unregistered %s from dbus", self.serviceName())
 
 
+    def set_connected(self, connected):
+        # Toggle the dbus /Connected path in place instead of tearing the service
+        # down, so a disconnected-but-persisted device shows offline (Connected=0)
+        # while staying registered. /Connected is auto-provided by the driver.
+        if hasattr(self, '_dbus_service'):
+            self._dbus_service['/Connected'] = 1 if connected else 0
+            logging.info("Set %s /Connected to %s", self.serviceName(), 1 if connected else 0)
+
+
     def _set_up_local_settings(self):
         #local_settings = {
          #   'CustomName': ["/Settings/MqttDevices/{}/CustomName".format(self.serviceName()), 'My {} Sensor'.format(self.serviceType.capitalize()), 0, 0],

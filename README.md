@@ -244,6 +244,23 @@ disconnect the device from the dbus. On device start-up, the device will obvious
 
 This feature should allow devices like Shelly to be managed and disconnected more easily with Venus OS.
 
+## Persisting a device across disconnects
+By default, when a device disconnects (a `connected: 0` status, or its last will firing) it is **removed** from the dbus. For some devices it is preferable to keep them registered and instead just flag them offline — this matches how native Victron services behave (they stay on the dbus with `/Connected = 0` rather than disappearing), so GX software holding a reference to the device, or expecting it to persist, keeps working across a transient outage, and reconnects don't churn the device registration.
+
+To opt in, include `"persist_on_disconnect": true` in your registration payload:
+```
+    {
+        "clientId": "fe001",
+        "connected": 1,
+        "persist_on_disconnect": true,
+        "version": "v1.0 ALPHA",
+        "services": {
+            "t1": "temperature"
+        }
+    }
+```
+With this set, a `connected: 0` status or a last-will event sets every one of the device's services to `/Connected = 0` but leaves them registered; a subsequent re-registration flips them back to `/Connected = 1`. The device is only fully removed when its **retained Status record is cleared** — i.e. an empty (zero-length) retained publish to `device/<clientId>/Status`. Devices that omit the flag keep the original remove-on-disconnect behaviour.
+
 ## Troubleshooting
 ### during installation
 If you receive an error during setup that includes the lines 
