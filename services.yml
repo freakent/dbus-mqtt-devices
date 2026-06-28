@@ -239,6 +239,105 @@ grid:
     description: "Hz"
     format: "{} Hz"
 
+
+# https://github.com/victronenergy/venus/wiki/dbus#genset
+# A generator (com.victronenergy.genset). The GX generator start/stop module binds a
+# genset that advertises RemoteStartModeEnabled=1 and reads StatusCode (1..9 => running)
+# to confirm it started; a genset may also report its AC output and engine telemetry.
+# NOTE: /Error/0/Id is intentionally omitted - exposing it (even as 0) makes the GX
+# notification daemon raise a toast for code 0, and the start/stop module treats the
+# path's absence as "no error".
+genset:
+  ProductId:
+    default: 65535 # 0xFFFF
+  CustomName:
+    default: "My Generator"
+    persist: true
+  StatusCode:
+    description: "0=Standby; 1-7=Startup; 8=Running; 9=Stopping; 10=Error"
+    default: 0
+    min: 0
+    max: 10
+  RemoteStartModeEnabled:
+    description: "0=Disabled; 1=Enabled (required for the GX generator start/stop module to bind this genset)"
+    default: 0
+    min: 0
+    max: 1
+  Start:
+    description: "Written by the GX: 1=start, 0=stop"
+    default: 0
+    min: 0
+    max: 1
+  NrOfPhases:
+    description: "1, 2 or 3"
+    default: 1
+    min: 1
+    max: 3
+  StarterVoltage:
+    description: "V (starter battery)"
+    format: "{} V"
+  Engine/OperatingHours:
+    description: "s"
+    format: "{} s"
+    default: 0
+  Engine/Speed:
+    description: "RPM"
+    format: "{} RPM"
+  Engine/Load:
+    description: "0 to 100%"
+    format: "{} %"
+  Engine/CoolantTemperature:
+    description: "Degrees C"
+    format: "{} C"
+  Engine/Starts:
+    description: "Count"
+  Ac/Power: # Total power of all phases, preferably real power
+    description: "W"
+    format: "{} W"
+  Ac/Frequency:
+    description: "Hz"
+    format: "{} Hz"
+  Ac/Energy/Forward: # Total energy produced over all phases
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L1/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L1/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L1/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L1/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L2/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L2/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L2/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L2/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+  Ac/L3/Voltage:
+    description: "V AC"
+    format: "{} V"
+  Ac/L3/Current:
+    description: "A AC"
+    format: "{} A"
+  Ac/L3/Power:
+    description: "W"
+    format: "{} W"
+  Ac/L3/Energy/Forward:
+    description: "kWh"
+    format: "{} kWh"
+
+
 # https://github.com/victronenergy/venus/wiki/dbus#gps
 gps:
   ProductId:
